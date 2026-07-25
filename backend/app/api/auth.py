@@ -13,9 +13,9 @@ from backend.app.auth.jwt_handler import create_access_token, get_current_user
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
-@router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/register", response_model=LoginResponse, status_code=status.HTTP_201_CREATED)
 def register(payload: UserCreate, db: Session = Depends(get_db)):
-    """Create a new user account."""
+    """Create a new user account and issue access token immediately."""
     existing = db.query(User).filter(User.email == payload.email).first()
     if existing:
         raise HTTPException(
@@ -31,7 +31,12 @@ def register(payload: UserCreate, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
-    return user
+
+    token = create_access_token(data={"sub": str(user.id)})
+    return LoginResponse(
+        tokens=TokenData(access=token),
+        user=user
+    )
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -58,5 +63,4 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
 @router.get("/user", response_model=UserResponse)
 def get_current_user_route(current_user: User = Depends(get_current_user)):
     """Get the currently authenticated user's profile."""
-    # FIX: get_current_user returns a User object directly — no DB re-query needed.
     return current_user

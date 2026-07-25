@@ -35,9 +35,10 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await register({ name: form.name, email: form.email, password: form.password });
+      await register({ full_name: form.name, email: form.email, password: form.password });
       navigate('/dashboard');
     } catch (err) {
+      console.error('Registration error:', err);
       setError(err.response?.data?.detail || err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);

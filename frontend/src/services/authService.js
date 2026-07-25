@@ -2,7 +2,13 @@ import api from './api';
 
 export const authService = {
   async register(userData) {
-    const { data } = await api.post('/auth/register', userData);
+    const payload = {
+      full_name: userData.full_name || userData.name || '',
+      email: userData.email,
+      password: userData.password,
+      phone: userData.phone || null,
+    };
+    const { data } = await api.post('/auth/register', payload);
     // Backend returns LoginResponse: { tokens: { access }, user }
     if (data.tokens?.access) {
       localStorage.setItem('access_token', data.tokens.access);
