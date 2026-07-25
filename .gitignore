@@ -39,6 +39,7 @@ Thumbs.db
 ml/datasets/raw/
 ml/datasets/processed/
 *.csv
+!ml/datasets/processed/food_database_final.csv
 
 # ── Logs ──────────────────────────────────────────────────────────────────
 *.log
