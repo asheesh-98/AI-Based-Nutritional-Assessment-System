@@ -35,11 +35,12 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await register({ full_name: form.name, email: form.email, password: form.password });
-      navigate('/dashboard');
+      await register({ full_name: form.name.trim(), email: form.email.trim(), password: form.password });
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.detail || err.response?.data?.message || 'Registration failed. Please try again.');
+      const rawErr = err.response?.data?.detail || err.response?.data?.message || 'Registration failed. Please check details and try again.';
+      setError(typeof rawErr === 'string' ? rawErr : JSON.stringify(rawErr));
     } finally {
       setLoading(false);
     }
