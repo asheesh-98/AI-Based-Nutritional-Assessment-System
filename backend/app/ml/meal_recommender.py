@@ -64,6 +64,16 @@ SCORE_NUTRIENT_COLS = [
 BALANCE_COLS = [("Protein_g", 0.15), ("Energy_kcal", 0.05), ("Fiber_g", 0.10)]
 MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"]
 
+NON_VEG_REGEX = re.compile(
+    r'\b(?:beef|pork|chicken|turkey|duck|lamb|mutton|fish|tuna|salmon|trout|rohu|catfish|ari|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|squid|octopus|meat|bacon|ham|sausage|pepperoni|salami|steak|poultry|anchovy|sardine|cod|haddock|meatball|mince|venison|veal|chorizo|prosciutto|bologna|egg|eggs|yolk)\b',
+    re.IGNORECASE
+)
+
+NON_VEGAN_REGEX = re.compile(
+    r'\b(?:milk|cheese|butter|cream|yogurt|curd|paneer|whey|ghee|honey|casein|egg|mayonnaise|custard|parmesan|cheddar|mozzarella)\b',
+    re.IGNORECASE
+)
+
 FOOD_IMAGE_KEYWORDS = [
     ("parmesan", "https://images.unsplash.com/photo-1452195100486-9cc805987862?auto=format&fit=crop&w=800&q=80"),
     ("cheese", "https://images.unsplash.com/photo-1552767059-ce182ead8c1b?auto=format&fit=crop&w=800&q=80"),
@@ -291,16 +301,27 @@ def _empty_plan(diet_pref: str, deficiencies: list, cal_target: int) -> dict:
 def _filter_by_diet(df: pd.DataFrame, pref: str) -> pd.DataFrame:
     pref = pref.strip().lower()
     if "diet_type" not in df.columns:
-        return df
+        filtered = df.copy()
+    else:
+        df["diet_type"] = df["diet_type"].fillna("").str.strip().str.lower()
+        if pref == "vegan":
+            filtered = df[df["diet_type"] == "vegan"].copy()
+        elif pref == "vegetarian":
+            filtered = df[df["diet_type"].isin(["vegetarian", "vegan"])].copy()
+        else:
+            filtered = df.copy()
 
-    df["diet_type"] = df["diet_type"].fillna("").str.strip().str.lower()
+    # Hardened runtime keyword exclusion safety filter
+    food_col = "Food_Name" if "Food_Name" in filtered.columns else "food_name"
+    if pref in ["vegetarian", "vegan"]:
+        mask = ~filtered[food_col].astype(str).str.contains(NON_VEG_REGEX, na=False)
+        filtered = filtered[mask]
 
     if pref == "vegan":
-        return df[df["diet_type"] == "vegan"].copy()
-    elif pref == "vegetarian":
-        return df[df["diet_type"].isin(["vegetarian", "vegan"])].copy()
-    else:
-        return df.copy()
+        mask = ~filtered[food_col].astype(str).str.contains(NON_VEGAN_REGEX, na=False)
+        filtered = filtered[mask]
+
+    return filtered
 
 
 def _normalise_nutrients(df: pd.DataFrame) -> pd.DataFrame:
