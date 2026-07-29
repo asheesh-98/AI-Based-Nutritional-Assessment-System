@@ -55,13 +55,14 @@ function MealCard({ slot, meal, onMealClick }) {
   }
 
   const hasValidImage = meal.recipe_image && !imgFailed;
+  const titleText = meal.recipe_title || meal.food_name || 'Meal Dish';
 
   return (
     <motion.div
       variants={cardVariant}
       whileHover={{ y: -6, scale: 1.015 }}
       onClick={() => onMealClick(meal, slot)}
-      className="relative rounded-3xl overflow-hidden cursor-pointer group shadow-2xl min-h-[300px] sm:min-h-[380px] flex flex-col border border-white/10"
+      className="relative rounded-3xl overflow-hidden cursor-pointer group shadow-2xl min-h-[320px] sm:min-h-[360px] flex flex-col border border-white/10"
     >
       {/* Background Imagery or Gradient Fallback */}
       {hasValidImage ? (
@@ -81,15 +82,15 @@ function MealCard({ slot, meal, onMealClick }) {
       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-black/40 opacity-90" />
       
       {/* Card Content */}
-      <div className="relative z-10 p-5 sm:p-6 flex flex-col h-full justify-between">
+      <div className="relative z-10 p-4 sm:p-6 flex flex-col h-full justify-between">
         {/* Top Header Pills */}
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 sm:gap-2 bg-black/50 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/15 shadow-lg">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/15 shadow-lg">
             <Icon size={14} className="text-cyan-400 shrink-0" />
             <span className="text-[10px] sm:text-xs font-black text-white uppercase tracking-wider">{slot}</span>
           </div>
           {meal.recipe_ready_in && (
-            <div className="bg-black/50 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/15 shadow-lg flex items-center gap-1.5 shrink-0">
+            <div className="bg-black/60 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/15 shadow-lg flex items-center gap-1.5 shrink-0">
               <Clock size={12} className="text-amber-400 shrink-0" />
               <span className="text-[10px] sm:text-xs font-bold text-white">{meal.recipe_ready_in} min</span>
             </div>
@@ -97,28 +98,31 @@ function MealCard({ slot, meal, onMealClick }) {
         </div>
 
         {/* Dish Title & Frosted-Glass Macros at a Glance */}
-        <div className="mt-auto pt-6 sm:pt-8 space-y-3 sm:space-y-4">
-          <h4 className="text-lg sm:text-2xl font-black text-white leading-snug drop-shadow-md group-hover:text-cyan-300 transition-colors line-clamp-2">
-            {meal.recipe_title || meal.food_name}
+        <div className="mt-auto pt-6 sm:pt-8 space-y-3">
+          <h4
+            title={titleText}
+            className="text-lg sm:text-xl xl:text-2xl font-black text-white leading-snug drop-shadow-md group-hover:text-cyan-300 transition-colors line-clamp-2"
+          >
+            {titleText}
           </h4>
 
-          {/* Frosted Glass Macros Badge Strip */}
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 bg-black/60 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-white/10 text-center">
-            <div className="flex flex-col items-center">
-              <span className="text-xs sm:text-sm font-black text-amber-400">{Math.round(meal.calories || 0)}</span>
-              <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Kcal</span>
+          {/* Responsive Macros Badge Strip */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-black/75 backdrop-blur-md p-2 rounded-2xl border border-white/10 text-center">
+            <div className="flex flex-col items-center justify-center p-1">
+              <span className="text-xs font-black text-amber-400 leading-none">{Math.round(meal.calories || 0)}</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Kcal</span>
             </div>
-            <div className="flex flex-col items-center border-l border-white/10">
-              <span className="text-xs sm:text-sm font-black text-emerald-400">{Math.round(meal.protein || 0)}g</span>
-              <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Protein</span>
+            <div className="flex flex-col items-center justify-center p-1 sm:border-l border-white/10">
+              <span className="text-xs font-black text-emerald-400 leading-none">{Math.round(meal.protein || 0)}g</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Protein</span>
             </div>
-            <div className="flex flex-col items-center border-l border-white/10">
-              <span className="text-xs sm:text-sm font-black text-blue-400">{Math.round(meal.carbohydrates || 0)}g</span>
-              <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Carbs</span>
+            <div className="flex flex-col items-center justify-center p-1 border-l sm:border-l border-white/10">
+              <span className="text-xs font-black text-blue-400 leading-none">{Math.round(meal.carbohydrates || 0)}g</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Carbs</span>
             </div>
-            <div className="flex flex-col items-center border-l border-white/10">
-              <span className="text-xs sm:text-sm font-black text-rose-400">{Math.round(meal.fat || 0)}g</span>
-              <span className="text-[8px] sm:text-[9px] font-bold text-gray-400 uppercase tracking-tighter">Fat</span>
+            <div className="flex flex-col items-center justify-center p-1 border-l border-white/10">
+              <span className="text-xs font-black text-rose-400 leading-none">{Math.round(meal.fat || 0)}g</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Fat</span>
             </div>
           </div>
         </div>
@@ -277,9 +281,9 @@ export default function MealPlanner() {
         })}
       </div>
 
-      {/* Meal Slot Cards Grid */}
+      {/* Meal Slot Cards Grid: 1-col on mobile, 2-col on laptops (1024px), 4-col on XL screens (1280px+) */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="glass-card p-6 rounded-3xl h-[320px] animate-pulse flex flex-col justify-between">
               <div className="h-6 w-24 bg-white/10 rounded-full" />
@@ -296,7 +300,7 @@ export default function MealPlanner() {
           initial="hidden"
           animate="show"
           key={selectedDayIndex}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6"
         >
           {['breakfast', 'lunch', 'dinner', 'snack'].map((slot) => (
             <MealCard
