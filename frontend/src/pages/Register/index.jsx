@@ -47,41 +47,40 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-row-reverse bg-[#0a0e1a] overflow-hidden text-slate-100">
+    <div className="min-h-screen flex flex-col lg:flex-row-reverse bg-[#0a0e1a] overflow-x-hidden text-slate-100">
       
       {/* Right side: Form (Reversed layout for distinction) */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-12 lg:px-24 xl:px-32 relative z-10">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 py-8 sm:py-12 relative z-10">
         
-        {/* Back Link */}
-        <div className="absolute top-8 right-4 sm:right-12 lg:right-24">
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-        </div>
-
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="w-full max-w-md mx-auto"
         >
-          {/* Logo */}
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-cyan-500/20">
-              <Utensils className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-              NutriAI
-            </span>
+          {/* Header: Logo + Back to Home */}
+          <div className="flex items-center justify-between gap-4 mb-8 sm:mb-10 w-full">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-cyan-500/20 shrink-0">
+                <Utensils className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-black bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+                NutriAI
+              </span>
+            </Link>
+
+            <Link to="/" className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors shrink-0">
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
+            </Link>
           </div>
 
-          <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">Create Account</h2>
-          <p className="text-slate-400 text-sm mb-8">Start your personalized nutrition journey today.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Create Account</h2>
+          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">Start your personalized nutrition journey today.</p>
 
           <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 mt-2">
             <Input
               label="Full Name"
               name="name"
@@ -123,7 +122,7 @@ export default function Register() {
                 type="submit"
                 loading={loading}
                 icon={UserPlus}
-                className="w-full text-base rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)]"
+                className="w-full text-sm sm:text-base rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] py-3"
                 size="lg"
               >
                 Create Account
@@ -131,7 +130,7 @@ export default function Register() {
             </div>
           </form>
 
-          <p className="text-center text-sm text-slate-400 mt-8">
+          <p className="text-center text-xs sm:text-sm text-slate-400 mt-6 sm:mt-8">
             Already have an account?{' '}
             <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
               Sign in here
