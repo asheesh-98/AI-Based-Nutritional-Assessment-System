@@ -3,7 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, ChevronDown, LogOut, User, Settings,
-  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot, LogIn, UserPlus
+  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot, LogIn, UserPlus,
+  Users, UtensilsCrossed, BarChart3, ShieldCheck
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -17,7 +18,10 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navLinks = [
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  // Links for normal users
+  const userNavLinks = [
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
     { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
@@ -25,6 +29,18 @@ export default function Navbar() {
     { path: '/food-scanner', label: t('scanner'), icon: ScanBarcode },
     { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
   ];
+
+  // Links for admin view
+  const adminNavLinks = [
+    { path: '/admin/dashboard', label: 'Admin Dashboard', icon: LayoutDashboard },
+    { path: '/admin/users', label: 'Users', icon: Users },
+    { path: '/admin/foods', label: 'Food Database', icon: UtensilsCrossed },
+    { path: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+    { path: '/admin/prediction-reports', label: 'Predictions', icon: Activity },
+    { path: '/admin/settings', label: 'Settings', icon: Settings },
+  ];
+
+  const activeNavLinks = isAdminRoute ? adminNavLinks : userNavLinks;
 
   const handleLogout = () => {
     logout();
@@ -38,16 +54,23 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 gap-2">
           
           {/* Left: Brand Logo */}
-          <Link to="/" className="flex items-center gap-2 group shrink-0">
+          <Link to={isAdminRoute ? '/admin/dashboard' : '/'} className="flex items-center gap-2 group shrink-0">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <Utensils className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
-            <span className="text-base sm:text-lg font-bold gradient-text">NutriAI</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-base sm:text-lg font-bold gradient-text">NutriAI</span>
+              {isAdminRoute && (
+                <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
+                  Admin
+                </span>
+              )}
+            </div>
           </Link>
 
           {/* Center: Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
+            {activeNavLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
@@ -97,8 +120,30 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-56 glass-strong rounded-xl p-2 shadow-2xl border border-white/10"
+                      className="absolute right-0 mt-2 w-56 glass-strong rounded-xl p-2 shadow-2xl border border-white/10 z-50"
                     >
+                      {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+                        isAdminRoute ? (
+                          <Link
+                            to="/dashboard"
+                            onClick={() => setProfileOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-semibold"
+                          >
+                            <User className="w-4 h-4" />
+                            Exit Admin View
+                          </Link>
+                        ) : (
+                          <Link
+                            to="/admin/dashboard"
+                            onClick={() => setProfileOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-semibold"
+                          >
+                            <ShieldCheck className="w-4 h-4" />
+                            Admin Console
+                          </Link>
+                        )
+                      ) : null}
+
                       <Link
                         to="/profile"
                         onClick={() => setProfileOpen(false)}
@@ -167,7 +212,13 @@ export default function Navbar() {
             className="lg:hidden glass-strong border-b border-white/10 shadow-2xl overflow-hidden"
           >
             <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto custom-scrollbar">
-              {navLinks.map((link) => {
+              {isAdminRoute && (
+                <div className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 rounded-lg border border-cyan-500/20 mb-2">
+                  Admin Console Navigation
+                </div>
+              )}
+
+              {activeNavLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
@@ -191,12 +242,35 @@ export default function Navbar() {
 
               <hr className="border-white/10 my-2" />
 
-              {/* Mobile Auth Actions */}
+              {/* Mobile Auth & Admin Actions */}
               {user ? (
                 <div className="space-y-1 pt-1">
                   <div className="px-4 py-2 text-xs font-semibold text-gray-400 truncate">
                     Signed in as <strong className="text-white">{user.full_name || user.name || user.email}</strong>
                   </div>
+
+                  {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
+                    isAdminRoute ? (
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-cyan-300 font-semibold bg-cyan-500/10 hover:bg-cyan-500/20"
+                      >
+                        <User className="w-4 h-4" />
+                        Exit Admin View
+                      </Link>
+                    ) : (
+                      <Link
+                        to="/admin/dashboard"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-cyan-300 font-semibold bg-cyan-500/10 hover:bg-cyan-500/20"
+                      >
+                        <ShieldCheck className="w-4 h-4" />
+                        Admin Console
+                      </Link>
+                    )
+                  ) : null}
+
                   <Link
                     to="/profile"
                     onClick={() => setMobileOpen(false)}
