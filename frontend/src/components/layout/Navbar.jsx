@@ -3,24 +3,28 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, ChevronDown, LogOut, User, Settings,
-  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode
+  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-
-const navLinks = [
-  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/prediction', label: 'Assessment', icon: Activity },
-  { path: '/meal-plan', label: 'Meal Plan', icon: Utensils },
-  { path: '/food-diary', label: 'Food Diary', icon: FileText },
-  { path: '/food-scanner', label: 'Scanner', icon: ScanBarcode },
-];
+import { useLanguage } from '../../context/LanguageContext';
+import LanguageSelector from '../common/LanguageSelector';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const navLinks = [
+    { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    { path: '/prediction', label: t('assessment'), icon: Activity },
+    { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
+    { path: '/food-diary', label: t('food_diary'), icon: FileText },
+    { path: '/food-scanner', label: t('scanner'), icon: ScanBarcode },
+    { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
+  ];
 
   const handleLogout = () => {
     logout();
@@ -48,7 +52,7 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   className={`
-                    flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium
+                    flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium
                     transition-all duration-300
                     ${isActive
                       ? 'bg-white/10 text-white shadow-inner'
@@ -63,8 +67,11 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Right side */}
+          {/* Right side controls */}
           <div className="flex items-center gap-3">
+            {/* Language Dropdown Selector */}
+            <LanguageSelector />
+
             {user ? (
               <div className="relative">
                 <button
@@ -72,10 +79,10 @@ export default function Navbar() {
                   className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-white/5 transition-colors"
                 >
                   <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white text-sm font-bold shadow-md shadow-cyan-500/20">
-                    {user.name?.[0] || user.email?.[0] || 'U'}
+                    {user.full_name?.[0] || user.name?.[0] || user.email?.[0] || 'U'}
                   </div>
                   <span className="hidden sm:block text-sm text-gray-300 max-w-[120px] truncate font-medium">
-                    {user.name || user.email}
+                    {user.full_name || user.name || user.email}
                   </span>
                   <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
                 </button>
@@ -95,7 +102,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <User className="w-4 h-4 text-cyan-400" />
-                        Profile
+                        {t('profile')}
                       </Link>
                       <Link
                         to="/health-profile"
@@ -103,7 +110,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                       >
                         <Settings className="w-4 h-4 text-purple-400" />
-                        Health Profile
+                        {t('health_profile')}
                       </Link>
                       <hr className="border-white/10 my-1" />
                       <button
@@ -111,7 +118,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-rose-400 hover:bg-rose-500/10 transition-colors w-full"
                       >
                         <LogOut className="w-4 h-4" />
-                        Sign out
+                        {t('logout')}
                       </button>
                     </motion.div>
                   )}
@@ -121,15 +128,15 @@ export default function Navbar() {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+                  className="px-3.5 py-2 text-sm text-gray-300 hover:text-white transition-colors font-medium"
                 >
-                  Sign in
+                  {t('login')}
                 </Link>
                 <Link
                   to="/register"
                   className="px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-shadow"
                 >
-                  Get Started
+                  {t('get_started')}
                 </Link>
               </div>
             )}
