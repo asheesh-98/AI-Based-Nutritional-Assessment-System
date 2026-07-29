@@ -40,6 +40,7 @@ const cardVariant = {
 };
 
 function MealCard({ slot, meal, onMealClick }) {
+  const [imgFailed, setImgFailed] = useState(false);
   const Icon = mealIcons[slot] || Utensils;
   const gradient = mealGradients[slot];
 
@@ -53,7 +54,7 @@ function MealCard({ slot, meal, onMealClick }) {
     );
   }
 
-  const bgImage = meal.recipe_image ? `url(${meal.recipe_image})` : 'none';
+  const hasValidImage = meal.recipe_image && !imgFailed;
 
   return (
     <motion.div
@@ -62,12 +63,21 @@ function MealCard({ slot, meal, onMealClick }) {
       onClick={() => onMealClick(meal, slot)}
       className="relative rounded-3xl overflow-hidden cursor-pointer group shadow-2xl min-h-[300px] sm:min-h-[380px] flex flex-col border border-white/10"
     >
-      {/* Edge-to-Edge Imagery */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-        style={{ backgroundImage: bgImage }}
-      />
-      <div className={`absolute inset-0 bg-gradient-to-br ${bgImage !== 'none' ? 'from-[#0B0F19]/90 via-[#0B0F19]/60 to-[#0B0F19]/95' : gradient}`} />
+      {/* Background Imagery or Gradient Fallback */}
+      {hasValidImage ? (
+        <img
+          src={meal.recipe_image}
+          alt=""
+          onError={() => setImgFailed(true)}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      ) : (
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-80 flex items-center justify-center`}>
+          <Utensils className="w-24 h-24 text-white/10" />
+        </div>
+      )}
+
+      <div className={`absolute inset-0 bg-gradient-to-br ${hasValidImage ? 'from-[#0B0F19]/90 via-[#0B0F19]/60 to-[#0B0F19]/95' : 'from-[#0B0F19]/80 via-transparent to-[#0B0F19]/95'}`} />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-black/40 opacity-90" />
       
       {/* Card Content */}
@@ -126,6 +136,7 @@ export default function MealPlanner() {
   const [alert, setAlert] = useState({ show: false, type: 'success', message: '' });
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [modalImgFailed, setModalImgFailed] = useState(false);
 
   const [aiRecipes, setAiRecipes] = useState(null);
   const [recipesLoading, setRecipesLoading] = useState(false);
@@ -295,6 +306,7 @@ export default function MealPlanner() {
               onMealClick={(meal) => {
                 setSelectedMeal(meal);
                 setSelectedSlot(slot);
+                setModalImgFailed(false);
               }}
             />
           ))}
@@ -313,27 +325,33 @@ export default function MealPlanner() {
             >
               <button
                 onClick={() => setSelectedMeal(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white z-20 cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white z-20 cursor-pointer shadow-md"
               >
                 <X size={20} />
               </button>
 
               <div className="overflow-y-auto pr-1 space-y-6 custom-scrollbar">
                 {/* Modal Hero Banner */}
-                <div className="relative rounded-2xl overflow-hidden h-48 sm:h-64 bg-slate-800">
-                  {selectedMeal.recipe_image ? (
-                    <img src={selectedMeal.recipe_image} alt={selectedMeal.recipe_title} className="w-full h-full object-cover" />
+                <div className="relative rounded-2xl overflow-hidden h-48 sm:h-64 bg-[#0a0e1a] border border-white/10">
+                  {selectedMeal.recipe_image && !modalImgFailed ? (
+                    <img
+                      src={selectedMeal.recipe_image}
+                      alt=""
+                      onError={() => setModalImgFailed(true)}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    <div className="w-full h-full gradient-bg flex items-center justify-center">
-                      <Utensils size={48} className="text-white/40" />
+                    <div className="w-full h-full bg-gradient-to-br from-cyan-900/60 via-purple-900/60 to-black flex items-center justify-center relative overflow-hidden">
+                      <Utensils size={64} className="text-cyan-400/20 animate-pulse" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4">
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/40 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 z-10">
                     <span className="text-xs font-black uppercase tracking-wider text-cyan-400 bg-black/60 px-3 py-1 rounded-full border border-cyan-500/30">
                       {selectedSlot}
                     </span>
-                    <h3 className="text-2xl sm:text-3xl font-black text-white mt-2 leading-tight drop-shadow-md">
+                    <h3 className="text-xl sm:text-3xl font-black text-white mt-2 leading-tight drop-shadow-md">
                       {selectedMeal.recipe_title || selectedMeal.food_name}
                     </h3>
                   </div>
