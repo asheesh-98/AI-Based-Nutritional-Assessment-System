@@ -33,7 +33,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 glass-strong w-full border-b border-white/5 overflow-x-hidden">
+    <nav className="sticky top-0 z-50 glass-strong w-full border-b border-white/5">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
           
@@ -71,7 +71,7 @@ export default function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Language Selector Dropdown */}
+            {/* Language Selector Dropdown / Modal Trigger */}
             <LanguageSelector compact={true} />
 
             {/* Desktop Auth Controls */}
