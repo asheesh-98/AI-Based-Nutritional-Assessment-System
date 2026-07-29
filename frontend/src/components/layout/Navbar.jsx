@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, ChevronDown, LogOut, User, Settings,
-  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot
+  LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot, LogIn, UserPlus
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -28,23 +28,25 @@ export default function Navbar() {
 
   const handleLogout = () => {
     logout();
+    setMobileOpen(false);
     navigate('/login');
   };
 
   return (
-    <nav className="sticky top-0 z-50 glass-strong w-full border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-cyan-500/20">
-              <Utensils className="w-5 h-5 text-white" />
+    <nav className="sticky top-0 z-50 glass-strong w-full border-b border-white/5 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-2">
+          
+          {/* Left: Brand Logo */}
+          <Link to="/" className="flex items-center gap-2 group shrink-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl gradient-bg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+              <Utensils className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
-            <span className="text-lg font-bold gradient-text hidden sm:block">NutriAI</span>
+            <span className="text-base sm:text-lg font-bold gradient-text">NutriAI</span>
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Center: Desktop Nav */}
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -52,8 +54,8 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   className={`
-                    flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-medium
-                    transition-all duration-300
+                    flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs xl:text-sm font-medium
+                    transition-all duration-300 whitespace-nowrap
                     ${isActive
                       ? 'bg-white/10 text-white shadow-inner'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -67,24 +69,25 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Right side controls */}
-          <div className="flex items-center gap-3">
-            {/* Language Dropdown Selector */}
-            <LanguageSelector />
+          {/* Right Controls */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+            {/* Language Selector Dropdown */}
+            <LanguageSelector compact={true} />
 
+            {/* Desktop Auth Controls */}
             {user ? (
-              <div className="relative">
+              <div className="relative hidden md:block">
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
                   className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-white/5 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white text-sm font-bold shadow-md shadow-cyan-500/20">
+                  <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white text-xs font-bold shadow-md shadow-cyan-500/20">
                     {user.full_name?.[0] || user.name?.[0] || user.email?.[0] || 'U'}
                   </div>
-                  <span className="hidden sm:block text-sm text-gray-300 max-w-[120px] truncate font-medium">
+                  <span className="hidden xl:block text-xs sm:text-sm text-gray-300 max-w-[100px] truncate font-medium">
                     {user.full_name || user.name || user.email}
                   </span>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 <AnimatePresence>
@@ -125,26 +128,27 @@ export default function Navbar() {
                 </AnimatePresence>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-3.5 py-2 text-sm text-gray-300 hover:text-white transition-colors font-medium"
+                  className="px-3 py-1.5 text-xs sm:text-sm text-gray-300 hover:text-white transition-colors font-medium whitespace-nowrap"
                 >
                   {t('login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-shadow"
+                  className="px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-white gradient-bg rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-shadow whitespace-nowrap"
                 >
                   {t('get_started')}
                 </Link>
               </div>
             )}
 
-            {/* Mobile menu button */}
+            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-white/10 text-gray-400 transition-colors"
+              className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-gray-300 transition-colors"
+              aria-label="Toggle Navigation Menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -152,16 +156,17 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-16 left-0 right-0 glass-strong border-b border-white/10 shadow-2xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="lg:hidden glass-strong border-b border-white/10 shadow-2xl overflow-hidden"
           >
-            <div className="p-4 space-y-2">
+            <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto custom-scrollbar">
               {navLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
@@ -174,7 +179,7 @@ export default function Navbar() {
                       transition-all duration-200
                       ${isActive
                         ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-white/10'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        : 'text-gray-300 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
@@ -183,6 +188,59 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+
+              <hr className="border-white/10 my-2" />
+
+              {/* Mobile Auth Actions */}
+              {user ? (
+                <div className="space-y-1 pt-1">
+                  <div className="px-4 py-2 text-xs font-semibold text-gray-400 truncate">
+                    Signed in as <strong className="text-white">{user.full_name || user.name || user.email}</strong>
+                  </div>
+                  <Link
+                    to="/profile"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5"
+                  >
+                    <User className="w-4 h-4 text-cyan-400" />
+                    {t('profile')}
+                  </Link>
+                  <Link
+                    to="/health-profile"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5"
+                  >
+                    <Settings className="w-4 h-4 text-purple-400" />
+                    {t('health_profile')}
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-rose-400 hover:bg-rose-500/10 w-full font-medium"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    {t('logout')}
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 text-sm font-semibold border border-white/10"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    {t('login')}
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-center gap-2 py-3 rounded-xl gradient-bg text-white text-sm font-bold shadow-lg shadow-cyan-500/20"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    {t('get_started')}
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
