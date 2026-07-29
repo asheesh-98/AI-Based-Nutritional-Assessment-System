@@ -68,29 +68,31 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Center: Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-1">
-            {activeNavLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`
-                    flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs xl:text-sm font-medium
-                    transition-all duration-300 whitespace-nowrap
-                    ${isActive
-                      ? 'bg-white/10 text-white shadow-inner'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }
-                  `}
-                >
-                  <link.icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : ''}`} />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </div>
+          {/* Center: Desktop Nav (Hidden when in Admin mode because AdminSidebar handles desktop nav) */}
+          {!isAdminRoute && (
+            <div className="hidden lg:flex items-center gap-1">
+              {userNavLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`
+                      flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs xl:text-sm font-medium
+                      transition-all duration-300 whitespace-nowrap
+                      ${isActive
+                        ? 'bg-white/10 text-white shadow-inner'
+                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      }
+                    `}
+                  >
+                    <link.icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : ''}`} />
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
@@ -189,7 +191,7 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Hamburger Button (Only shown on mobile < lg) */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-gray-300 transition-colors"
