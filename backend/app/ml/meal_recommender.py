@@ -65,7 +65,7 @@ BALANCE_COLS = [("Protein_g", 0.15), ("Energy_kcal", 0.05), ("Fiber_g", 0.10)]
 MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"]
 
 NON_VEG_REGEX = re.compile(
-    r'\b(?:beef|pork|chicken|turkey|duck|lamb|mutton|fish|tuna|salmon|trout|rohu|catfish|ari|seafood|shrimp|prawn|crab|lobster|clam|mussel|oyster|squid|octopus|meat|bacon|ham|sausage|pepperoni|salami|steak|poultry|anchovy|sardine|cod|haddock|meatball|mince|venison|veal|chorizo|prosciutto|bologna|egg|eggs|yolk)\b',
+    r'\b(?:beef|pork|chicken|turkey|duck|lamb|mutton|fish|fishes|tuna|salmon|trout|rohu|catfish|ari|seafood|shrimp|prawn|prawns|crab|crabs|lobster|clam|mussel|oyster|squid|octopus|meat|bacon|ham|sausage|pepperoni|salami|steak|poultry|anchovy|sardine|cod|haddock|meatball|mince|venison|veal|chorizo|prosciutto|bologna|egg|eggs|yolk|pangas|kayrai|paarai|pandukopa|chappal|catla|hilsa|surmai|bhetki|mrigal|singhi|magur|tengra|bata|pabda|parshe|basa|pomfret|mackerel|kaloori|mathi|ayala|karimeen|nethili|vanjaram|sankara|kizhanga|sheela|kanagurtalu|korrameenu|sankata|eel|eels|stingray|fisch|poisson|pescado|peixe|pesce|vis)\b',
     re.IGNORECASE
 )
 

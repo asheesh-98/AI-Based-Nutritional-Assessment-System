@@ -1,6 +1,7 @@
 """
 Comprehensive Food Database Re-classifier for NutriAI
 Fixes diet_type classifications for all 58,921 rows in food_database_final.csv
+Includes Indian regional food names (IFCT) and international terms.
 """
 import re
 import pandas as pd
@@ -23,20 +24,31 @@ def main():
         re.IGNORECASE
     )
 
-    # NON-VEGETARIAN items (Meat, Poultry, Fish, Seafood, Game, Animal Fats, Eggs, Gelatin, Organ Meats)
+    # Comprehensive Non-Veg Terms (English, Indian Regional IFCT, International)
     non_veg_terms = [
-        # Fish & Seafood
+        # Fish & Seafood (English & Scientific)
         'fish', 'fishes', 'salmon', 'tuna', 'cod', 'haddock', 'halibut', 'sole', 'flounder', 'snapper',
         'grouper', 'bass', 'perch', 'trout', 'char', 'swordfish', 'mahi', 'marlin', 'shark', 'sturgeon',
         'carp', 'pike', 'walleye', 'tilapia', 'mullet', 'milkfish', 'barramundi', 'kingfish', 'trevally',
-        'rohu', 'catfish', 'ari', 'hilsa', 'pomfret', 'mackerel', 'sardine', 'surmai', 'bhetki', 'katla',
-        'anchovy', 'anchovies', 'caviar', 'roe', 'surimi', 'kamaboko', 'eel', 'eels',
+        'anchovy', 'anchovies', 'caviar', 'roe', 'surimi', 'kamaboko', 'eel', 'eels', 'stingray', 'ray',
         'shrimp', 'shrimps', 'prawn', 'prawns', 'crab', 'crabs', 'lobster', 'lobsters', 'clam', 'clams',
         'mussel', 'mussels', 'oyster', 'oysters', 'squid', 'squids', 'cuttlefish', 'octopus', 'scallop',
         'scallops', 'seafood', 'shellfish', 'snails', 'escargot',
+
+        # Indian Regional Fish & Seafood Names (IFCT Dataset)
+        'pangas', 'kayrai', 'paarai', 'pandukopa', 'chappal', 'rohu', 'katla', 'catla', 'hilsa',
+        'surmai', 'bhetki', 'mrigal', 'singhi', 'magur', 'tengra', 'bata', 'pabda', 'parshe', 'basa',
+        'pomfret', 'mackerel', 'sardine', 'bombay duck', 'silver belly', 'ribbon fish', 'seer fish',
+        'kaloori', 'mathi', 'ayala', 'karimeen', 'nethili', 'vanjaram', 'sankara', 'kizhanga',
+        'sheela', 'kanagurtalu', 'korrameenu', 'sankata', 'pulli paarai', 'kulam paarai', 'kannadi paarai',
+
+        # International Non-Veg Words
+        'fisch', 'poisson', 'pescado', 'peixe', 'pesce', 'vis',
+
         # Poultry & Game
         'chicken', 'chickens', 'turkey', 'turkeys', 'duck', 'ducks', 'goose', 'geese', 'quail', 'pheasant',
         'poultry', 'fowl', 'squab', 'pigeon', 'rabbit', 'hare',
+
         # Red Meat & Butchery
         'beef', 'pork', 'lamb', 'mutton', 'venison', 'veal', 'goat', 'bacon', 'ham', 'hams', 'sausage',
         'sausages', 'pepperoni', 'salami', 'steak', 'steaks', 'meat', 'meats', 'meatball', 'meatballs',
@@ -44,9 +56,10 @@ def main():
         'jerky', 'salumi', 'mortadella', 'pastrami', 'bologna', 'frankfurter', 'frankfurters', 'hotdog',
         'hotdogs', 'patty', 'patties', 'nugget', 'nuggets', 'wing', 'wings', 'drumstick', 'drumsticks',
         'rib', 'ribs', 'sirloin', 'ribeye', 'tenderloin', 'brisket', 'tallow', 'lard', 'suet',
+
         # Eggs & Organ Meats
         'egg', 'eggs', 'yolk', 'yolks', 'liver', 'livers', 'kidney', 'kidneys', 'heart', 'hearts',
-        'tripe', 'gizzard', 'gizzards', 'gelatin', 'gelatine', 'bone\s+broth', 'beef\s+broth', 'chicken\s+broth'
+        'tripe', 'gizzard', 'gizzards', 'gelatin', 'gelatine'
     ]
 
     non_veg_regex = re.compile(r'\b(?:' + '|'.join(non_veg_terms) + r')\b', re.IGNORECASE)
@@ -65,7 +78,6 @@ def main():
         cat = str(row.get('Food_Category', ''))
         text = f"{name} {cat}"
 
-        # If it's a known veg exception (e.g. Kidney Beans), check if dairy or pure vegan
         is_veg_exception = bool(veg_exceptions.search(text))
 
         if not is_veg_exception and non_veg_regex.search(text):
@@ -74,7 +86,6 @@ def main():
         if non_vegan_regex.search(text):
             return 'vegetarian'
 
-        # Check existing tag if neutral
         orig_tag = str(row.get('diet_type', '')).lower().strip()
         if orig_tag == 'vegetarian':
             return 'vegetarian'
@@ -87,7 +98,6 @@ def main():
     print("\nNew Diet Type Counts:")
     print(counts)
 
-    # Save cleaned dataset
     df.to_csv(str(csv_path), index=False)
     print(f"\nSaved updated dataset to {csv_path} successfully!")
 

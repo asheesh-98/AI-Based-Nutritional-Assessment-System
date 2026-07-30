@@ -2,6 +2,7 @@
 Meal plan endpoints: generate, regenerate, and view history.
 """
 import json
+import logging
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -14,13 +15,15 @@ from backend.app.models.health_profile import HealthProfile
 from backend.app.models.prediction import Prediction
 from backend.app.models.meal_plan import MealPlan
 from backend.app.schemas.meal import MealPlanRequest, MealPlanResponse, DayMeal, MealItem
-from backend.app.ml.meal_recommender import generate_weekly_meal_plan
+from backend.app.ml.meal_recommender import generate_weekly_meal_plan, NON_VEG_REGEX, NON_VEGAN_REGEX
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/meal-plan", tags=["Meal Plans"])
 
 
 def _detected_deficiencies(pred: Optional[Prediction]) -> List[str]:
-    """Extract deficiency keys where risk ≥ 0.4 from the latest prediction."""
+    """Extract deficiency keys where risk >= 0.4 from the latest prediction."""
     if pred is None:
         return []
     keys = []
@@ -36,6 +39,29 @@ def _detected_deficiencies(pred: Optional[Prediction]) -> List[str]:
         if score and score >= 0.4:
             keys.append(key)
     return keys
+
+
+def _plan_has_diet_violations(plan_dict: dict, diet_pref: str) -> bool:
+    """Check if a cached plan contains items that violate the requested diet preference."""
+    pref = (diet_pref or "").lower().strip()
+    if pref not in ["vegetarian", "vegan"]:
+        return False
+
+    saved_pref = (plan_dict.get("diet_preference") or "").lower().strip()
+    if saved_pref != pref:
+        return True
+
+    for d in plan_dict.get("days", []):
+        for slot, item in d.get("meals", {}).items():
+            if item:
+                title = f"{item.get('recipe_title', '')} {item.get('food_name', '')}"
+                if NON_VEG_REGEX.search(title):
+                    logger.warning("Sanitizer found non-veg item '%s' in cached %s plan!", title, pref)
+                    return True
+                if pref == "vegan" and NON_VEGAN_REGEX.search(title):
+                    logger.warning("Sanitizer found non-vegan item '%s' in cached vegan plan!", title)
+                    return True
+    return False
 
 
 def _build_response(plan_dict: dict, plan_id: Optional[int] = None, created_at=None) -> MealPlanResponse:
@@ -86,7 +112,7 @@ def get_weekly_meal_plan(
     )
     deficiencies = _detected_deficiencies(latest_pred)
 
-    # Generate plan
+    # Generate candidate plan
     plan_dict = generate_weekly_meal_plan(
         diet_preference=diet_pref,
         deficiencies=deficiencies,
@@ -108,14 +134,21 @@ def get_weekly_meal_plan(
     )
 
     if existing:
-        # Return the existing saved plan
         try:
             saved = json.loads(existing.plan_data)
         except (json.JSONDecodeError, TypeError):
             saved = plan_dict
-        return _build_response(saved, plan_id=existing.id, created_at=existing.created_at)
 
-    # Save new plan
+        # Sanitize check: If existing cached plan has diet violations or different preference, purge it!
+        if _plan_has_diet_violations(saved, diet_pref):
+            logger.info("Purging non-compliant cached plan ID %s for user %s and re-generating clean plan...", existing.id, current_user.id)
+            db.delete(existing)
+            db.commit()
+            existing = None
+        else:
+            return _build_response(saved, plan_id=existing.id, created_at=existing.created_at)
+
+    # Save new verified plan
     meal = MealPlan(
         user_id=current_user.id,
         week_number=wn,
