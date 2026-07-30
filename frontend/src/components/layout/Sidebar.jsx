@@ -29,6 +29,7 @@ const menuSections = [
     title: 'Nutrition',
     items: [
       { path: '/meal-plan', label: 'Meal Plan', icon: Utensils },
+      { path: '/food-diary', label: 'Food Diary', icon: FileText },
       { path: '/food-scanner', label: 'Food Scanner', icon: ScanBarcode },
     ],
   },

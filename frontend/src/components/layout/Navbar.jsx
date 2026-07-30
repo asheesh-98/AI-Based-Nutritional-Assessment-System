@@ -25,6 +25,7 @@ export default function Navbar() {
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
     { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
+    { path: '/food-diary', label: t('food_diary'), icon: FileText },
     { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
   ];
 
