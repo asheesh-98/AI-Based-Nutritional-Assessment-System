@@ -20,8 +20,16 @@ export default function Navbar() {
 
   const isAdminRoute = location.pathname.startsWith('/admin');
 
-  // Links for normal users
-  const userNavLinks = [
+  // Sleek desktop top navbar links (fits perfectly on laptop/PC viewports)
+  const desktopUserNavLinks = [
+    { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    { path: '/prediction', label: t('assessment'), icon: Activity },
+    { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
+    { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
+  ];
+
+  // Full comprehensive navigation links for mobile drawer menu
+  const mobileUserNavLinks = [
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
     { path: '/symptoms', label: 'Symptoms', icon: Stethoscope },
@@ -42,8 +50,6 @@ export default function Navbar() {
     { path: '/admin/prediction-reports', label: 'Predictions', icon: Activity },
     { path: '/admin/settings', label: 'Settings', icon: Settings },
   ];
-
-  const activeNavLinks = isAdminRoute ? adminNavLinks : userNavLinks;
 
   const handleLogout = () => {
     logout();
@@ -73,8 +79,8 @@ export default function Navbar() {
 
           {/* Center: Desktop Nav (Hidden when in Admin mode because AdminSidebar handles desktop nav) */}
           {!isAdminRoute && (
-            <div className="hidden lg:flex items-center gap-1">
-              {userNavLinks.map((link) => {
+            <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+              {desktopUserNavLinks.map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
@@ -99,7 +105,7 @@ export default function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Language Selector Dropdown / Modal Trigger */}
+            {/* Language Selector Dropdown */}
             <LanguageSelector compact={true} />
 
             {/* Desktop Auth Controls */}
@@ -194,7 +200,7 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mobile Hamburger Button (Only shown on mobile < lg) */}
+            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-gray-300 transition-colors"
@@ -217,13 +223,13 @@ export default function Navbar() {
             className="lg:hidden glass-strong border-b border-white/10 shadow-2xl overflow-hidden"
           >
             <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto custom-scrollbar">
-              {isAdminRoute && (
+              {isAdminRoute ? (
                 <div className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 rounded-lg border border-cyan-500/20 mb-2">
                   Admin Console Navigation
                 </div>
-              )}
+              ) : null}
 
-              {activeNavLinks.map((link) => {
+              {(isAdminRoute ? adminNavLinks : mobileUserNavLinks).map((link) => {
                 const isActive = location.pathname === link.path;
                 return (
                   <Link
@@ -251,52 +257,50 @@ export default function Navbar() {
               {user ? (
                 <div className="space-y-1 pt-1">
                   <div className="px-4 py-2 text-xs font-semibold text-gray-400 truncate">
-                    Signed in as <strong className="text-white">{user.full_name || user.name || user.email}</strong>
+                    Signed in as <span className="text-white font-bold">{user.full_name || user.name || user.email}</span>
                   </div>
-
                   {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
                     isAdminRoute ? (
                       <Link
                         to="/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-cyan-300 font-semibold bg-cyan-500/10 hover:bg-cyan-500/20"
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-cyan-300 hover:bg-cyan-500/10 transition-colors"
                       >
-                        <User className="w-4 h-4" />
+                        <User className="w-5 h-5" />
                         Exit Admin View
                       </Link>
                     ) : (
                       <Link
                         to="/admin/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-cyan-300 font-semibold bg-cyan-500/10 hover:bg-cyan-500/20"
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-cyan-300 hover:bg-cyan-500/10 transition-colors"
                       >
-                        <ShieldCheck className="w-4 h-4" />
+                        <ShieldCheck className="w-5 h-5" />
                         Admin Console
                       </Link>
                     )
                   ) : null}
-
                   <Link
                     to="/profile"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                   >
-                    <User className="w-4 h-4 text-cyan-400" />
+                    <User className="w-5 h-5 text-cyan-400" />
                     {t('profile')}
                   </Link>
                   <Link
                     to="/health-profile"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-300 hover:text-white hover:bg-white/5"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                   >
-                    <Settings className="w-4 h-4 text-purple-400" />
+                    <Settings className="w-5 h-5 text-purple-400" />
                     {t('health_profile')}
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-rose-400 hover:bg-rose-500/10 w-full font-medium"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 transition-colors w-full"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-5 h-5" />
                     {t('logout')}
                   </button>
                 </div>
@@ -305,7 +309,7 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 text-sm font-semibold border border-white/10"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 bg-white/5 hover:bg-white/10 transition-colors"
                   >
                     <LogIn className="w-4 h-4" />
                     {t('login')}
@@ -313,7 +317,7 @@ export default function Navbar() {
                   <Link
                     to="/register"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 py-3 rounded-xl gradient-bg text-white text-sm font-bold shadow-lg shadow-cyan-500/20"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white gradient-bg shadow-lg shadow-cyan-500/20"
                   >
                     <UserPlus className="w-4 h-4" />
                     {t('get_started')}
