@@ -275,6 +275,14 @@ def generate_weekly_meal_plan(
             "total_calories": round(day_calories, 1),
         })
 
+    # Gemini AI Verification Guard: Use Gemini API key to audit and replace any non-compliant meal items
+    if diet_preference in ["vegetarian", "vegan"]:
+        try:
+            from backend.app.services.gemini_service import verify_meal_plan_diet
+            days = verify_meal_plan_diet(days, diet_preference)
+        except Exception as err:
+            logger.warning("Gemini diet verification skipped: %s", err)
+
     return {
         "week_number": week_number,
         "year": year,
