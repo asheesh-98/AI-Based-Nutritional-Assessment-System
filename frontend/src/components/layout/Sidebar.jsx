@@ -3,113 +3,109 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Activity, Heart, Utensils, FileText,
-  Droplets, TestTube2, TrendingUp, User, Settings,
+  TestTube2, TrendingUp, User,
   ChevronLeft, ChevronRight, Stethoscope, ScanBarcode, Bot
 } from 'lucide-react';
-
-const menuSections = [
-  {
-    title: 'Overview',
-    items: [
-      { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { path: '/ai-coach', label: 'AI Nutrition Coach', icon: Bot },
-      { path: '/reports', label: 'Reports', icon: TrendingUp },
-    ],
-  },
-  {
-    title: 'Health',
-    items: [
-      { path: '/health-profile', label: 'Health Profile', icon: Heart },
-      { path: '/symptoms', label: 'Symptoms', icon: Stethoscope },
-      { path: '/blood-report', label: 'Blood Reports', icon: TestTube2 },
-      { path: '/prediction', label: 'Assessment', icon: Activity },
-    ],
-  },
-  {
-    title: 'Nutrition',
-    items: [
-      { path: '/meal-plan', label: 'Meal Plan', icon: Utensils },
-      { path: '/food-diary', label: 'Food Diary', icon: FileText },
-      { path: '/food-scanner', label: 'Food Scanner', icon: ScanBarcode },
-    ],
-  },
-  {
-    title: 'Account',
-    items: [
-      { path: '/profile', label: 'Profile', icon: User },
-    ],
-  },
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const menuSections = [
+    {
+      title: t('overview') || 'Overview',
+      items: [
+        { path: '/dashboard', label: t('dashboard') || 'Dashboard', icon: LayoutDashboard },
+        { path: '/ai-coach', label: t('ai_coach') || 'AI Nutrition Coach', icon: Bot },
+        { path: '/reports', label: t('reports') || 'Reports', icon: TrendingUp },
+      ],
+    },
+    {
+      title: t('health') || 'Health',
+      items: [
+        { path: '/health-profile', label: t('health_profile') || 'Health Profile', icon: Heart },
+        { path: '/symptoms', label: t('symptoms') || 'Symptoms', icon: Stethoscope },
+        { path: '/blood-report', label: t('blood_reports') || 'Blood Reports', icon: TestTube2 },
+        { path: '/prediction', label: t('assessment') || 'Assessment', icon: Activity },
+      ],
+    },
+    {
+      title: t('nutrition') || 'Nutrition',
+      items: [
+        { path: '/meal-plan', label: t('meal_plan') || 'Meal Plan', icon: Utensils },
+        { path: '/food-diary', label: t('food_diary') || 'Food Diary', icon: FileText },
+        { path: '/food-scanner', label: t('scanner') || 'Food Scanner', icon: ScanBarcode },
+      ],
+    },
+    {
+      title: t('account') || 'Account',
+      items: [
+        { path: '/profile', label: t('profile') || 'Profile', icon: User },
+      ],
+    },
+  ];
 
   return (
-    <motion.aside
-      animate={{ width: collapsed ? 72 : 256 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="hidden lg:flex flex-col h-full flex-shrink-0 glass border-r border-white/5 relative z-10"
+    <aside
+      className={`
+        relative hidden lg:flex flex-col glass-strong border-r border-white/5
+        transition-all duration-300 z-30 shrink-0
+        ${collapsed ? 'w-20' : 'w-64'}
+      `}
     >
-      {/* Collapse button */}
+      {/* Collapse Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full gradient-bg flex items-center justify-center text-white shadow-lg z-20 cursor-pointer"
+        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-cyan-500 text-white flex items-center justify-center shadow-lg hover:bg-cyan-400 transition-colors z-40"
+        aria-label="Toggle Sidebar"
       >
-        {collapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+        {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>
 
-      <div className="flex-1 py-6 px-3 space-y-6 overflow-y-auto">
-        {menuSections.map((section) => (
-          <div key={section.title}>
-            <AnimatePresence>
-              {!collapsed && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500"
-                >
-                  {section.title}
-                </motion.p>
-              )}
-            </AnimatePresence>
-            <div className="space-y-0.5">
+      {/* Menu Sections */}
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6 pt-6">
+        {menuSections.map((section, sIdx) => (
+          <div key={sIdx} className="space-y-2">
+            {!collapsed && (
+              <h3 className="px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                {section.title}
+              </h3>
+            )}
+            <div className="space-y-1">
               {section.items.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <Link
                     key={item.path}
                     to={item.path}
-                    title={collapsed ? item.label : ''}
+                    title={collapsed ? item.label : undefined}
                     className={`
                       flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
-                      transition-all duration-200 group relative overflow-hidden
+                      transition-all duration-200 group relative
                       ${isActive
-                        ? 'bg-white/10 text-white shadow-inner'
+                        ? 'bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-white/10 shadow-lg shadow-cyan-500/10'
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                       }
                     `}
                   >
+                    <item.icon
+                      className={`w-5 h-5 shrink-0 transition-colors ${
+                        isActive ? 'text-cyan-400' : 'group-hover:text-cyan-400'
+                      }`}
+                    />
+                    {!collapsed && (
+                      <span className="truncate">{item.label}</span>
+                    )}
+
+                    {/* Active Indicator Bar */}
                     {isActive && (
                       <motion.div
-                        layoutId="sidebar-active"
-                        className="absolute left-0 top-0 bottom-0 w-1 gradient-bg"
+                        layoutId="activeBar"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-cyan-400 rounded-r-full"
                       />
                     )}
-                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-cyan-400' : ''}`} />
-                    <AnimatePresence>
-                      {!collapsed && (
-                        <motion.span
-                          initial={{ opacity: 0, width: 0 }}
-                          animate={{ opacity: 1, width: 'auto' }}
-                          exit={{ opacity: 0, width: 0 }}
-                          className="whitespace-nowrap overflow-hidden relative z-10"
-                        >
-                          {item.label}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
                   </Link>
                 );
               })}
@@ -117,18 +113,6 @@ export default function Sidebar() {
           </div>
         ))}
       </div>
-
-      {/* Bottom section */}
-      <div className="p-3 border-t border-white/5">
-        <Link
-          to="/profile"
-          title={collapsed ? 'Settings' : ''}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
-        >
-          <Settings className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span>Settings</span>}
-        </Link>
-      </div>
-    </motion.aside>
+    </aside>
   );
 }
