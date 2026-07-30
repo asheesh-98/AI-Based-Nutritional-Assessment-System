@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Menu, X, ChevronDown, LogOut, User, Settings,
   LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot, LogIn, UserPlus,
-  Users, UtensilsCrossed, BarChart3, ShieldCheck
+  Users, UtensilsCrossed, BarChart3, ShieldCheck, TrendingUp, Stethoscope, TestTube2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -24,6 +24,9 @@ export default function Navbar() {
   const userNavLinks = [
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
+    { path: '/symptoms', label: 'Symptoms', icon: Stethoscope },
+    { path: '/blood-report', label: 'Blood Reports', icon: TestTube2 },
+    { path: '/reports', label: 'Reports', icon: TrendingUp },
     { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
     { path: '/food-diary', label: t('food_diary'), icon: FileText },
     { path: '/food-scanner', label: t('scanner'), icon: ScanBarcode },
