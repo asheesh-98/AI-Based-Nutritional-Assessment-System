@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { PageLoader } from '../../components/common/Loader';
+import { useLanguage } from '../../context/LanguageContext';
 import assessmentService from '../../services/assessmentService';
 import dashboardService from '../../services/dashboardService';
 
@@ -64,6 +65,7 @@ function StatCard({ icon: Icon, label, value, sub, color }) {
 }
 
 export default function Reports() {
+  const { t } = useLanguage();
   const [predictions, setPredictions] = useState([]);
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -87,11 +89,10 @@ export default function Reports() {
     load();
   }, []);
 
-  if (loading) return <DashboardLayout title="Reports"><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title={t('reports') || "Reports"}><PageLoader /></DashboardLayout>;
 
   const latest = predictions[0];
 
-  // Average risk across all predictions per nutrient
   const avgRisks = Object.keys(RISK_LABELS).reduce((acc, key) => {
     if (predictions.length === 0) { acc[key] = 0; return acc; }
     const sum = predictions.reduce((s, p) => s + (p[key] || 0), 0);
@@ -105,9 +106,8 @@ export default function Reports() {
   const latestConfidence = latest ? Math.round((latest.confidence_score || 0) * 100) : 0;
 
   return (
-    <DashboardLayout title="Reports" subtitle="Your health assessment history and nutritional risk overview">
+    <DashboardLayout title={t('reports') || "Reports"} subtitle="Your health assessment history and nutritional risk overview">
 
-      {/* Summary Stats - 1 col on mobile, 2 cols on tablet, 4 cols on desktop */}
       <motion.div
         variants={container}
         initial="hidden"
@@ -116,28 +116,28 @@ export default function Reports() {
       >
         <StatCard
           icon={Activity}
-          label="Total Assessments"
+          label={t('total_assessments') || "Total Assessments"}
           value={predictions.length}
           sub="All time"
           color="bg-cyan-500/20 text-cyan-400"
         />
         <StatCard
           icon={AlertCircle}
-          label="High-Risk Nutrients"
+          label={t('high_risk_nutrients') || "High-Risk Nutrients"}
           value={highRiskCount}
           sub={latest ? 'In latest assessment' : 'No data yet'}
           color="bg-rose-500/20 text-rose-400"
         />
         <StatCard
           icon={Target}
-          label="Confidence Score"
+          label={t('confidence_score') || "Confidence Score"}
           value={latest ? `${latestConfidence}%` : '—'}
           sub="Latest assessment"
           color="bg-purple-500/20 text-purple-400"
         />
         <StatCard
           icon={Clock}
-          label="Last Assessment"
+          label={t('last_assessment') || "Last Assessment"}
           value={latest ? new Date(latest.prediction_date).toLocaleDateString() : '—'}
           sub={latest ? new Date(latest.prediction_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Run your first assessment'}
           color="bg-amber-500/20 text-amber-400"

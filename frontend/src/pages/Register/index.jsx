@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Utensils, UserPlus, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import LanguageSelector from '../../components/common/LanguageSelector';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
@@ -12,6 +14,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -47,8 +50,13 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row-reverse bg-[#0a0e1a] overflow-x-hidden text-slate-100">
+    <div className="min-h-screen flex flex-col lg:flex-row-reverse bg-[#0a0e1a] overflow-x-hidden text-slate-100 relative">
       
+      {/* Top Language Selector */}
+      <div className="absolute top-4 left-4 z-50">
+        <LanguageSelector compact={true} />
+      </div>
+
       {/* Right side: Form (Reversed layout for distinction) */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24 py-8 sm:py-12 relative z-10">
         
@@ -71,27 +79,30 @@ export default function Register() {
 
             <Link to="/" className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors shrink-0">
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Home</span>
+              <span>{t('home') || "Back to Home"}</span>
             </Link>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Create Account</h2>
-          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">Start your personalized nutrition journey today.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">
+            {t('sign_up_title') || "Create Your Account"}
+          </h2>
+          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">
+            {t('sign_up_sub') || "Start your personalized nutritional health journey"}
+          </p>
 
           <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 mt-2">
             <Input
-              label="Full Name"
+              label={t('full_name') || "Full Name"}
               name="name"
-              type="text"
-              placeholder="John Doe"
+              placeholder="Asheesh Patel"
               icon={User}
               value={form.name}
               onChange={handleChange}
             />
             <Input
-              label="Email Address"
+              label={t('email_address') || "Email Address"}
               name="email"
               type="email"
               placeholder="you@example.com"
@@ -100,7 +111,7 @@ export default function Register() {
               onChange={handleChange}
             />
             <Input
-              label="Password"
+              label={t('password') || "Password"}
               name="password"
               type="password"
               placeholder="••••••••"
@@ -109,7 +120,7 @@ export default function Register() {
               onChange={handleChange}
             />
             <Input
-              label="Confirm Password"
+              label={t('confirm_password') || "Confirm Password"}
               name="password2"
               type="password"
               placeholder="••••••••"
@@ -125,22 +136,22 @@ export default function Register() {
                 className="w-full text-sm sm:text-base rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] py-3"
                 size="lg"
               >
-                Create Account
+                {t('get_started') || "Create Account"}
               </Button>
             </div>
           </form>
 
           <p className="text-center text-xs sm:text-sm text-slate-400 mt-6 sm:mt-8">
-            Already have an account?{' '}
+            {t('already_have_account') || "Already have an account?"}{' '}
             <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
-              Sign in here
+              {t('login') || "Sign in"}
             </Link>
           </p>
         </motion.div>
       </div>
 
       {/* Left side: Branding Graphic */}
-      <div className="hidden lg:flex w-1/2 relative bg-gradient-to-bl from-purple-900/40 to-cyan-900/40 border-r border-white/5 items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 relative bg-gradient-to-br from-purple-900/40 to-cyan-900/40 border-r border-white/5 items-center justify-center p-12">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-[20%] right-[20%] w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
           <div className="absolute bottom-[20%] left-[20%] w-[30rem] h-[30rem] bg-cyan-500/20 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
@@ -152,19 +163,12 @@ export default function Register() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative z-10 glass-card p-12 max-w-lg text-center"
         >
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="glass p-6 rounded-2xl flex flex-col items-center justify-center border-cyan-500/30">
-              <span className="text-3xl font-black text-cyan-400">95%</span>
-              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">Accuracy</span>
-            </div>
-            <div className="glass p-6 rounded-2xl flex flex-col items-center justify-center border-purple-500/30">
-              <span className="text-3xl font-black text-purple-400">50+</span>
-              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">Nutrients</span>
-            </div>
+          <div className="w-20 h-20 mx-auto rounded-3xl gradient-bg flex items-center justify-center mb-8 shadow-2xl shadow-cyan-500/30">
+            <Utensils className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Empower Your Health</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">Precision Health AI</h3>
           <p className="text-slate-300 leading-relaxed">
-            Join thousands of users who have transformed their lives through AI-driven nutritional guidance.
+            Join thousands of users optimizing their clinical health metrics through AI-driven nutrient deficiency detection and weekly custom recipes.
           </p>
         </motion.div>
       </div>
