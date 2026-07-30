@@ -14,9 +14,20 @@ import io
 import re
 import logging
 
-import pdfplumber
-import pytesseract
-from PIL import Image
+try:
+    import pdfplumber
+except ImportError:
+    pdfplumber = None
+
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 logger = logging.getLogger(__name__)
 

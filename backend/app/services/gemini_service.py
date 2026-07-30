@@ -170,6 +170,9 @@ def analyze_food_image(base64_image: str, mime_type: str = "image/jpeg") -> Dict
             "nutritional_highlights": ["Balanced Meal"]
         }
 
+# Function alias for endpoint compatibility
+analyze_meal_photo = analyze_food_image
+
 
 def analyze_blood_report_document(base64_file: str, mime_type: str = "application/pdf") -> Dict[str, Any]:
     """
@@ -208,6 +211,9 @@ def analyze_blood_report_document(base64_file: str, mime_type: str = "applicatio
     except Exception as exc:
         logger.error("Failed to parse Gemini blood report: %s", exc)
         return {}
+
+# Function alias for endpoint compatibility
+parse_blood_report_with_gemini = analyze_blood_report_document
 
 
 def generate_ai_meal_plan_recipes(deficiencies: List[str], preference: str = "vegetarian", target_calories: int = 2000) -> str:
