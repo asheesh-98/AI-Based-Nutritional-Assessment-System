@@ -19,6 +19,7 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isHomePage = location.pathname === '/';
 
   // Sleek desktop top navbar links (fits perfectly on laptop/PC viewports)
   const desktopUserNavLinks = [
@@ -106,8 +107,8 @@ export default function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Language Selector Dropdown */}
-            <LanguageSelector compact={true} />
+            {/* Language Selector Dropdown (Only shown on Home Page '/') */}
+            {isHomePage && <LanguageSelector compact={true} />}
 
             {/* Desktop Auth Controls */}
             {user ? (

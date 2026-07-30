@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
-import { useLanguage } from '../../context/LanguageContext';
+import Alert from '../../components/common/Alert';
 import mealService from '../../services/mealService';
 import api from '../../services/api';
 
@@ -132,7 +132,6 @@ function MealCard({ slot, meal, onMealClick }) {
 }
 
 export default function MealPlanner() {
-  const { t } = useLanguage();
   const [selectedDiet, setSelectedDiet] = useState('vegetarian');
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [weeklyPlan, setWeeklyPlan] = useState(null);
@@ -145,12 +144,6 @@ export default function MealPlanner() {
 
   const [aiRecipes, setAiRecipes] = useState(null);
   const [recipesLoading, setRecipesLoading] = useState(false);
-
-  const activeDietOptions = [
-    { value: 'vegetarian', label: t('vegetarian') || 'Vegetarian', icon: Leaf, color: 'text-emerald-400' },
-    { value: 'non_vegetarian', label: t('non_vegetarian') || 'Non-Veg', icon: Beef, color: 'text-rose-400' },
-    { value: 'vegan', label: t('vegan') || 'Vegan', icon: Vegan, color: 'text-green-400' },
-  ];
 
   useEffect(() => {
     loadWeeklyPlan(selectedDiet);
@@ -208,7 +201,7 @@ export default function MealPlanner() {
   const currentMeals = currentDayData?.meals || {};
 
   return (
-    <DashboardLayout title={t('smart_meal_planner') || "Smart Meal Planner"} subtitle={t('assessment_sub') || "Personalized meal plans targeting your deficiency profile"}>
+    <DashboardLayout title="Smart Meal Planner" subtitle="Personalized meal plans targeting your deficiency profile">
       {alert.show && (
         <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />
       )}
@@ -217,7 +210,7 @@ export default function MealPlanner() {
       <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 mb-6 sm:mb-8 w-full max-w-full overflow-x-hidden">
         {/* Diet Selector Pills */}
         <div className="grid grid-cols-3 gap-1 p-1 bg-white/5 border border-white/10 rounded-2xl w-full xl:w-auto">
-          {activeDietOptions.map((opt) => {
+          {dietOptions.map((opt) => {
             const Icon = opt.icon;
             const isSelected = selectedDiet === opt.value;
             return (

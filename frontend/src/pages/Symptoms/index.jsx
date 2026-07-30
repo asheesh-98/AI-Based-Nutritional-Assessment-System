@@ -9,7 +9,6 @@ import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { PageLoader } from '../../components/common/Loader';
-import { useLanguage } from '../../context/LanguageContext';
 import assessmentService from '../../services/assessmentService';
 
 const symptomsList = [
@@ -39,7 +38,6 @@ const container = { hidden: {}, show: { transition: { staggerChildren: 0.03 } } 
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
 export default function Symptoms() {
-  const { t } = useLanguage();
   const [symptoms, setSymptoms] = useState(() =>
     symptomsList.reduce((acc, s) => ({ ...acc, [s.key]: 0 }), {})
   );
@@ -50,19 +48,21 @@ export default function Symptoms() {
   useEffect(() => {
     const load = async () => {
       try {
-        const records = await assessmentService.getSymptoms();
-        if (records && records.length > 0) {
-          const last = records[0];
+        const history = await assessmentService.getSymptomHistory();
+        if (history && history.length > 0) {
+          // Backend sorts recorded_at desc, so history[0] is the newest submission
+          const last = history[0];
+          const data = last.symptoms || last;
           setSymptoms(prev => {
             const filled = { ...prev };
             Object.keys(filled).forEach(key => {
-              if (last[key] !== undefined && last[key] !== null) filled[key] = last[key];
+              if (data[key] !== undefined && data[key] !== null) filled[key] = data[key];
             });
             return filled;
           });
         }
       } catch (err) {
-        // No previous symptoms
+        // No history, use defaults
       } finally {
         setLoading(false);
       }
@@ -70,8 +70,8 @@ export default function Symptoms() {
     load();
   }, []);
 
-  const handleChange = (key, value) => {
-    setSymptoms(prev => ({ ...prev, [key]: Number(value) }));
+  const handleSlider = (key, value) => {
+    setSymptoms(prev => ({ ...prev, [key]: parseInt(value) }));
   };
 
   const handleSubmit = async () => {
@@ -79,18 +79,18 @@ export default function Symptoms() {
     setAlert({ show: false, type: 'success', message: '' });
     try {
       await assessmentService.submitSymptoms(symptoms);
-      setAlert({ show: true, type: 'success', message: t('symptoms_submitted') || 'Symptoms submitted successfully! You can now run an assessment.' });
+      setAlert({ show: true, type: 'success', message: 'Symptoms submitted successfully! You can now run an assessment.' });
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('submission_failed') || 'Failed to submit symptoms.' });
+      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || 'Failed to submit symptoms.' });
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <DashboardLayout title={t('symptoms') || "Symptom Tracker"}><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title="Symptom Tracker"><PageLoader /></DashboardLayout>;
 
   return (
-    <DashboardLayout title={t('symptom_logger') || "Symptom Record & Health Logger"} subtitle={t('symptom_sub') || "Track physical symptoms to refine your AI nutritional recommendations"}>
+    <DashboardLayout title="Symptom Tracker" subtitle="Rate your symptoms to help our AI assess deficiencies">
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       <motion.div

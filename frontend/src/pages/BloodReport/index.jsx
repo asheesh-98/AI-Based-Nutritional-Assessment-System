@@ -6,7 +6,6 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { PageLoader } from '../../components/common/Loader';
-import { useLanguage } from '../../context/LanguageContext';
 import assessmentService from '../../services/assessmentService';
 
 const bloodMarkers = [
@@ -26,7 +25,6 @@ const container = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } 
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
 export default function BloodReport() {
-  const { t } = useLanguage();
   const [form, setForm] = useState(() =>
     bloodMarkers.reduce((acc, m) => ({ ...acc, [m.key]: '' }), {})
   );
@@ -37,16 +35,20 @@ export default function BloodReport() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await assessmentService.getLatestBloodReport();
-        if (data) {
-          const loaded = {};
-          bloodMarkers.forEach(m => {
-            loaded[m.key] = data[m.key] !== null && data[m.key] !== undefined ? String(data[m.key]) : '';
+        const reports = await assessmentService.getBloodReports();
+        if (reports && reports.length > 0) {
+          // Backend sorts uploaded_at desc, so reports[0] is the newest submission
+          const last = reports[0];
+          setForm(prev => {
+            const filled = { ...prev };
+            Object.keys(filled).forEach(key => {
+              if (last[key] !== undefined && last[key] !== null) filled[key] = last[key];
+            });
+            return filled;
           });
-          setForm(loaded);
         }
       } catch (err) {
-        // No report yet
+        // No previous reports
       } finally {
         setLoading(false);
       }
@@ -75,10 +77,10 @@ export default function BloodReport() {
     }
   };
 
-  if (loading) return <DashboardLayout title={t('blood_reports') || "Blood Reports"}><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title="Blood Report"><PageLoader /></DashboardLayout>;
 
   return (
-    <DashboardLayout title={t('blood_reports') || "Blood Reports"} subtitle={t('blood_report_ocr') || "Enter your blood test results for analysis"}>
+    <DashboardLayout title="Blood Report" subtitle="Enter your blood test results for analysis">
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       <div className="glass-card p-4 mb-6 mt-2 flex items-start gap-3 border border-cyan-500/20 bg-cyan-500/5">

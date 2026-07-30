@@ -5,7 +5,6 @@ import {
   Lightbulb, ShieldCheck
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
-import { useLanguage } from '../../context/LanguageContext';
 import api from '../../services/api';
 
 const suggestedPrompts = [
@@ -16,7 +15,6 @@ const suggestedPrompts = [
 ];
 
 export default function AICoach() {
-  const { t } = useLanguage();
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -69,7 +67,7 @@ export default function AICoach() {
   };
 
   return (
-    <DashboardLayout title={t('ai_coach_title') || "24/7 AI NutriCoach"} subtitle={t('ai_coach_sub') || "Ask your personal Gemini AI nutritionist any dietary or health question"}>
+    <DashboardLayout title="AI Nutrition Coach" subtitle="Powered by Google Gemini 2.0 Flash">
       <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-230px)] max-w-4xl mx-auto w-full overflow-x-hidden">
 
         {/* Disclaimer Pill */}

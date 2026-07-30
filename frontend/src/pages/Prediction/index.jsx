@@ -9,7 +9,6 @@ import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
-import { useLanguage } from '../../context/LanguageContext';
 import assessmentService from '../../services/assessmentService';
 import api from '../../services/api';
 
@@ -67,7 +66,6 @@ const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } 
 const item = { hidden: { opacity: 0, y: 20, scale: 0.95 }, show: { opacity: 1, y: 0, scale: 1 } };
 
 export default function Prediction() {
-  const { t } = useLanguage();
   const [results, setResults] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -151,16 +149,16 @@ export default function Prediction() {
   const confidence = results?.confidence || results?.confidence_score;
   const hasHighRisk = Object.values(deficiencies).some(v => (typeof v === 'number' ? v : v?.risk || 0) > 0.6);
 
-  if (loading) return <DashboardLayout title={t('assessment') || "AI Assessment"}><Loader size="lg" text="Loading assessments..." /></DashboardLayout>;
+  if (loading) return <DashboardLayout title="AI Assessment"><Loader size="lg" text="Loading assessments..." /></DashboardLayout>;
 
   return (
-    <DashboardLayout title={t('deficiency_assessment') || "AI Assessment"} subtitle={t('assessment_sub') || "Get AI-powered nutritional deficiency predictions & clinical insights"}>
+    <DashboardLayout title="AI Assessment" subtitle="Get AI-powered nutritional deficiency predictions & clinical insights">
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       {/* Top Section */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8 mt-2">
         <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg">
-          {predicting ? (t('calculating') || 'Analyzing...') : (t('run_assessment') || 'Run New Assessment')}
+          {predicting ? 'Analyzing...' : 'Run New Assessment'}
         </Button>
         <div className="flex gap-2">
           <Link to="/symptoms">
