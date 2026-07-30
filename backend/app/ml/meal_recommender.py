@@ -3,13 +3,14 @@ Weekly meal-plan generator.
 
 Core algorithm:
 1. Load the food database CSV.
-2. Filter by diet preference.
+2. Filter by diet preference using Word Matching + Biological Nutritional Shields.
 3. Score each food based on nutrient density for detected deficiencies.
 4. Generate a 7-day plan (breakfast, lunch, dinner, snack) with:
    - No food repeated within the week.
    - Plans change weekly (ISO week-number × year as seed).
    - Top-20 scoring foods per slot → seeded random pick for variety.
    - Rough daily calorie target validation (1500-2500 kcal).
+5. Audit via Gemini 2.0 Flash AI verification before serving.
 """
 import logging
 import random
@@ -65,12 +66,12 @@ BALANCE_COLS = [("Protein_g", 0.15), ("Energy_kcal", 0.05), ("Fiber_g", 0.10)]
 MEAL_SLOTS = ["breakfast", "lunch", "dinner", "snack"]
 
 NON_VEG_REGEX = re.compile(
-    r'\b(?:beef|pork|chicken|turkey|duck|lamb|mutton|fish|fishes|tuna|salmon|trout|rohu|catfish|ari|seafood|shrimp|prawn|prawns|crab|crabs|lobster|clam|mussel|oyster|squid|octopus|meat|bacon|ham|sausage|pepperoni|salami|steak|poultry|anchovy|sardine|cod|haddock|meatball|mince|venison|veal|chorizo|prosciutto|bologna|egg|eggs|yolk|pangas|kayrai|paarai|pandukopa|chappal|catla|hilsa|surmai|bhetki|mrigal|singhi|magur|tengra|bata|pabda|parshe|basa|pomfret|mackerel|kaloori|mathi|ayala|karimeen|nethili|vanjaram|sankara|kizhanga|sheela|kanagurtalu|korrameenu|sankata|eel|eels|stingray|fisch|poisson|pescado|peixe|pesce|vis)\b',
+    r'\b(?:beef|pork|chicken|chickens|turkey|duck|ducks|lamb|mutton|fish|fishes|tuna|salmon|trout|rohu|catfish|ari|seafood|shrimp|shrimps|prawn|prawns|crab|crabs|lobster|clam|mussel|oyster|squid|octopus|meat|meats|bacon|ham|sausage|sausages|pepperoni|salami|steak|steaks|poultry|anchovy|sardine|cod|haddock|meatball|mince|venison|veal|chorizo|prosciutto|bologna|egg|eggs|yolk|yolks|meen|aluva|allathi|betki|bhetki|bommuralu|chakla|chelu|chembali|eri|gobro|jallal|jathi|tholam|narba|pangas|paarai|pandukopa|chappal|karimeen|vanjaram|nethili|mathi|ayala|sankara|kizhanga|sheela|kanagurtalu|korrameenu|sankata|eel|eels|stingray|fisch|poisson|pescado|peixe|pesce|vis|calf|calves|hen|hens|chops|spleen|tongue|lungs|gizzard|tripe|liver|livers)\b',
     re.IGNORECASE
 )
 
 NON_VEGAN_REGEX = re.compile(
-    r'\b(?:milk|cheese|butter|cream|yogurt|curd|paneer|whey|ghee|honey|casein|egg|mayonnaise|custard|parmesan|cheddar|mozzarella)\b',
+    r'\b(?:milk|cheese|cheeses|butter|cream|yogurt|yogurts|curd|paneer|whey|ghee|honey|casein|egg|eggs|mayonnaise|custard|parmesan|cheddar|mozzarella|ricotta)\b',
     re.IGNORECASE
 )
 
@@ -324,6 +325,16 @@ def _filter_by_diet(df: pd.DataFrame, pref: str) -> pd.DataFrame:
     if pref in ["vegetarian", "vegan"]:
         mask = ~filtered[food_col].astype(str).str.contains(NON_VEG_REGEX, na=False)
         filtered = filtered[mask]
+
+        # Biological Nutritional Shield: Drop any item with Cholesterol > 5, Fiber < 0.2, Carbs < 2, Protein > 6
+        if {"Cholesterol_mg", "Fiber_g", "Carbohydrate_g", "Protein_g"}.issubset(filtered.columns):
+            bio_mask = ~(
+                (filtered["Cholesterol_mg"].fillna(0) > 5.0) &
+                (filtered["Fiber_g"].fillna(0) < 0.2) &
+                (filtered["Carbohydrate_g"].fillna(0) < 2.0) &
+                (filtered["Protein_g"].fillna(0) > 6.0)
+            )
+            filtered = filtered[bio_mask]
 
     if pref == "vegan":
         mask = ~filtered[food_col].astype(str).str.contains(NON_VEGAN_REGEX, na=False)
