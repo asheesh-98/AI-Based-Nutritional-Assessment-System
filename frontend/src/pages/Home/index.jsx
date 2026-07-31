@@ -1,9 +1,10 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Activity, Utensils, FileText, TrendingUp,
   TestTube2, Stethoscope, User, Heart, Cpu,
-  ArrowRight, Sparkles, Shield, ChevronRight
+  ArrowRight, Sparkles, Shield, ChevronRight, Download, Smartphone
 } from 'lucide-react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
@@ -12,6 +13,50 @@ import { useLanguage } from '../../context/LanguageContext';
 
 export default function Home() {
   const { t } = useLanguage();
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+    }
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallPWA = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+      }
+      setDeferredPrompt(null);
+    } else {
+      alert(
+        "To install NutriAI as an App on your device:\n\n" +
+        "📱 Android / Chrome: Tap menu (⋮) -> 'Install App' or 'Add to Home Screen'\n" +
+        "📱 iOS Safari: Tap Share (⎋) -> 'Add to Home Screen'\n" +
+        "💻 Desktop Chrome / Edge: Click Install Icon (⤓) in the URL address bar."
+      );
+    }
+  };
 
   const features = [
     { icon: Activity, title: t('feature_ml_title'), desc: t('feature_ml_desc'), color: 'cyan' },
@@ -107,7 +152,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4"
+              className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4"
             >
               <Link to="/register" className="w-full sm:w-auto">
                 <motion.button
@@ -119,6 +164,18 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </motion.button>
               </Link>
+
+              {/* 📲 PWA Download Button */}
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={handleInstallPWA}
+                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-cyan-300 glass border border-cyan-500/30 hover:border-cyan-400 rounded-xl sm:rounded-2xl shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2.5 transition-all cursor-pointer bg-cyan-500/10"
+              >
+                <Download className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 animate-bounce" />
+                <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
+              </motion.button>
+
               <a href="#features" className="w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.1)' }}
@@ -139,31 +196,29 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="w-full max-w-5xl glass-strong rounded-2xl sm:rounded-3xl p-4 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 divide-y-0 sm:divide-y-0 lg:divide-x divide-white/10 shadow-2xl relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-purple-500/5 pointer-events-none" />
             {stats.map((stat, idx) => (
-              <div key={idx} className="text-center px-1 sm:px-2 py-2 sm:py-0 relative z-10 flex flex-col justify-center">
-                <p className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent">
+              <div key={idx} className="flex flex-col items-center text-center p-2">
+                <span className="text-2xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-1">
                   {stat.value}
-                </p>
-                <p className="text-[10px] sm:text-xs text-cyan-400 font-semibold uppercase mt-1 sm:mt-2 tracking-wider">
-                  {stat.label}
-                </p>
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-white mb-0.5">{stat.label}</span>
+                <span className="text-[11px] text-slate-400 font-medium hidden sm:block">{stat.desc}</span>
               </div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative bg-black/20 border-y border-white/5">
+      {/* Features Grid */}
+      <section id="features" className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative bg-white/[0.01]">
         <div className="max-w-7xl mx-auto">
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true }}
             className="text-center mb-12 sm:mb-20"
           >
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6 leading-tight">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6">
               {t('features_title')}
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
@@ -171,24 +226,25 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <motion.div
+          <motion.div 
             variants={container}
             initial="hidden"
             whileInView="show"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
           >
             {features.map((feature, idx) => {
-              const c = colorMap[feature.color];
+              const colors = colorMap[feature.color];
               return (
                 <motion.div
                   key={idx}
                   variants={item}
-                  className="glass-card p-6 sm:p-8 group flex flex-col justify-between"
+                  whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                  className="glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
-                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${c.bg} ${c.border} border border-opacity-50 flex items-center justify-center mb-5 transition-transform group-hover:scale-105 duration-300`}>
-                      <feature.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${c.text}`} />
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${colors.bg} border ${colors.border} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <feature.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${colors.text}`} />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-white mb-3">{feature.title}</h3>
                     <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
@@ -242,38 +298,51 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA & PWA Section */}
       <section className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative mb-8 sm:mb-12">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-card p-8 sm:p-16 text-center relative overflow-hidden"
+            className="glass-card p-8 sm:p-16 text-center relative overflow-hidden rounded-3xl border border-white/10"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10" />
             <div className="absolute top-0 left-0 w-full h-1 gradient-bg" />
             
             <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 sm:mb-8">
-                <Shield className="w-8 h-8 sm:w-10 sm:h-10 text-cyan-400" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 sm:mb-8 text-cyan-400">
+                <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 animate-bounce" />
               </div>
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6">
-                {t('hero_title_1')} {t('hero_title_2')}
+                Install NutriAI on Any Device
               </h2>
-              <p className="text-slate-400 max-w-2xl mx-auto mb-8 sm:mb-10 text-xs sm:text-base leading-relaxed">
-                {t('hero_subtitle')}
+              <p className="text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 text-xs sm:text-base leading-relaxed">
+                Enjoy offline meal plans, instant food scanning, and zero app store downloads with Progressive Web App technology.
               </p>
-              <Link to="/register" className="w-full sm:w-auto">
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
+                  onClick={handleInstallPWA}
                   className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white gradient-bg rounded-xl sm:rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,212,255,0.4)]"
                 >
-                  <span>{t('start_assessment')}</span>
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                  <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
                 </motion.button>
-              </Link>
+
+                <Link to="/register" className="w-full sm:w-auto">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-slate-200 glass border border-white/10 hover:bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>{t('start_assessment')}</span>
+                    <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </motion.button>
+                </Link>
+              </div>
             </div>
           </motion.div>
         </div>
