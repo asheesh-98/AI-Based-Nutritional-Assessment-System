@@ -119,10 +119,21 @@ def chat_with_nutritionist(messages: List[Dict[str, str]], health_context: Optio
     return _call_gemini_api(formatted_contents, system_instruction=system_prompt)
 
 
-def analyze_food_image(base64_image: str, mime_type: str = "image/jpeg") -> Dict[str, Any]:
+def analyze_food_image(image_input: Any, mime_type: str = "image/jpeg") -> Dict[str, Any]:
     """
     Visual Food Scanner — sends image to Gemini Vision model to identify food items and estimate macros.
+    Accepts base64 string or raw bytes.
     """
+    if isinstance(image_input, bytes):
+        base64_image = base64.b64encode(image_input).decode("utf-8")
+    elif isinstance(image_input, str):
+        if "," in image_input:
+            base64_image = image_input.split(",", 1)[1]
+        else:
+            base64_image = image_input
+    else:
+        base64_image = str(image_input)
+
     system_prompt = (
         "You are an AI Food Scanner & Calorie Estimator. Analyze the provided food image and return a JSON object ONLY. "
         "Do not include markdown code blocks or conversational text. "
@@ -174,10 +185,21 @@ def analyze_food_image(base64_image: str, mime_type: str = "image/jpeg") -> Dict
 analyze_meal_photo = analyze_food_image
 
 
-def analyze_blood_report_document(base64_file: str, mime_type: str = "application/pdf") -> Dict[str, Any]:
+def analyze_blood_report_document(file_input: Any, mime_type: str = "application/pdf") -> Dict[str, Any]:
     """
     Multi-modal OCR and Lab Analysis — extracts biomarkers from blood test PDFs/Images.
+    Accepts base64 string or raw bytes.
     """
+    if isinstance(file_input, bytes):
+        base64_file = base64.b64encode(file_input).decode("utf-8")
+    elif isinstance(file_input, str):
+        if "," in file_input:
+            base64_file = file_input.split(",", 1)[1]
+        else:
+            base64_file = file_input
+    else:
+        base64_file = str(file_input)
+
     prompt = (
         "Extract all blood biomarkers, lab values, and deficiency risks from this medical document. "
         "Return a strictly valid JSON object adhering to this structure:\n"

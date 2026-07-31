@@ -1,6 +1,7 @@
 """
 AI endpoints powered by Google Gemini API.
 """
+import base64
 from typing import List, Optional, Dict, Any
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
@@ -108,7 +109,8 @@ async def scan_meal_photo(
     try:
         contents = await file.read()
         mime_type = file.content_type or "image/jpeg"
-        result = analyze_meal_photo(contents, mime_type=mime_type)
+        base64_image = base64.b64encode(contents).decode("utf-8")
+        result = analyze_meal_photo(base64_image, mime_type=mime_type)
         return result
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Image analysis failed: {str(exc)}")
