@@ -11,6 +11,7 @@ import { SkeletonCard } from '../../components/common/Loader';
 import Alert from '../../components/common/Alert';
 import { useAuth } from '../../context/AuthContext';
 import dashboardService from '../../services/dashboardService';
+import { saveOfflineDashboard, getOfflineDashboard } from '../../utils/offlineStorage';
 
 const quickActions = [
   { label: 'Run Assessment', icon: Activity, path: '/prediction', gradient: true },
@@ -33,16 +34,22 @@ export default function Dashboard() {
       try {
         const res = await dashboardService.getDashboard();
         setData(res);
+        saveOfflineDashboard(res);
       } catch (err) {
         console.error('Dashboard fetch error:', err);
-        // Use fallback data
-        setData({
-          nutrition_score: 82,
-          deficiency_count: 3,
-          daily_calories: 1850,
-          water_intake: 2.1,
-          recent_predictions: [],
-        });
+        const cached = getOfflineDashboard();
+        if (cached) {
+          setData(cached);
+        } else {
+          // Use fallback data
+          setData({
+            nutrition_score: 82,
+            deficiency_count: 3,
+            daily_calories: 1850,
+            water_intake: 2.1,
+            recent_predictions: [],
+          });
+        }
       } finally {
         setLoading(false);
       }

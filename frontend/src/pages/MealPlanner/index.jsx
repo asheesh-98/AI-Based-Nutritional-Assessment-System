@@ -8,7 +8,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import mealService from '../../services/mealService';
-import api from '../../services/api';
+import { saveOfflineMealPlan, getOfflineMealPlan } from '../../utils/offlineStorage';
 
 const dietOptions = [
   { value: 'vegetarian', label: 'Vegetarian', icon: Leaf, color: 'text-emerald-400' },
@@ -154,9 +154,16 @@ export default function MealPlanner() {
     try {
       const data = await mealService.getWeeklyMealPlan(diet);
       setWeeklyPlan(data);
+      saveOfflineMealPlan(data);
     } catch (err) {
       console.error('Failed to load meal plan', err);
-      setAlert({ show: true, type: 'error', message: 'Could not load meal plan.' });
+      const cached = getOfflineMealPlan();
+      if (cached) {
+        setWeeklyPlan(cached);
+        setAlert({ show: true, type: 'info', message: 'Loaded cached offline meal plan.' });
+      } else {
+        setAlert({ show: true, type: 'error', message: 'Could not load meal plan.' });
+      }
     } finally {
       setLoading(false);
     }
