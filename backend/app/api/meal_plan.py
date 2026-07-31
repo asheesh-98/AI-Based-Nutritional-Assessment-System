@@ -64,13 +64,20 @@ def _plan_has_diet_violations(plan_dict: dict, diet_pref: str) -> bool:
     return False
 
 
+from backend.app.ml.meal_recommender import generate_weekly_meal_plan, NON_VEG_REGEX, NON_VEGAN_REGEX, _get_dynamic_food_image
+
 def _build_response(plan_dict: dict, plan_id: Optional[int] = None, created_at=None) -> MealPlanResponse:
     """Convert the raw dict from the recommender into a MealPlanResponse."""
     days = []
     for d in plan_dict.get("days", []):
         meals = {}
         for slot, item in d.get("meals", {}).items():
-            meals[slot] = MealItem(**item)
+            if item:
+                title = item.get("recipe_title") or item.get("food_name") or ""
+                # Refresh image if missing or if assigned old generic fallback
+                if not item.get("recipe_image") or "photo-1525351484163" in str(item.get("recipe_image")):
+                    item["recipe_image"] = _get_dynamic_food_image(title, slot)
+                meals[slot] = MealItem(**item)
         days.append(DayMeal(
             day=d["day"],
             meals=meals,

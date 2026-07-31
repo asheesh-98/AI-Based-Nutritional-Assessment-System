@@ -75,69 +75,99 @@ NON_VEGAN_REGEX = re.compile(
     re.IGNORECASE
 )
 
+# ── High-Accuracy Dynamic Food Keyword Image Router ──────────────────────────
 FOOD_IMAGE_KEYWORDS = [
-    ("parmesan", "https://images.unsplash.com/photo-1452195100486-9cc805987862?auto=format&fit=crop&w=800&q=80"),
-    ("cheese", "https://images.unsplash.com/photo-1552767059-ce182ead8c1b?auto=format&fit=crop&w=800&q=80"),
-    ("gingelly", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
-    ("seed", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
-    ("flaxseed", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
-    ("peanut", "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80"),
-    ("butter", "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80"),
-    ("egg", "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80"),
-    ("pancake", "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80"),
-    ("salad", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"),
-    ("paneer", "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"),
-    ("curry", "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"),
-    ("pasta", "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80"),
-    ("smoothie", "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80"),
-    ("soup", "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80"),
+    # Millets & Grains
+    ("millet", "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"),
+    ("buckwheat", "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"),
+    ("quinoa", "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"),
+    ("grain", "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"),
+    ("flour", "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80"),
+    ("cereal", "https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=800&q=80"),
     ("rice", "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80"),
     ("bread", "https://images.unsplash.com/photo-1584776296944-ab6fb57b0bdd?auto=format&fit=crop&w=800&q=80"),
-    ("toast", "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80"),
+
+    # Seeds (Niger, Sesame, Sunflower, Pumpkin, Flaxseed, Omum)
+    ("niger", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("seed", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("seeds", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("gingelly", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("sesame", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("flaxseed", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("sunflower", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("pumpkin", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+    ("omum", "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"),
+
+    # Leafy Greens & Vegetables (Pak Choi, Bathua, Spinach, Agathi)
+    ("pak choi", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("choi", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("leaf", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("leaves", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("spinach", "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80"),
+    ("greens", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("bathua", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("agathi", "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"),
+    ("vegetable", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"),
+    ("salad", "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80"),
+    ("mushroom", "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"),
+
+    # Cookies & Oats
+    ("cookie", "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80"),
+    ("cookies", "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80"),
+    ("oatmeal", "https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=800&q=80"),
     ("oat", "https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=800&q=80"),
+    ("biscuit", "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80"),
+
+    # Nuts & Legumes
+    ("walnut", "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80"),
+    ("almond", "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80"),
+    ("cashew", "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80"),
+    ("nut", "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80"),
+    ("nuts", "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80"),
+    ("hazelnut", "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80"),
+    ("pecan", "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80"),
+    ("dal", "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80"),
+    ("gram", "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80"),
+    ("soya", "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80"),
+    ("paneer", "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"),
+    ("curry", "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"),
+
+    # Fruits & Sweets
+    ("fig", "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80"),
+    ("figs", "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80"),
+    ("fruit", "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80"),
+    ("apple", "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=800&q=80"),
+    ("coconut", "https://images.unsplash.com/photo-1543362906-acfc16c67564?auto=format&fit=crop&w=800&q=80"),
+
+    # Non-Veg
     ("chicken", "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80"),
     ("fish", "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80"),
-    ("fruit", "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80"),
-    ("yogurt", "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800&q=80"),
 ]
-
-SLOT_FALLBACK_IMAGES = {
-    "breakfast": [
-        "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80"
-    ],
-    "lunch": [
-        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80"
-    ],
-    "dinner": [
-        "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=800&q=80"
-    ],
-    "snack": [
-        "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&w=800&q=80"
-    ]
-}
 
 
 def _get_dynamic_food_image(title: str, slot: str) -> str:
+    """Find authentic, verified food image by keyword matching or fallback category router."""
     title_lower = title.lower()
     for kw, img_url in FOOD_IMAGE_KEYWORDS:
         if kw in title_lower:
             return img_url
     
-    pool = SLOT_FALLBACK_IMAGES.get(slot, SLOT_FALLBACK_IMAGES["lunch"])
-    idx = abs(hash(title)) % len(pool)
-    return pool[idx]
+    # Default category fallback by food type (eliminates random egg images for grains/seeds)
+    if any(k in title_lower for k in ["seed", "niger", "gingelly", "sesame", "flax"]):
+        return "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?auto=format&fit=crop&w=800&q=80"
+    if any(k in title_lower for k in ["flour", "grain", "wheat", "millet", "quinoa", "rice"]):
+        return "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"
+    if any(k in title_lower for k in ["choi", "leaf", "leaves", "spinach", "vegetable", "green"]):
+        return "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80"
+
+    # Slot fallbacks
+    fallback_map = {
+        "breakfast": "https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=800&q=80", # Oatmeal / Cereal
+        "lunch": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",     # Salad Bowl
+        "dinner": "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80",    # Curry / Specialty Dish
+        "snack": "https://images.unsplash.com/photo-1508061252966-173859d9f2b6?auto=format&fit=crop&w=800&q=80",     # Nuts & Seeds
+    }
+    return fallback_map.get(slot, "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80")
 
 
 def _clean_food_name(name: str) -> str:
@@ -229,18 +259,18 @@ def generate_weekly_meal_plan(
                 clean_title = _clean_food_name(raw_name)
                 day_meals[slot]["food_name"] = clean_title
 
-                recipe = None
-                if slot in ["lunch", "dinner"]:
-                    search_term = clean_title.split()[0]
-                    recipe = get_recipe_by_ingredients([search_term])
+                # Stage 1: Try Spoonacular API query search by exact ingredient/title
+                search_term = clean_title.split()[0]
+                recipe = get_recipe_by_ingredients([clean_title, search_term])
 
-                if recipe and recipe.get("title"):
-                    day_meals[slot]["recipe_title"] = recipe["title"]
-                    day_meals[slot]["recipe_image"] = recipe.get("image") or _get_dynamic_food_image(clean_title, slot)
+                if recipe and recipe.get("image"):
+                    day_meals[slot]["recipe_title"] = recipe.get("title") or f"Healthy {clean_title}"
+                    day_meals[slot]["recipe_image"] = recipe.get("image")
                     day_meals[slot]["recipe_instructions"] = recipe.get("instructions") or []
                     day_meals[slot]["recipe_ready_in"] = recipe.get("readyInMinutes", 20)
                     day_meals[slot]["recipe_url"] = recipe.get("sourceUrl")
                 else:
+                    # Stage 2 & 3: High-Accuracy Dynamic Keyword Image Router
                     day_meals[slot]["recipe_title"] = f"Healthy {clean_title}"
                     day_meals[slot]["recipe_image"] = _get_dynamic_food_image(clean_title, slot)
                     day_meals[slot]["recipe_ready_in"] = 15
