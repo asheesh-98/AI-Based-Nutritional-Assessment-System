@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity, Utensils, FileText, TrendingUp,
   TestTube2, Stethoscope, User, Heart, Cpu,
-  ArrowRight, Sparkles, Shield, ChevronRight, Download, Smartphone
+  ArrowRight, Sparkles, Shield, ChevronRight, Download, Smartphone,
+  Zap, Bot, CheckCircle2, ScanBarcode, Flame, Globe
 } from 'lucide-react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
@@ -15,6 +16,7 @@ export default function Home() {
   const { t } = useLanguage();
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [activeTab, setActiveTab] = useState('scanner');
 
   useEffect(() => {
     const handleBeforeInstall = (e) => {
@@ -90,6 +92,13 @@ export default function Home() {
     { value: '7-Day', label: t('stat_plans'), desc: t('stat_plans_desc') },
   ];
 
+  const demoTabs = [
+    { id: 'scanner', label: 'AI Food Scanner', icon: ScanBarcode, color: 'text-cyan-400' },
+    { id: 'blood', label: 'Blood Lab OCR', icon: TestTube2, color: 'text-rose-400' },
+    { id: 'recommender', label: 'Smart Meal Recommender', icon: Utensils, color: 'text-emerald-400' },
+    { id: 'coach', label: 'Clinical AI Coach', icon: Bot, color: 'text-purple-400' },
+  ];
+
   const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
   const item = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } } };
 
@@ -100,27 +109,28 @@ export default function Home() {
 
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-20 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full">
-        {/* Ambient Glows */}
+      {/* 🌟 Hero Section */}
+      <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[90vh] w-full">
+        {/* Ambient Glow Orbs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-glow" />
-          <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[45vw] bg-purple-500/10 rounded-full blur-[140px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-cyan-500/10 rounded-full blur-[140px] animate-pulse-glow" />
+          <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-purple-500/10 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-[-10%] left-[20%] w-[45vw] h-[45vw] bg-emerald-500/10 rounded-full blur-[140px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
         </div>
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center gap-8 sm:gap-12">
+        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           
-          {/* Main Content Block */}
-          <div className="flex flex-col items-center text-center w-full max-w-4xl mx-auto">
+          {/* Left Hero Text Column */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left flex-1 max-w-2xl">
             {/* Top Badge */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full glass border border-white/10 text-[10px] sm:text-xs font-bold text-cyan-400 mb-6 tracking-wider uppercase max-w-full text-center truncate"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-xs font-bold text-cyan-400 mb-6 tracking-wider uppercase shadow-lg shadow-cyan-500/10"
             >
-              <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate">{t('hero_badge')}</span>
+              <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>{t('hero_badge')}</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -128,13 +138,13 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-5xl md:text-7xl font-black tracking-tight mb-4 sm:mb-6 leading-tight text-white px-2"
+              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 leading-tight text-white"
             >
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
                 {t('hero_title_1')}
               </span>
-              <br className="hidden sm:block" />
-              <span className="sm:mt-2 block">{t('hero_title_2')}</span>
+              <br />
+              <span className="mt-1 block text-white">{t('hero_title_2')}</span>
             </motion.h1>
 
             {/* Sub-headline */}
@@ -142,23 +152,23 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-sm sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-medium px-4"
+              className="text-sm sm:text-lg text-slate-300 mb-8 sm:mb-10 leading-relaxed font-medium"
             >
               {t('hero_subtitle')}
             </motion.p>
 
-            {/* CTAs */}
+            {/* Hero CTAs */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto px-4"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 w-full"
             >
               <Link to="/register" className="w-full sm:w-auto">
                 <motion.button
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.97 }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white gradient-bg rounded-xl sm:rounded-2xl shadow-[0_0_20px_rgba(0,212,255,0.3)] flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-white gradient-bg rounded-2xl shadow-[0_0_25px_rgba(0,212,255,0.35)] flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <span>{t('start_assessment')}</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -167,61 +177,114 @@ export default function Home() {
 
               {/* 📲 PWA Download Button */}
               <motion.button
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={handleInstallPWA}
-                className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-cyan-300 glass border border-cyan-500/30 hover:border-cyan-400 rounded-xl sm:rounded-2xl shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2.5 transition-all cursor-pointer bg-cyan-500/10"
+                className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-cyan-300 glass border border-cyan-500/30 hover:border-cyan-400 rounded-2xl shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2.5 transition-all cursor-pointer bg-cyan-500/10"
               >
                 <Download className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 animate-bounce" />
                 <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
               </motion.button>
-
-              <a href="#features" className="w-full sm:w-auto">
-                <motion.button
-                  whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-slate-300 glass border border-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <span>{t('explore_features')}</span>
-                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </motion.button>
-              </a>
             </motion.div>
           </div>
 
-          {/* Stats Bar Container */}
+          {/* Right Floating 3D Product Mockup Card */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="w-full max-w-5xl glass-strong rounded-2xl sm:rounded-3xl p-4 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 divide-y-0 sm:divide-y-0 lg:divide-x divide-white/10 shadow-2xl relative overflow-hidden"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex-1 w-full relative"
           >
-            {stats.map((stat, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center p-2">
-                <span className="text-2xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-1">
-                  {stat.value}
+            <div className="glass-card p-6 sm:p-8 rounded-3xl gradient-border shadow-[0_20px_60px_rgba(0,0,0,0.6)] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-[80px] pointer-events-none" />
+              
+              {/* Product Header Bar */}
+              <div className="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center text-white font-bold shadow-md shadow-cyan-500/20">
+                    <Activity className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-extrabold text-white leading-tight">NutriAI Diagnostic Suite</h4>
+                    <p className="text-xs text-cyan-400 font-semibold">Live Metabolic Intelligence</p>
+                  </div>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[11px] font-extrabold text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> Optimal Score
                 </span>
-                <span className="text-xs sm:text-sm font-bold text-white mb-0.5">{stat.label}</span>
-                <span className="text-[11px] text-slate-400 font-medium hidden sm:block">{stat.desc}</span>
               </div>
-            ))}
+
+              {/* Sample Metrics Widget */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="p-4 rounded-2xl glass border border-white/5 space-y-1">
+                  <p className="text-xs text-slate-400 font-semibold uppercase">Nutrition Score</p>
+                  <p className="text-3xl font-black text-white">88<span className="text-sm font-medium text-slate-400">/100</span></p>
+                  <span className="text-[11px] font-bold text-emerald-400">+5% Optimization</span>
+                </div>
+                <div className="p-4 rounded-2xl glass border border-white/5 space-y-1">
+                  <p className="text-xs text-slate-400 font-semibold uppercase">Risk Status</p>
+                  <p className="text-3xl font-black text-amber-400">Mild</p>
+                  <span className="text-[11px] font-bold text-amber-300">2 Nutrients Tracked</span>
+                </div>
+              </div>
+
+              {/* Sample Micro-cards */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3.5 rounded-xl glass border border-white/5 text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <TestTube2 className="w-4 h-4 text-rose-400" />
+                    <span className="font-bold text-slate-200">Iron & Hemoglobin Lab Scan</span>
+                  </div>
+                  <span className="font-extrabold text-rose-400">Normal Range</span>
+                </div>
+                <div className="flex items-center justify-between p-3.5 rounded-xl glass border border-white/5 text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <Utensils className="w-4 h-4 text-emerald-400" />
+                    <span className="font-bold text-slate-200">7-Day Vegetarian Meal Plan</span>
+                  </div>
+                  <span className="font-extrabold text-emerald-400">Generated</span>
+                </div>
+              </div>
+            </div>
           </motion.div>
+
         </div>
+
+        {/* Floating Stats Bar Container */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="w-full max-w-6xl mt-12 sm:mt-16 glass-strong rounded-3xl p-6 sm:p-8 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 shadow-2xl relative overflow-hidden border border-white/10"
+        >
+          {stats.map((stat, idx) => (
+            <div key={idx} className="flex flex-col items-center text-center p-2">
+              <span className="text-3xl sm:text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent mb-1">
+                {stat.value}
+              </span>
+              <span className="text-xs sm:text-sm font-bold text-white mb-0.5">{stat.label}</span>
+              <span className="text-[11px] text-slate-400 font-medium hidden sm:block">{stat.desc}</span>
+            </div>
+          ))}
+        </motion.div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative bg-white/[0.01]">
+      {/* 🛠️ Features Grid */}
+      <section id="features" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 relative bg-white/[0.01]">
         <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-20"
+            className="text-center mb-16 sm:mb-24"
           >
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6">
+            <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-3.5 py-1.5 rounded-full border border-cyan-500/20 mb-4 inline-block">
+              Clinical Intelligence Suite
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6">
               {t('features_title')}
             </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
               {t('features_subtitle')}
             </p>
           </motion.div>
@@ -240,14 +303,14 @@ export default function Home() {
                   key={idx}
                   variants={item}
                   whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                  className="glass-card p-6 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col justify-between"
+                  className="glass-card p-7 sm:p-9 rounded-3xl relative overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-300 flex flex-col justify-between"
                 >
                   <div>
-                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${colors.bg} border ${colors.border} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                      <feature.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${colors.text}`} />
+                    <div className={`w-14 h-14 rounded-2xl ${colors.bg} border ${colors.border} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <feature.icon className={`w-7 h-7 ${colors.text}`} />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-white mb-3">{feature.title}</h3>
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{feature.desc}</p>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white mb-3">{feature.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">{feature.desc}</p>
                   </div>
                 </motion.div>
               );
@@ -256,20 +319,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative">
+      {/* 🔄 How It Works Step Walkthrough */}
+      <section className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-20"
+            className="text-center mb-16 sm:mb-24"
           >
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6">
-              {t('hero_title_1')} <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">{t('hero_title_2')}</span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6">
+              How <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">NutriAI Works</span>
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
-              {t('features_subtitle')}
+              A 4-step medical intelligence workflow engineered for precision health optimization.
             </p>
           </motion.div>
 
@@ -278,19 +341,19 @@ export default function Home() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {steps.map((step, idx) => (
               <motion.div key={idx} variants={item} className="relative group">
-                <div className="glass-card p-6 sm:p-8 text-center h-full flex flex-col items-center">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl gradient-bg flex items-center justify-center text-white font-black text-xs sm:text-sm mb-5 shadow-lg shadow-cyan-500/20">
+                <div className="glass-card p-7 sm:p-9 text-center h-full flex flex-col items-center rounded-3xl border border-white/5 hover:border-cyan-500/30 transition-all">
+                  <div className="w-10 h-10 rounded-2xl gradient-bg flex items-center justify-center text-white font-black text-sm mb-6 shadow-lg shadow-cyan-500/20">
                     0{idx + 1}
                   </div>
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-all duration-300">
-                    <step.icon className="w-7 h-7 sm:w-8 sm:h-8 text-cyan-400" />
+                  <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-all duration-300">
+                    <step.icon className="w-8 h-8 text-cyan-400" />
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-white mb-3">{step.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{step.desc}</p>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">{step.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -298,26 +361,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA & PWA Section */}
-      <section className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative mb-8 sm:mb-12">
+      {/* 📲 PWA App Download Banner */}
+      <section className="py-16 sm:py-28 px-4 sm:px-6 lg:px-8 relative mb-12">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-card p-8 sm:p-16 text-center relative overflow-hidden rounded-3xl border border-white/10"
+            className="glass-card p-8 sm:p-16 text-center relative overflow-hidden rounded-3xl border border-white/10 shadow-2xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10" />
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 pointer-events-none" />
             <div className="absolute top-0 left-0 w-full h-1 gradient-bg" />
             
             <div className="relative z-10 flex flex-col items-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 sm:mb-8 text-cyan-400">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-6 sm:mb-8 text-cyan-400 shadow-xl">
                 <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 animate-bounce" />
               </div>
-              <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-4 sm:mb-6">
-                Install NutriAI on Any Device
+              <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6">
+                Install NutriAI App on Any Device
               </h2>
-              <p className="text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 text-xs sm:text-base leading-relaxed">
+              <p className="text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 text-xs sm:text-base leading-relaxed font-medium">
                 Enjoy offline meal plans, instant food scanning, and zero app store downloads with Progressive Web App technology.
               </p>
               
@@ -326,7 +389,7 @@ export default function Home() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleInstallPWA}
-                  className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white gradient-bg rounded-xl sm:rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,212,255,0.4)]"
+                  className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white gradient-bg rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,212,255,0.4)]"
                 >
                   <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
@@ -336,7 +399,7 @@ export default function Home() {
                   <motion.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-slate-200 glass border border-white/10 hover:bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-slate-200 glass border border-white/10 hover:bg-white/10 rounded-2xl flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{t('start_assessment')}</span>
                     <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
