@@ -139,14 +139,8 @@ export default function Home() {
 
       <Navbar />
 
-      {/* 🌟 Top Clinical Industry Announcement Bar */}
-      <div className="w-full bg-gradient-to-r from-cyan-500/15 via-purple-500/15 to-emerald-500/15 border-b border-white/10 pt-16 sm:pt-20 pb-2 px-4 text-center text-[11px] sm:text-xs font-semibold text-slate-300 flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
-        <span>Powered by <strong>Google Gemini 2.0 Flash Vision</strong> & <strong>XGBoost Multi-Output ML Engines</strong></span>
-      </div>
-
       {/* 🌟 Hero Section */}
-      <section className="relative pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full">
+      <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full">
         {/* Ambient Glow Orbs */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-cyan-500/10 rounded-full blur-[140px] animate-pulse-glow" />
