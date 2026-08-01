@@ -25,10 +25,15 @@ export default function AICoach() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -83,7 +88,7 @@ export default function AICoach() {
 
   return (
     <DashboardLayout title="AI Clinical Nutrition Coach" subtitle="Interactive 24/7 dietary assistant powered by Google Gemini 2.0 Flash">
-      <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-230px)] max-w-5xl mx-auto w-full overflow-x-hidden pb-4">
+      <div className="flex flex-col h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] max-w-5xl mx-auto w-full overflow-x-hidden pb-2">
 
         {/* 🌟 Header Status & Telemetry Bar */}
         <div className="glass-card px-4 py-3 mb-3.5 flex flex-wrap items-center justify-between gap-3 border border-cyan-500/20 bg-cyan-500/5 rounded-2xl text-xs">
@@ -96,7 +101,7 @@ export default function AICoach() {
           <div className="flex items-center gap-2">
             <button
               onClick={handleClearChat}
-              className="text-[11px] font-bold text-slate-400 hover:text-white px-2.5 py-1 rounded-xl glass border border-white/10 flex items-center gap-1 transition-all"
+              className="text-[11px] font-bold text-slate-400 hover:text-white px-2.5 py-1 rounded-xl glass border border-white/10 flex items-center gap-1 transition-all cursor-pointer"
               title="Clear Chat History"
             >
               <Trash2 className="w-3.5 h-3.5 text-rose-400" />
@@ -105,8 +110,8 @@ export default function AICoach() {
           </div>
         </div>
 
-        {/* 💬 Messages Container */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 glass-card mb-3.5 rounded-3xl custom-scrollbar border border-white/10">
+        {/* 💬 Messages Container (Internal Scroll Only) */}
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 glass-card mb-3.5 rounded-3xl custom-scrollbar border border-white/10">
           {messages.map((msg, idx) => (
             <motion.div
               key={idx}
@@ -156,7 +161,6 @@ export default function AICoach() {
               </div>
             </motion.div>
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         {/* 💡 Categorized Suggested Prompts */}
