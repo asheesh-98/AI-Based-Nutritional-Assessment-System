@@ -13,8 +13,7 @@ import foodService from '../../services/foodService';
 
 const sampleBarcodes = [
   { code: '5449000000996', label: 'Coca-Cola 330ml' },
-  { code: '3017620422003', label: 'Nutella Hazelnut Spread' },
-  { code: '7350041860011', label: 'Oat Milk Original' }
+  { code: '3017620422003', label: 'Nutella Hazelnut Spread' }
 ];
 
 export default function FoodScanner() {
