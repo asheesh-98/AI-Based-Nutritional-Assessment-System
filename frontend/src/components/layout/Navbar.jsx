@@ -133,7 +133,7 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-56 glass-strong rounded-xl p-2 shadow-2xl border border-white/10 z-50"
+                      className="absolute right-0 mt-2 w-56 bg-[#111827] rounded-xl p-2 shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-slate-700/80 z-50"
                     >
                       {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
                         isAdminRoute ? (
