@@ -1,24 +1,26 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   Bot, Send, Sparkles, User, RefreshCw, AlertCircle,
-  Lightbulb, ShieldCheck
+  Lightbulb, ShieldCheck, Cpu, Utensils, Activity, Trash2, ArrowRight, Zap
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import api from '../../services/api';
 
-const suggestedPrompts = [
-  "What foods boost Vitamin D?",
-  "High-protein vegetarian breakfast recipe",
-  "How does tea/coffee affect iron absorption?",
-  "Explain my deficiency assessment risks"
+const suggestedCategories = [
+  { label: 'Deficiencies', prompt: 'Explain my deficiency assessment risks & how to fix them', icon: AlertCircle, color: 'text-amber-400' },
+  { label: 'High Protein', prompt: 'Suggest high-protein vegetarian breakfast & dinner recipes', icon: Utensils, color: 'text-emerald-400' },
+  { label: 'Iron & Vit D', prompt: 'What foods increase Iron and Vitamin D absorption best?', icon: Zap, color: 'text-cyan-400' },
+  { label: 'Tea & Coffee', prompt: 'How does tea or coffee affect iron and calcium absorption?', icon: Lightbulb, color: 'text-purple-400' },
 ];
 
 export default function AICoach() {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hello! I'm your AI Clinical Nutrition Coach powered by Google Gemini. How can I help optimize your diet or explain your health assessment today?"
+      content: "Hello! I'm your AI Clinical Nutrition Coach powered by Google Gemini 2.0 Flash. I'm connected to your active health profile and lab records. How can I assist with your dietary goals today?",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
   const [input, setInput] = useState('');
@@ -37,7 +39,8 @@ export default function AICoach() {
     const query = textToSend || input;
     if (!query.trim() || loading) return;
 
-    const userMsg = { role: 'user', content: query };
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const userMsg = { role: 'user', content: query, timestamp: timeStr };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     if (!textToSend) setInput('');
@@ -54,107 +57,141 @@ export default function AICoach() {
 
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: data.reply || "I couldn't generate a response at the moment."
+        content: data.reply || "I couldn't generate a response at the moment.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
     } catch (err) {
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: err.response?.data?.detail || "Sorry, I encountered an issue connecting to Gemini. Please try again."
+        content: err.response?.data?.detail || "Sorry, I encountered an issue connecting to Gemini. Please try again.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <DashboardLayout title="AI Nutrition Coach" subtitle="Powered by Google Gemini 2.0 Flash">
-      <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-230px)] max-w-4xl mx-auto w-full overflow-x-hidden">
+  const handleClearChat = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: "Conversation reset. I am ready for your next nutrition query!",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }
+    ]);
+  };
 
-        {/* Disclaimer Pill */}
-        <div className="glass-card px-3 sm:px-4 py-2 mb-3 sm:mb-4 flex items-center gap-2 border border-cyan-500/20 bg-cyan-500/5 text-[11px] sm:text-xs text-cyan-300">
-          <ShieldCheck size={16} className="text-cyan-400 shrink-0" />
-          <span className="leading-tight">
-            Reads your active Health Profile & Assessment results to personalize recommendations.
-          </span>
+  return (
+    <DashboardLayout title="AI Clinical Nutrition Coach" subtitle="Interactive 24/7 dietary assistant powered by Google Gemini 2.0 Flash">
+      <div className="flex flex-col h-[calc(100vh-210px)] sm:h-[calc(100vh-230px)] max-w-5xl mx-auto w-full overflow-x-hidden pb-4">
+
+        {/* 🌟 Header Status & Telemetry Bar */}
+        <div className="glass-card px-4 py-3 mb-3.5 flex flex-wrap items-center justify-between gap-3 border border-cyan-500/20 bg-cyan-500/5 rounded-2xl text-xs">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+            <span className="font-bold text-white">Gemini 2.0 Flash Neural Assistant</span>
+            <span className="text-cyan-400 font-semibold hidden sm:inline">• Health Context Linked</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleClearChat}
+              className="text-[11px] font-bold text-slate-400 hover:text-white px-2.5 py-1 rounded-xl glass border border-white/10 flex items-center gap-1 transition-all"
+              title="Clear Chat History"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-rose-400" />
+              <span>Clear</span>
+            </button>
+          </div>
         </div>
 
-        {/* Messages Container */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 glass-card mb-3 sm:mb-4 rounded-2xl custom-scrollbar">
+        {/* 💬 Messages Container */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 glass-card mb-3.5 rounded-3xl custom-scrollbar border border-white/10">
           {messages.map((msg, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`flex gap-2.5 sm:gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              transition={{ duration: 0.3 }}
+              className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {msg.role === 'assistant' && (
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl gradient-bg flex items-center justify-center text-white shrink-0 mt-1">
-                  <Bot size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl gradient-bg flex items-center justify-center text-white shrink-0 mt-1 shadow-md shadow-cyan-500/20">
+                  <Bot className="w-5 h-5" />
                 </div>
               )}
-              <div
-                className={`p-3 sm:p-4 rounded-2xl max-w-[88%] sm:max-w-[80%] text-xs sm:text-sm leading-relaxed break-words ${
-                  msg.role === 'user'
-                    ? 'bg-cyan-600 text-white rounded-br-none shadow-lg shadow-cyan-500/10'
-                    : 'bg-white/5 border border-white/10 text-gray-200 rounded-bl-none'
-                }`}
-              >
-                <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+              
+              <div className="flex flex-col max-w-[88%] sm:max-w-[80%]">
+                <div
+                  className={`p-4 rounded-3xl text-xs sm:text-sm leading-relaxed shadow-lg ${
+                    msg.role === 'user'
+                      ? 'gradient-bg text-white rounded-br-none shadow-cyan-500/20 font-medium'
+                      : 'glass border border-white/10 text-slate-200 rounded-bl-none font-normal'
+                  }`}
+                >
+                  <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                </div>
+                <span className={`text-[10px] text-slate-500 mt-1 font-medium px-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                  {msg.timestamp}
+                </span>
               </div>
+
               {msg.role === 'user' && (
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 mt-1">
-                  <User size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-purple-300 shrink-0 mt-1">
+                  <User className="w-5 h-5" />
                 </div>
               )}
             </motion.div>
           ))}
 
+          {/* ⚡ Thinking Neural Spinner */}
           {loading && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2.5 sm:gap-3 items-center text-gray-400 text-xs p-1">
-              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl gradient-bg flex items-center justify-center text-white shrink-0">
-                <Bot size={16} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 items-center text-slate-400 text-xs p-1">
+              <div className="w-9 h-9 rounded-2xl gradient-bg flex items-center justify-center text-white shrink-0 shadow-md shadow-cyan-500/20">
+                <Bot className="w-5 h-5 animate-pulse" />
               </div>
-              <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl border border-white/10">
-                <Sparkles size={14} className="text-cyan-400 animate-spin" />
-                <span>Thinking...</span>
+              <div className="flex items-center gap-2.5 glass px-4 py-2.5 rounded-2xl border border-cyan-500/30">
+                <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" />
+                <span className="font-semibold text-cyan-300">Synthesizing clinical advice...</span>
               </div>
             </motion.div>
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Suggested Prompts (Horizontal Scroll on Mobile) */}
-        {messages.length < 3 && (
-          <div className="flex flex-nowrap sm:flex-wrap gap-2 mb-2 sm:mb-3 overflow-x-auto custom-scrollbar pb-1">
-            {suggestedPrompts.map((prompt, i) => (
+        {/* 💡 Categorized Suggested Prompts */}
+        {messages.length < 4 && (
+          <div className="flex flex-nowrap sm:flex-wrap gap-2 mb-3 overflow-x-auto custom-scrollbar pb-1">
+            {suggestedCategories.map((cat, i) => (
               <button
                 key={i}
-                onClick={() => handleSend(prompt)}
-                className="text-[11px] sm:text-xs bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer whitespace-nowrap"
+                onClick={() => handleSend(cat.prompt)}
+                className="text-[11px] sm:text-xs glass hover:bg-white/10 border border-white/10 text-slate-300 px-3.5 py-2 rounded-2xl transition-all flex items-center gap-2 shrink-0 cursor-pointer whitespace-nowrap"
               >
-                <Lightbulb size={12} className="text-amber-400 shrink-0" />
-                <span>{prompt}</span>
+                <cat.icon className={`w-3.5 h-3.5 ${cat.color} shrink-0`} />
+                <span className="font-semibold">{cat.label}</span>
               </button>
             ))}
           </div>
         )}
 
-        {/* Input Bar */}
-        <div className="glass-card p-1.5 sm:p-2 flex items-center gap-2 shrink-0">
+        {/* ⌨️ Glassmorphism Chat Input Bar */}
+        <div className="glass-card p-2 flex items-center gap-2 shrink-0 rounded-2xl border border-white/10 shadow-xl">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask AI Nutritionist..."
-            className="flex-1 bg-transparent px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none min-w-0"
+            placeholder="Ask AI Clinical Nutritionist anything..."
+            className="flex-1 bg-transparent px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none min-w-0 font-medium"
           />
           <button
             onClick={() => handleSend()}
             disabled={loading || !input.trim()}
-            className="p-2.5 sm:p-3 rounded-xl gradient-bg text-white disabled:opacity-50 hover:shadow-lg hover:shadow-cyan-500/20 transition-all shrink-0 cursor-pointer"
+            className="px-4 py-3 rounded-xl gradient-bg text-white font-bold disabled:opacity-40 hover:shadow-lg hover:shadow-cyan-500/30 active:scale-95 transition-all shrink-0 cursor-pointer flex items-center gap-2"
           >
-            <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="hidden sm:inline text-xs">Send</span>
+            <Send className="w-4 h-4" />
           </button>
         </div>
 
