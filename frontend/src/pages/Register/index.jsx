@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, User, Utensils, UserPlus, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
@@ -13,6 +14,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,15 +24,15 @@ export default function Register() {
     e.preventDefault();
     setError('');
     if (!form.name || !form.email || !form.password || !form.password2) {
-      setError('Please fill in all fields.');
+      setError(t('auth_register_fill_fields'));
       return;
     }
     if (form.password !== form.password2) {
-      setError('Passwords do not match.');
+      setError(t('auth_register_password_mismatch'));
       return;
     }
     if (form.password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError(t('auth_register_password_length'));
       return;
     }
     setLoading(true);
@@ -39,7 +41,7 @@ export default function Register() {
       navigate('/dashboard', { replace: true });
     } catch (err) {
       console.error('Registration error:', err);
-      const rawErr = err.response?.data?.detail || err.response?.data?.message || 'Registration failed. Please check details and try again.';
+      const rawErr = err.response?.data?.detail || err.response?.data?.message || t('auth_register_failed');
       setError(typeof rawErr === 'string' ? rawErr : JSON.stringify(rawErr));
     } finally {
       setLoading(false);
@@ -71,36 +73,36 @@ export default function Register() {
 
             <Link to="/" className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors shrink-0">
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Home</span>
+              <span>{t('common_back_to_home')}</span>
             </Link>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Create Account</h2>
-          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">Start your personalized nutrition journey today.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">{t('auth_register_title')}</h2>
+          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">{t('auth_register_subtitle')}</p>
 
           <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 mt-2">
             <Input
-              label="Full Name"
+              label={t('auth_register_name_label')}
               name="name"
               type="text"
-              placeholder="John Doe"
+              placeholder={t('auth_register_name_placeholder')}
               icon={User}
               value={form.name}
               onChange={handleChange}
             />
             <Input
-              label="Email Address"
+              label={t('auth_register_email_label')}
               name="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder={t('auth_register_email_placeholder')}
               icon={Mail}
               value={form.email}
               onChange={handleChange}
             />
             <Input
-              label="Password"
+              label={t('auth_register_password_label')}
               name="password"
               type="password"
               placeholder="••••••••"
@@ -109,7 +111,7 @@ export default function Register() {
               onChange={handleChange}
             />
             <Input
-              label="Confirm Password"
+              label={t('auth_register_confirm_label')}
               name="password2"
               type="password"
               placeholder="••••••••"
@@ -125,15 +127,15 @@ export default function Register() {
                 className="w-full text-sm sm:text-base rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] py-3"
                 size="lg"
               >
-                Create Account
+                {t('auth_register_submit')}
               </Button>
             </div>
           </form>
 
           <p className="text-center text-xs sm:text-sm text-slate-400 mt-6 sm:mt-8">
-            Already have an account?{' '}
+            {t('auth_register_already_account')}{' '}
             <Link to="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
-              Sign in here
+              {t('auth_register_sign_in')}
             </Link>
           </p>
         </motion.div>
@@ -155,16 +157,16 @@ export default function Register() {
           <div className="grid grid-cols-2 gap-4 mb-8">
             <div className="glass p-6 rounded-2xl flex flex-col items-center justify-center border-cyan-500/30">
               <span className="text-3xl font-black text-cyan-400">95%</span>
-              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">Accuracy</span>
+              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{t('auth_register_stat_accuracy')}</span>
             </div>
             <div className="glass p-6 rounded-2xl flex flex-col items-center justify-center border-purple-500/30">
               <span className="text-3xl font-black text-purple-400">50+</span>
-              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">Nutrients</span>
+              <span className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{t('auth_register_stat_nutrients')}</span>
             </div>
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Empower Your Health</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">{t('auth_register_branding_title')}</h3>
           <p className="text-slate-300 leading-relaxed">
-            Join thousands of users who have transformed their lives through AI-driven nutritional guidance.
+            {t('auth_register_branding_desc')}
           </p>
         </motion.div>
       </div>

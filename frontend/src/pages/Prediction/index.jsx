@@ -12,29 +12,13 @@ import Alert from '../../components/common/Alert';
 import Loader from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
 import api from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
-const deficiencyNames = {
-  'Iron_Anemia_Deficiency': 'Iron Deficiency Anemia',
-  'Vitamin_D_Deficiency': 'Vitamin D Deficiency',
-  'Vitamin_B12_Deficiency': 'Vitamin B12 / Riboflavin',
-  'Calcium_Deficiency': 'Calcium Deficiency',
-  'Magnesium_Deficiency': 'Magnesium Deficiency',
-  'Zinc_Deficiency': 'Zinc Deficiency',
-  'Potassium_Deficiency': 'Potassium Deficiency',
-};
-
-function formatDeficiency(key) {
-  if (deficiencyNames[key]) return deficiencyNames[key];
-  return key.replace(/_/g, ' ').replace(/Deficiency/gi, '').trim();
+function CircularProgressRiskLabel({ t }) {
+  return <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t('prediction_risk_label')}</span>;
 }
 
-function getRiskInfo(pct) {
-  if (pct > 60) return { label: 'High Risk', color: '#f43f5e', bg: 'bg-rose-500/15', text: 'text-rose-400', border: 'border-rose-500/30', bar: 'bg-rose-500' };
-  if (pct > 30) return { label: 'Moderate Risk', color: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/30', bar: 'bg-amber-400' };
-  return { label: 'Optimal / Low Risk', color: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', border: 'border-emerald-500/30', bar: 'bg-emerald-400' };
-}
-
-function CircularProgress({ percentage, size = 110, strokeWidth = 7 }) {
+function CircularProgress({ percentage, size = 110, strokeWidth = 7, getRiskInfo, t }) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
@@ -59,7 +43,7 @@ function CircularProgress({ percentage, size = 110, strokeWidth = 7 }) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-xl font-black text-white">{Math.round(percentage)}%</span>
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Risk</span>
+        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t('prediction_risk_label')}</span>
       </div>
     </div>
   );
@@ -69,6 +53,29 @@ const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } 
 const item = { hidden: { opacity: 0, y: 20, scale: 0.95 }, show: { opacity: 1, y: 0, scale: 1 } };
 
 export default function Prediction() {
+  const { t } = useLanguage();
+
+  const deficiencyNames = {
+    'Iron_Anemia_Deficiency': t('prediction_def_iron'),
+    'Vitamin_D_Deficiency': t('prediction_def_vitamin_d'),
+    'Vitamin_B12_Deficiency': t('prediction_def_vitamin_b12'),
+    'Calcium_Deficiency': t('prediction_def_calcium'),
+    'Magnesium_Deficiency': t('prediction_def_magnesium'),
+    'Zinc_Deficiency': t('prediction_def_zinc'),
+    'Potassium_Deficiency': t('prediction_def_potassium'),
+  };
+
+  function formatDeficiency(key) {
+    if (deficiencyNames[key]) return deficiencyNames[key];
+    return key.replace(/_/g, ' ').replace(/Deficiency/gi, '').trim();
+  }
+
+  function getRiskInfo(pct) {
+    if (pct > 60) return { label: t('prediction_high_risk'), color: '#f43f5e', bg: 'bg-rose-500/15', text: 'text-rose-400', border: 'border-rose-500/30', bar: 'bg-rose-500' };
+    if (pct > 30) return { label: t('prediction_moderate_risk'), color: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/30', bar: 'bg-amber-400' };
+    return { label: t('prediction_low_risk'), color: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', border: 'border-emerald-500/30', bar: 'bg-emerald-400' };
+  }
+
   const [results, setResults] = useState(null);
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,13 +118,13 @@ export default function Prediction() {
       clearInterval(stepInterval);
       setResults(data);
       setPredictions((prev) => [data, ...prev]);
-      setAlert({ show: true, type: 'success', message: 'Assessment completed successfully!' });
+      setAlert({ show: true, type: 'success', message: t('prediction_alert_success') });
     } catch (err) {
       clearInterval(stepInterval);
       setAlert({
         show: true,
         type: 'error',
-        message: err.response?.data?.detail || 'Assessment failed. Make sure you have submitted symptoms or blood reports.',
+        message: err.response?.data?.detail || t('prediction_alert_error'),
       });
     } finally {
       setPredicting(false);
@@ -134,7 +141,7 @@ export default function Prediction() {
       });
       setAiSummary(data.summary);
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: 'Failed to generate AI summary.' });
+      setAlert({ show: true, type: 'error', message: t('prediction_alert_summary_error') });
     } finally {
       setSummaryLoading(false);
     }
@@ -170,13 +177,13 @@ export default function Prediction() {
 
   if (loading)
     return (
-      <DashboardLayout title="AI Assessment">
-        <Loader size="lg" text="Initializing ML Assessment Engine..." />
+      <DashboardLayout title={t('prediction_title')}>
+        <Loader size="lg" text={t('prediction_loader')} />
       </DashboardLayout>
     );
 
   return (
-    <DashboardLayout title="AI Assessment" subtitle="Get AI-powered clinical nutritional deficiency risk predictions & machine learning diagnostics">
+    <DashboardLayout title={t('prediction_title')} subtitle={t('prediction_subtitle')}>
       {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />}
 
       <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full overflow-x-hidden pb-12">
@@ -195,29 +202,29 @@ export default function Prediction() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1.5 rounded-full glass border border-white/10 text-xs font-semibold text-cyan-400">
                 <Cpu className="w-3.5 h-3.5" />
-                Random Forest & XGBoost Ensemble
+                {t('prediction_hero_badge')}
               </div>
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
-                AI Clinical <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent">Metabolic Scanner</span>
+                {t('prediction_hero_title1')} <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent">{t('prediction_hero_title2')}</span>
               </h2>
               <p className="text-slate-300 text-xs sm:text-base font-medium leading-relaxed">
-                Run an end-to-end diagnostic evaluation combining physical symptoms and blood lab values.
+                {t('prediction_hero_subtitle')}
               </p>
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
               <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg" className="w-full sm:w-auto shadow-lg shadow-cyan-500/25">
-                {predicting ? 'Running Neural Scan...' : 'Run New AI Assessment'}
+                {predicting ? t('prediction_btn_running') : t('prediction_btn_run')}
               </Button>
               <div className="flex gap-2 w-full sm:w-auto">
                 <Link to="/symptoms" className="flex-1 sm:flex-none">
                   <Button variant="secondary" icon={Stethoscope} size="sm" className="w-full">
-                    Symptoms
+                    {t('prediction_btn_symptoms')}
                   </Button>
                 </Link>
                 <Link to="/blood-report" className="flex-1 sm:flex-none">
                   <Button variant="secondary" icon={TestTube2} size="sm" className="w-full">
-                    Blood Lab
+                    {t('prediction_btn_blood')}
                   </Button>
                 </Link>
               </div>
@@ -231,7 +238,7 @@ export default function Prediction() {
             <Info className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            <span className="font-bold text-white">Optimal Diagnostic Accuracy Tip:</span> For maximum prediction precision, ensure both your <Link to="/symptoms" className="text-cyan-400 underline font-semibold">clinical symptoms</Link> and <Link to="/blood-report" className="text-cyan-400 underline font-semibold">blood lab parameters</Link> are logged before running the scanner.
+            <span className="font-bold text-white">{t('prediction_tip_title')}</span> {t('prediction_tip_part1')}<Link to="/symptoms" className="text-cyan-400 underline font-semibold">{t('prediction_tip_link_symptoms')}</Link>{t('prediction_tip_and')}<Link to="/blood-report" className="text-cyan-400 underline font-semibold">{t('prediction_tip_link_blood')}</Link>{t('prediction_tip_part2')}
           </div>
         </div>
 
@@ -254,17 +261,17 @@ export default function Prediction() {
                 <Cpu className="w-10 h-10 text-cyan-400 animate-pulse" />
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-white mb-2">Analyzing Health Biomarkers</h3>
+              <h3 className="text-xl sm:text-2xl font-black text-white mb-2">{t('prediction_scan_title')}</h3>
               
               <div className="space-y-2 mt-4 text-xs sm:text-sm text-slate-300 font-medium">
                 <p className={`transition-all ${scanStep >= 1 ? 'text-cyan-400 font-bold' : 'text-slate-500'}`}>
-                  {scanStep >= 1 ? '✓' : '○'} Step 1: Processing symptom correlations...
+                  {scanStep >= 1 ? '✓' : '○'} {t('prediction_scan_step1')}
                 </p>
                 <p className={`transition-all ${scanStep >= 2 ? 'text-purple-400 font-bold' : 'text-slate-500'}`}>
-                  {scanStep >= 2 ? '✓' : '○'} Step 2: Correlating lab blood parameters...
+                  {scanStep >= 2 ? '✓' : '○'} {t('prediction_scan_step2')}
                 </p>
                 <p className={`transition-all ${scanStep >= 3 ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
-                  {scanStep >= 3 ? '✓' : '○'} Step 3: Evaluating Random Forest ensemble risk models...
+                  {scanStep >= 3 ? '✓' : '○'} {t('prediction_scan_step3')}
                 </p>
               </div>
             </div>
@@ -285,7 +292,7 @@ export default function Prediction() {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs sm:text-sm font-extrabold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-cyan-400" />
-                    Overall Model Confidence Score
+                    {t('prediction_confidence_label')}
                   </span>
                   <span className="text-base sm:text-lg font-black text-white">{Math.round(confidence * (confidence <= 1 ? 100 : 1))}%</span>
                 </div>
@@ -307,7 +314,7 @@ export default function Prediction() {
                 variant="secondary"
                 className="w-full sm:w-auto whitespace-nowrap shadow-lg"
               >
-                Generate AI Clinical Summary
+                {t('prediction_generate_summary')}
               </Button>
             </motion.div>
 
@@ -323,8 +330,8 @@ export default function Prediction() {
                     <Bot className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg sm:text-xl font-black text-white">Gemini AI Clinical Summary Report</h3>
-                    <p className="text-xs text-purple-300 font-medium">Synthesized based on your symptoms, blood reports, and ML prediction scores</p>
+                    <h3 className="text-lg sm:text-xl font-black text-white">{t('prediction_ai_summary_title')}</h3>
+                    <p className="text-xs text-purple-300 font-medium">{t('prediction_ai_summary_subtitle')}</p>
                   </div>
                 </div>
                 <div className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap glass p-5 rounded-2xl border border-white/10 font-mono">
@@ -351,7 +358,7 @@ export default function Prediction() {
                     className={`glass-card p-6 rounded-3xl text-center border ${risk.border} transition-all shadow-lg flex flex-col items-center justify-between`}
                   >
                     <div className="my-2">
-                      <CircularProgress percentage={pct} />
+                      <CircularProgress percentage={pct} getRiskInfo={getRiskInfo} t={t} />
                     </div>
                     <div className="mt-2 w-full">
                       <h4 className="text-base font-extrabold text-white mb-2 leading-tight">{formatDeficiency(key)}</h4>
@@ -375,16 +382,16 @@ export default function Prediction() {
                 <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
                     <div className="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-300">
-                      <AlertTriangle className="w-3.5 h-3.5" /> High Deficiency Risk Detected
+                      <AlertTriangle className="w-3.5 h-3.5" /> {t('prediction_cta_badge')}
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">Targeted Nutritional Action Plan Available</h3>
+                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t('prediction_cta_title')}</h3>
                     <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl font-medium leading-relaxed">
-                      Our recommender algorithm can generate a 7-day meal plan tailored specifically to correct your detected nutrient gaps.
+                      {t('prediction_cta_desc')}
                     </p>
                   </div>
                   <Link to="/meal-plan" className="w-full md:w-auto">
                     <Button icon={Utensils} size="lg" className="w-full md:w-auto shadow-lg shadow-cyan-500/25">
-                      Generate 7-Day Meal Plan
+                      {t('prediction_cta_btn')}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
                   </Link>
@@ -407,8 +414,8 @@ export default function Prediction() {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-base font-extrabold text-white">Past Diagnostic Sessions ({predictions.length})</h4>
-                  <p className="text-xs text-slate-400 font-medium">Click to reload past predictions</p>
+                  <h4 className="text-base font-extrabold text-white">{t('prediction_history_title')} ({predictions.length})</h4>
+                  <p className="text-xs text-slate-400 font-medium">{t('prediction_history_subtitle')}</p>
                 </div>
               </div>
               {showHistory ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
@@ -432,10 +439,10 @@ export default function Prediction() {
                       >
                         <div className="flex items-center gap-3">
                           <Activity className="w-4 h-4 text-cyan-400" />
-                          <span className="text-sm font-bold text-white">Diagnostic Session #{predictions.length - idx}</span>
+                          <span className="text-sm font-bold text-white">{t('prediction_history_session')}#{predictions.length - idx}</span>
                         </div>
                         <span className="text-xs text-slate-400 font-medium">
-                          {pred.prediction_date ? new Date(pred.prediction_date).toLocaleString() : `Result #${idx + 1}`}
+                          {pred.prediction_date ? new Date(pred.prediction_date).toLocaleString() : `${t('prediction_history_result')}#${idx + 1}`}
                         </span>
                       </div>
                     ))}

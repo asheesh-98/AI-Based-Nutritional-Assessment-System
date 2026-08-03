@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, Utensils, LogIn, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
@@ -13,6 +14,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,7 +24,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     if (!form.email || !form.password) {
-      setError('Please fill in all fields.');
+      setError(t('auth_login_fill_fields'));
       return;
     }
     setLoading(true);
@@ -34,7 +36,7 @@ export default function Login() {
         navigate('/dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.detail || err.response?.data?.message || 'Invalid credentials. Please try again.');
+      setError(err.response?.data?.detail || err.response?.data?.message || t('auth_login_invalid'));
     } finally {
       setLoading(false);
     }
@@ -65,27 +67,27 @@ export default function Login() {
 
             <Link to="/" className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-400 hover:text-white transition-colors shrink-0">
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Home</span>
+              <span>{t('common_back_to_home')}</span>
             </Link>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">Welcome Back</h2>
-          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">Sign in to continue your personalized health journey.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">{t('auth_login_welcome')}</h2>
+          <p className="text-slate-400 text-xs sm:text-sm mb-6 sm:mb-8">{t('auth_login_subtitle')}</p>
 
           <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 mt-2">
             <Input
-              label="Email Address"
+              label={t('auth_login_email_label')}
               name="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder={t('auth_login_email_placeholder')}
               icon={Mail}
               value={form.email}
               onChange={handleChange}
             />
             <Input
-              label="Password"
+              label={t('auth_login_password_label')}
               name="password"
               type="password"
               placeholder="••••••••"
@@ -101,15 +103,15 @@ export default function Login() {
                 className="w-full text-sm sm:text-base rounded-xl shadow-[0_0_20px_rgba(0,212,255,0.2)] py-3"
                 size="lg"
               >
-                Sign In
+                {t('auth_login_submit')}
               </Button>
             </div>
           </form>
 
           <p className="text-center text-xs sm:text-sm text-slate-400 mt-6 sm:mt-8">
-            Don't have an account?{' '}
+            {t('auth_login_no_account')}{' '}
             <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
-              Create an account
+              {t('auth_login_create_account')}
             </Link>
           </p>
         </motion.div>
@@ -131,9 +133,9 @@ export default function Login() {
           <div className="w-20 h-20 mx-auto rounded-3xl gradient-bg flex items-center justify-center mb-8 shadow-2xl shadow-cyan-500/30">
             <Utensils className="w-10 h-10 text-white" />
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Precision Nutrition</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">{t('auth_login_branding_title')}</h3>
           <p className="text-slate-300 leading-relaxed">
-            NutriAI leverages advanced machine learning to analyze your blood markers, symptoms, and dietary habits to deliver hyper-personalized meal plans.
+            {t('auth_login_branding_desc')}
           </p>
         </motion.div>
       </div>

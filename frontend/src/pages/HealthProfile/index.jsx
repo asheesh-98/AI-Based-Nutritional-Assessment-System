@@ -8,16 +8,9 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { PageLoader } from '../../components/common/Loader';
 import profileService from '../../services/profileService';
+import { useLanguage } from '../../context/LanguageContext';
 
-const healthGoals = [
-  'Weight Loss', 'Weight Gain', 'Muscle Building', 'Improve Energy',
-  'Better Sleep', 'Immunity Boost', 'Heart Health', 'Diabetes Management'
-];
-const medicalConditions = [
-  'Diabetes', 'Hypertension', 'Thyroid', 'PCOS', 'Anemia',
-  'Heart Disease', 'Kidney Disease', 'None'
-];
-const allergies = ['Dairy', 'Gluten', 'Nuts', 'Soy', 'Eggs', 'Seafood', 'None'];
+
 
 const defaultForm = {
   age: '', gender: '', height_cm: '', weight_kg: '',
@@ -45,6 +38,18 @@ function TogglePill({ label, selected, onClick }) {
 }
 
 export default function HealthProfile() {
+  const { t } = useLanguage();
+
+  const healthGoals = [
+    t('hp_goal_weight_loss'), t('hp_goal_weight_gain'), t('hp_goal_muscle'), t('hp_goal_energy'),
+    t('hp_goal_sleep'), t('hp_goal_immunity'), t('hp_goal_heart'), t('hp_goal_diabetes')
+  ];
+  const medicalConditions = [
+    t('hp_condition_diabetes'), t('hp_condition_hypertension'), t('hp_condition_thyroid'), t('hp_condition_pcos'), t('hp_condition_anemia'),
+    t('hp_condition_heart'), t('hp_condition_kidney'), t('hp_condition_none')
+  ];
+  const allergies = [t('hp_allergy_dairy'), t('hp_allergy_gluten'), t('hp_allergy_nuts'), t('hp_allergy_soy'), t('hp_allergy_eggs'), t('hp_allergy_seafood'), t('hp_allergy_none')];
+
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -111,10 +116,10 @@ export default function HealthProfile() {
   const bmiCategory = useMemo(() => {
     if (!bmi) return null;
     const v = parseFloat(bmi);
-    if (v < 18.5) return { label: 'Underweight', color: 'text-amber-400 bg-amber-500/15' };
-    if (v < 25) return { label: 'Normal', color: 'text-emerald-400 bg-emerald-500/15' };
-    if (v < 30) return { label: 'Overweight', color: 'text-amber-400 bg-amber-500/15' };
-    return { label: 'Obese', color: 'text-rose-400 bg-rose-500/15' };
+    if (v < 18.5) return { label: t('hp_bmi_underweight'), color: 'text-amber-400 bg-amber-500/15' };
+    if (v < 25) return { label: t('hp_bmi_normal'), color: 'text-emerald-400 bg-emerald-500/15' };
+    if (v < 30) return { label: t('hp_bmi_overweight'), color: 'text-amber-400 bg-amber-500/15' };
+    return { label: t('hp_bmi_obese'), color: 'text-rose-400 bg-rose-500/15' };
   }, [bmi]);
 
   const handleSave = async () => {
@@ -136,18 +141,18 @@ export default function HealthProfile() {
         allergies: form.allergies.join(', ') || null,
       };
       await profileService.updateHealthProfile(payload);
-      setAlert({ show: true, type: 'success', message: 'Health profile saved successfully!' });
+      setAlert({ show: true, type: 'success', message: t('hp_save_success') });
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || 'Failed to save profile.' });
+      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('hp_save_error') });
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <DashboardLayout title="Health Profile"><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title={t('hp_page_title')}><PageLoader /></DashboardLayout>;
 
   return (
-    <DashboardLayout title="Health Profile" subtitle="Tell us about yourself for personalized recommendations">
+    <DashboardLayout title={t('hp_page_title')} subtitle={t('hp_page_subtitle')}>
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       <div className="space-y-6 mt-4 max-w-4xl">
@@ -155,22 +160,22 @@ export default function HealthProfile() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-cyan-500/10"><User className="w-5 h-5 text-cyan-400" /></div>
-            <h3 className="text-lg font-semibold text-white">Personal Information</h3>
+            <h3 className="text-lg font-semibold text-white">{t('hp_personal_info')}</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label="Age" name="age" type="number" placeholder="25" min="1" max="120" value={form.age} onChange={handleChange} />
-            <Select label="Gender" name="gender" value={form.gender} onChange={handleChange}>
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+            <Input label={t('hp_age_label')} name="age" type="number" placeholder="25" min="1" max="120" value={form.age} onChange={handleChange} />
+            <Select label={t('hp_gender_label')} name="gender" value={form.gender} onChange={handleChange}>
+              <option value="">{t('hp_select_gender')}</option>
+              <option value="male">{t('hp_gender_male')}</option>
+              <option value="female">{t('hp_gender_female')}</option>
+              <option value="other">{t('hp_gender_other')}</option>
             </Select>
-            <Input label="Height (cm)" name="height_cm" type="number" placeholder="170" min="50" max="300" value={form.height_cm} onChange={handleChange} />
-            <Input label="Weight (kg)" name="weight_kg" type="number" placeholder="70" min="10" max="500" value={form.weight_kg} onChange={handleChange} />
+            <Input label={t('hp_height_label')} name="height_cm" type="number" placeholder="170" min="50" max="300" value={form.height_cm} onChange={handleChange} />
+            <Input label={t('hp_weight_label')} name="weight_kg" type="number" placeholder="70" min="10" max="500" value={form.weight_kg} onChange={handleChange} />
           </div>
           {bmi && bmiCategory && (
             <div className="mt-4 flex items-center gap-3">
-              <span className="text-sm text-gray-400">BMI:</span>
+              <span className="text-sm text-gray-400">{t('hp_bmi_prefix')}</span>
               <span className="text-lg font-bold text-white">{bmi}</span>
               <span className={`text-xs px-3 py-1 rounded-full font-medium ${bmiCategory.color}`}>{bmiCategory.label}</span>
             </div>
@@ -181,35 +186,35 @@ export default function HealthProfile() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-purple-500/10"><Dumbbell className="w-5 h-5 text-purple-400" /></div>
-            <h3 className="text-lg font-semibold text-white">Lifestyle</h3>
+            <h3 className="text-lg font-semibold text-white">{t('hp_lifestyle')}</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Select label="Activity Level" name="activity_level" value={form.activity_level} onChange={handleChange}>
-              <option value="">Select activity level</option>
-              <option value="sedentary">Sedentary</option>
-              <option value="lightly_active">Lightly Active</option>
-              <option value="moderately_active">Moderately Active</option>
-              <option value="very_active">Very Active</option>
-              <option value="extremely_active">Extremely Active</option>
+            <Select label={t('hp_activity_label')} name="activity_level" value={form.activity_level} onChange={handleChange}>
+              <option value="">{t('hp_select_activity')}</option>
+              <option value="sedentary">{t('hp_activity_sedentary')}</option>
+              <option value="lightly_active">{t('hp_activity_lightly')}</option>
+              <option value="moderately_active">{t('hp_activity_moderately')}</option>
+              <option value="very_active">{t('hp_activity_very')}</option>
+              <option value="extremely_active">{t('hp_activity_extremely')}</option>
             </Select>
-            <Select label="Dietary Preference" name="dietary_preference" value={form.dietary_preference} onChange={handleChange}>
-              <option value="">Select preference</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="non_vegetarian">Non-Vegetarian</option>
-              <option value="vegan">Vegan</option>
-              <option value="eggetarian">Eggetarian</option>
-              <option value="keto">Keto</option>
+            <Select label={t('hp_diet_label')} name="dietary_preference" value={form.dietary_preference} onChange={handleChange}>
+              <option value="">{t('hp_select_diet')}</option>
+              <option value="vegetarian">{t('hp_diet_vegetarian')}</option>
+              <option value="non_vegetarian">{t('hp_diet_non_veg')}</option>
+              <option value="vegan">{t('hp_diet_vegan')}</option>
+              <option value="eggetarian">{t('hp_diet_eggetarian')}</option>
+              <option value="keto">{t('hp_diet_keto')}</option>
             </Select>
-            <Input label="Sleep Hours" name="sleep_hours" type="number" placeholder="7" min="1" max="24" step="0.5" value={form.sleep_hours} onChange={handleChange} />
-            <Select label="Smoking" name="smoking" value={form.smoking} onChange={handleChange}>
-              <option value="No">No</option>
-              <option value="Occasionally">Occasionally</option>
-              <option value="Regularly">Regularly</option>
+            <Input label={t('hp_sleep_label')} name="sleep_hours" type="number" placeholder="7" min="1" max="24" step="0.5" value={form.sleep_hours} onChange={handleChange} />
+            <Select label={t('hp_smoking_label')} name="smoking" value={form.smoking} onChange={handleChange}>
+              <option value="No">{t('hp_freq_no')}</option>
+              <option value="Occasionally">{t('hp_freq_occasionally')}</option>
+              <option value="Regularly">{t('hp_freq_regularly')}</option>
             </Select>
-            <Select label="Alcohol" name="alcohol" value={form.alcohol} onChange={handleChange}>
-              <option value="No">No</option>
-              <option value="Occasionally">Occasionally</option>
-              <option value="Regularly">Regularly</option>
+            <Select label={t('hp_alcohol_label')} name="alcohol" value={form.alcohol} onChange={handleChange}>
+              <option value="No">{t('hp_freq_no')}</option>
+              <option value="Occasionally">{t('hp_freq_occasionally')}</option>
+              <option value="Regularly">{t('hp_freq_regularly')}</option>
             </Select>
           </div>
         </motion.div>
@@ -218,7 +223,7 @@ export default function HealthProfile() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-emerald-500/10"><Heart className="w-5 h-5 text-emerald-400" /></div>
-            <h3 className="text-lg font-semibold text-white">Health Goals</h3>
+            <h3 className="text-lg font-semibold text-white">{t('hp_health_goals')}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
             {healthGoals.map((goal) => (
@@ -231,7 +236,7 @@ export default function HealthProfile() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-rose-500/10"><Shield className="w-5 h-5 text-rose-400" /></div>
-            <h3 className="text-lg font-semibold text-white">Medical Conditions</h3>
+            <h3 className="text-lg font-semibold text-white">{t('hp_medical_conditions')}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
             {medicalConditions.map((cond) => (
@@ -244,7 +249,7 @@ export default function HealthProfile() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="glass-card p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-amber-500/10"><Leaf className="w-5 h-5 text-amber-400" /></div>
-            <h3 className="text-lg font-semibold text-white">Allergies</h3>
+            <h3 className="text-lg font-semibold text-white">{t('hp_allergies_title')}</h3>
           </div>
           <div className="flex flex-wrap gap-2">
             {allergies.map((allergy) => (
@@ -256,7 +261,7 @@ export default function HealthProfile() {
         {/* Save Button */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
           <Button onClick={handleSave} loading={saving} icon={Save} size="lg" className="w-full sm:w-auto">
-            Save Health Profile
+            {t('hp_save_btn')}
           </Button>
         </motion.div>
       </div>

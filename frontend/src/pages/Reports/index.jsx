@@ -13,26 +13,14 @@ import { PageLoader } from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
 import dashboardService from '../../services/dashboardService';
 import { saveOfflinePredictions, getOfflinePredictions } from '../../utils/offlineStorage';
+import { useLanguage } from '../../context/LanguageContext';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
-const RISK_LABELS = {
-  iron_risk: { label: 'Iron Deficiency', color: '#f43f5e', border: 'border-rose-500/30', bg: 'bg-rose-500/10', text: 'text-rose-400' },
-  vitamin_d_risk: { label: 'Vitamin D Deficiency', color: '#06b6d4', border: 'border-cyan-500/30', bg: 'bg-cyan-500/10', text: 'text-cyan-400' },
-  calcium_risk: { label: 'Calcium Deficiency', color: '#a855f7', border: 'border-purple-500/30', bg: 'bg-purple-500/10', text: 'text-purple-400' },
-  magnesium_risk: { label: 'Magnesium Deficiency', color: '#f59e0b', border: 'border-amber-500/30', bg: 'bg-amber-500/10', text: 'text-amber-400' },
-  potassium_risk: { label: 'Potassium Deficiency', color: '#10b981', border: 'border-emerald-500/30', bg: 'bg-emerald-500/10', text: 'text-emerald-400' },
-  vitamin_b12_risk: { label: 'B12 / Riboflavin Deficiency', color: '#3b82f6', border: 'border-blue-500/30', bg: 'bg-blue-500/10', text: 'text-blue-400' },
-};
 
-function getRiskStatus(score) {
-  if (score > 0.6) return { label: 'High Risk', color: 'text-rose-400', bg: 'bg-rose-500/15', border: 'border-rose-500/30', bar: 'bg-rose-500' };
-  if (score > 0.3) return { label: 'Moderate Risk', color: 'text-amber-400', bg: 'bg-amber-500/15', border: 'border-amber-500/30', bar: 'bg-amber-400' };
-  return { label: 'Optimal / Low Risk', color: 'text-emerald-400', bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', bar: 'bg-emerald-400' };
-}
 
-function StatCard({ icon: Icon, label, value, sub, color, border }) {
+function StatCard({ icon: Icon, label, value, sub, color, border, aiVerifiedLabel }) {
   return (
     <motion.div
       variants={item}
@@ -44,7 +32,7 @@ function StatCard({ icon: Icon, label, value, sub, color, border }) {
           <Icon className="w-5 h-5 text-white" />
         </div>
         <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-          AI Verified
+          {aiVerifiedLabel}
         </span>
       </div>
       <div>
@@ -57,10 +45,26 @@ function StatCard({ icon: Icon, label, value, sub, color, border }) {
 }
 
 export default function Reports() {
+  const { t } = useLanguage();
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedView, setSelectedView] = useState('chart'); // 'chart' or 'cards'
+
+  const RISK_LABELS = {
+    iron_risk: { label: t('reports_risk_iron'), color: '#f43f5e', border: 'border-rose-500/30', bg: 'bg-rose-500/10', text: 'text-rose-400' },
+    vitamin_d_risk: { label: t('reports_risk_vitamin_d'), color: '#06b6d4', border: 'border-cyan-500/30', bg: 'bg-cyan-500/10', text: 'text-cyan-400' },
+    calcium_risk: { label: t('reports_risk_calcium'), color: '#a855f7', border: 'border-purple-500/30', bg: 'bg-purple-500/10', text: 'text-purple-400' },
+    magnesium_risk: { label: t('reports_risk_magnesium'), color: '#f59e0b', border: 'border-amber-500/30', bg: 'bg-amber-500/10', text: 'text-amber-400' },
+    potassium_risk: { label: t('reports_risk_potassium'), color: '#10b981', border: 'border-emerald-500/30', bg: 'bg-emerald-500/10', text: 'text-emerald-400' },
+    vitamin_b12_risk: { label: t('reports_risk_b12'), color: '#3b82f6', border: 'border-blue-500/30', bg: 'bg-blue-500/10', text: 'text-blue-400' },
+  };
+
+  function getRiskStatus(score) {
+    if (score > 0.6) return { label: t('common_high_risk'), color: 'text-rose-400', bg: 'bg-rose-500/15', border: 'border-rose-500/30', bar: 'bg-rose-500' };
+    if (score > 0.3) return { label: t('common_moderate_risk'), color: 'text-amber-400', bg: 'bg-amber-500/15', border: 'border-amber-500/30', bar: 'bg-amber-400' };
+    return { label: t('common_low_risk'), color: 'text-emerald-400', bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', bar: 'bg-emerald-400' };
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -74,7 +78,7 @@ export default function Reports() {
         if (cached) {
           setPredictions(cached);
         } else {
-          setError('Could not load report data.');
+          setError(t('reports_load_error'));
         }
       } finally {
         setLoading(false);
@@ -83,7 +87,7 @@ export default function Reports() {
     load();
   }, []);
 
-  if (loading) return <DashboardLayout title="Reports"><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title={t('reports_title')}><PageLoader /></DashboardLayout>;
 
   const latest = predictions[0];
 
@@ -105,7 +109,7 @@ export default function Reports() {
   const latestConfidence = latest ? Math.round((latest.confidence_score || 0) * 100) : 0;
 
   return (
-    <DashboardLayout title="Reports" subtitle="Clinical nutritional deficiency history, diagnostic trend analytics & risk profiles">
+    <DashboardLayout title={t('reports_title')} subtitle={t('reports_subtitle')}>
       <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full overflow-x-hidden pb-12">
 
         {/* 🌟 Hero Header Banner */}
@@ -122,13 +126,13 @@ export default function Reports() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1.5 rounded-full glass border border-white/10 text-xs font-semibold text-purple-300">
                 <Sparkles className="w-3.5 h-3.5" />
-                AI Diagnostic Report Suite
+                {t('reports_hero_badge')}
               </div>
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
-                Nutritional <span className="bg-gradient-to-r from-purple-400 via-cyan-300 to-rose-400 bg-clip-text text-transparent">Risk Analytics</span>
+                {t('reports_hero_title1')} <span className="bg-gradient-to-r from-purple-400 via-cyan-300 to-rose-400 bg-clip-text text-transparent">{t('reports_hero_title2')}</span>
               </h2>
               <p className="text-slate-300 text-xs sm:text-base font-medium leading-relaxed">
-                Track your biomarker evolution over time. Our multi-layer machine learning engine detects early micronutrient deficiency patterns.
+                {t('reports_hero_subtitle')}
               </p>
             </div>
 
@@ -138,14 +142,14 @@ export default function Reports() {
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white gradient-bg shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:scale-[1.02] active:scale-95 transition-all"
               >
                 <Activity className="w-4 h-4" />
-                Run New Assessment
+                {t('reports_hero_btn_run')}
               </Link>
               <Link
                 to="/blood-report"
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white glass border border-white/10 hover:bg-white/10 transition-all"
               >
                 <TestTube2 className="w-4 h-4 text-rose-400" />
-                Upload Lab PDF
+                {t('reports_hero_btn_upload')}
               </Link>
             </div>
           </div>
@@ -160,35 +164,39 @@ export default function Reports() {
         >
           <StatCard
             icon={Activity}
-            label="Total Assessments"
+            label={t('reports_stat_total_label')}
             value={predictions.length}
-            sub="All-time diagnostic logs"
+            sub={t('reports_stat_total_sub')}
             color="bg-cyan-500/20 text-cyan-400"
             border="border-cyan-500/20"
+            aiVerifiedLabel={t('reports_ai_verified')}
           />
           <StatCard
             icon={AlertCircle}
-            label="High-Risk Nutrients"
+            label={t('reports_stat_high_label')}
             value={highRiskCount}
-            sub={latest ? 'In latest assessment' : 'No risk data yet'}
+            sub={latest ? t('reports_stat_high_in_latest') : t('reports_stat_high_no_data')}
             color="bg-rose-500/20 text-rose-400"
             border="border-rose-500/20"
+            aiVerifiedLabel={t('reports_ai_verified')}
           />
           <StatCard
             icon={Target}
-            label="Model Confidence"
+            label={t('reports_stat_confidence_label')}
             value={latest ? `${latestConfidence}%` : '—'}
-            sub="Latest prediction accuracy"
+            sub={t('reports_stat_confidence_sub')}
             color="bg-purple-500/20 text-purple-400"
             border="border-purple-500/20"
+            aiVerifiedLabel={t('reports_ai_verified')}
           />
           <StatCard
             icon={Clock}
-            label="Last Assessment Date"
+            label={t('reports_stat_date_label')}
             value={latest ? new Date(latest.prediction_date).toLocaleDateString() : '—'}
-            sub={latest ? new Date(latest.prediction_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Run first test'}
+            sub={latest ? new Date(latest.prediction_date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t('reports_stat_date_run')}
             color="bg-amber-500/20 text-amber-400"
             border="border-amber-500/20"
+            aiVerifiedLabel={t('reports_ai_verified')}
           />
         </motion.div>
 
@@ -202,15 +210,15 @@ export default function Reports() {
             <div className="w-16 h-16 rounded-2xl glass border border-white/10 flex items-center justify-center mx-auto mb-4 text-purple-400">
               <Activity className="w-8 h-8" />
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white mb-2">No Reports Generated Yet</h3>
+            <h3 className="text-xl sm:text-2xl font-black text-white mb-2">{t('reports_empty_title')}</h3>
             <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
-              Complete your clinical symptom questionnaire or upload blood lab reports to generate your first nutritional risk profile.
+              {t('reports_empty_desc')}
             </p>
             <Link
               to="/prediction"
               className="inline-flex items-center gap-2 px-6 py-3.5 gradient-bg text-white text-xs sm:text-sm font-bold rounded-2xl shadow-lg shadow-purple-500/25 hover:scale-105 transition-all"
             >
-              Start First Assessment <ArrowRight className="w-4 h-4" />
+              {t('reports_empty_btn')} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         ) : (
@@ -226,9 +234,9 @@ export default function Reports() {
                 <div>
                   <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
                     <TrendingUp className="w-5 h-5 text-cyan-400" />
-                    Biomarker Deficiency Trend Analytics
+                    {t('reports_chart_title')}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Historical risk progression across all assessment tests</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{t('reports_chart_subtitle')}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -237,7 +245,7 @@ export default function Reports() {
                       selectedView === 'chart' ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    Area Chart
+                    {t('reports_chart_btn_area')}
                   </button>
                   <button
                     onClick={() => setSelectedView('cards')}
@@ -245,7 +253,7 @@ export default function Reports() {
                       selectedView === 'cards' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'text-slate-400 hover:text-white'
                     }`}
                   >
-                    Risk Cards
+                    {t('reports_chart_btn_cards')}
                   </button>
                 </div>
               </div>
@@ -308,7 +316,7 @@ export default function Reports() {
                         </div>
                         <div className="flex items-baseline justify-between">
                           <span className="text-2xl font-black text-white">{pct}%</span>
-                          <span className="text-xs text-slate-400 font-medium">Risk Score</span>
+                          <span className="text-xs text-slate-400 font-medium">{t('reports_chart_risk_score')}</span>
                         </div>
                         <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full ${status.bar}`} style={{ width: `${pct}%` }} />
@@ -333,8 +341,8 @@ export default function Reports() {
                     <CalendarDays className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">Diagnostic History Log</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">{predictions.length} recorded diagnostic sessions</p>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">{t('reports_history_title')}</h3>
+                    <p className="text-xs text-slate-400 mt-0.5">{predictions.length} {t('reports_history_subtitle')}</p>
                   </div>
                 </div>
               </div>
@@ -343,20 +351,25 @@ export default function Reports() {
                 <table className="w-full min-w-[700px] text-xs sm:text-sm">
                   <thead>
                     <tr className="text-left border-b border-white/10 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
-                      <th className="pb-3 pl-2">Session #</th>
-                      <th className="pb-3">Date</th>
-                      <th className="pb-3 text-rose-400">Iron</th>
-                      <th className="pb-3 text-cyan-400">Vit D</th>
-                      <th className="pb-3 text-purple-400">Calcium</th>
-                      <th className="pb-3 text-amber-400">Magnesium</th>
-                      <th className="pb-3 text-emerald-400">Potassium</th>
-                      <th className="pb-3 text-blue-400">B12 / Ribo</th>
-                      <th className="pb-3 pr-2 text-right">Confidence</th>
+                      <th className="pb-3 pl-2">{t('reports_table_session')}</th>
+                      <th className="pb-3">{t('reports_table_date')}</th>
+                      <th className="pb-3 text-rose-400">{t('reports_table_iron')}</th>
+                      <th className="pb-3 text-cyan-400">{t('reports_table_vitd')}</th>
+                      <th className="pb-3 text-purple-400">{t('reports_table_calcium')}</th>
+                      <th className="pb-3 text-amber-400">{t('reports_table_magnesium')}</th>
+                      <th className="pb-3 text-emerald-400">{t('reports_table_potassium')}</th>
+                      <th className="pb-3 text-blue-400">{t('reports_table_b12')}</th>
+                      <th className="pb-3 pr-2 text-right">{t('reports_table_confidence')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
                     {predictions.map((pred, idx) => {
                       const conf = Math.round((pred.confidence_score || 0) * 100);
+                      const getRiskStatus = (val) => {
+                          if (val > 0.7) return { color: 'text-rose-400' };
+                          if (val > 0.4) return { color: 'text-amber-400' };
+                          return { color: 'text-emerald-400' };
+                      };
                       return (
                         <tr key={pred.id || idx} className="hover:bg-white/5 transition-all group">
                           <td className="py-3.5 pl-2 font-bold text-slate-400 group-hover:text-white">

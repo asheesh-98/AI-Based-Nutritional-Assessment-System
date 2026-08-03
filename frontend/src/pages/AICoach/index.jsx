@@ -7,19 +7,24 @@ import {
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import api from '../../services/api';
+import { useLanguage } from '../../context/LanguageContext';
 
-const suggestedCategories = [
-  { label: 'Deficiencies', prompt: 'Explain my deficiency assessment risks & how to fix them', icon: AlertCircle, color: 'text-amber-400' },
-  { label: 'High Protein', prompt: 'Suggest high-protein vegetarian breakfast & dinner recipes', icon: Utensils, color: 'text-emerald-400' },
-  { label: 'Iron & Vit D', prompt: 'What foods increase Iron and Vitamin D absorption best?', icon: Zap, color: 'text-cyan-400' },
-  { label: 'Tea & Coffee', prompt: 'How does tea or coffee affect iron and calcium absorption?', icon: Lightbulb, color: 'text-purple-400' },
-];
+
 
 export default function AICoach() {
+  const { t } = useLanguage();
+
+  const suggestedCategories = [
+    { label: t('ai_coach_prompt_deficiencies_label'), prompt: t('ai_coach_prompt_deficiencies'), icon: AlertCircle, color: 'text-amber-400' },
+    { label: t('ai_coach_prompt_protein_label'), prompt: t('ai_coach_prompt_protein'), icon: Utensils, color: 'text-emerald-400' },
+    { label: t('ai_coach_prompt_iron_label'), prompt: t('ai_coach_prompt_iron'), icon: Zap, color: 'text-cyan-400' },
+    { label: t('ai_coach_prompt_tea_label'), prompt: t('ai_coach_prompt_tea'), icon: Lightbulb, color: 'text-purple-400' },
+  ];
+
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: "Hello! I'm your AI Clinical Nutrition Coach powered by Google Gemini 2.0 Flash. I'm connected to your active health profile and lab records. How can I assist with your dietary goals today?",
+      content: t('ai_coach_initial_message'),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -62,13 +67,13 @@ export default function AICoach() {
 
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: data.reply || "I couldn't generate a response at the moment.",
+        content: data.reply || t('ai_coach_error_reply'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
     } catch (err) {
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: err.response?.data?.detail || "Sorry, I encountered an issue connecting to Gemini. Please try again.",
+        content: err.response?.data?.detail || t('ai_coach_connection_error'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }]);
     } finally {
@@ -80,32 +85,32 @@ export default function AICoach() {
     setMessages([
       {
         role: 'assistant',
-        content: "Conversation reset. I am ready for your next nutrition query!",
+        content: t('ai_coach_reset_message'),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
   };
 
   return (
-    <DashboardLayout title="AI Clinical Nutrition Coach" subtitle="Interactive 24/7 dietary assistant powered by Google Gemini 2.0 Flash">
+    <DashboardLayout title={t('ai_coach_title')} subtitle={t('ai_coach_subtitle')}>
       <div className="flex flex-col h-[calc(100vh-220px)] sm:h-[calc(100vh-240px)] max-w-5xl mx-auto w-full overflow-x-hidden pb-2">
 
         {/* 🌟 Header Status & Telemetry Bar */}
         <div className="glass-card px-4 py-3 mb-3.5 flex flex-wrap items-center justify-between gap-3 border border-cyan-500/20 bg-cyan-500/5 rounded-2xl text-xs">
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
-            <span className="font-bold text-white">Gemini 2.0 Flash Neural Assistant</span>
-            <span className="text-cyan-400 font-semibold hidden sm:inline">• Health Context Linked</span>
+            <span className="font-bold text-white">{t('ai_coach_header_status')}</span>
+            <span className="text-cyan-400 font-semibold hidden sm:inline">{t('ai_coach_context_linked')}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleClearChat}
               className="text-[11px] font-bold text-slate-400 hover:text-white px-2.5 py-1 rounded-xl glass border border-white/10 flex items-center gap-1 transition-all cursor-pointer"
-              title="Clear Chat History"
+              title={t('ai_coach_clear_title')}
             >
               <Trash2 className="w-3.5 h-3.5 text-rose-400" />
-              <span>Clear</span>
+              <span>{t('ai_coach_clear_btn')}</span>
             </button>
           </div>
         </div>
@@ -157,7 +162,7 @@ export default function AICoach() {
               </div>
               <div className="flex items-center gap-2.5 glass px-4 py-2.5 rounded-2xl border border-cyan-500/30">
                 <Sparkles className="w-4 h-4 text-cyan-400 animate-spin" />
-                <span className="font-semibold text-cyan-300">Synthesizing clinical advice...</span>
+                <span className="font-semibold text-cyan-300">{t('ai_coach_synthesizing')}</span>
               </div>
             </motion.div>
           )}
@@ -186,7 +191,7 @@ export default function AICoach() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask AI Clinical Nutritionist anything..."
+            placeholder={t('ai_coach_input_placeholder')}
             className="flex-1 bg-transparent px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none min-w-0 font-medium"
           />
           <button
@@ -194,7 +199,7 @@ export default function AICoach() {
             disabled={loading || !input.trim()}
             className="px-4 py-3 rounded-xl gradient-bg text-white font-bold disabled:opacity-40 hover:shadow-lg hover:shadow-cyan-500/30 active:scale-95 transition-all shrink-0 cursor-pointer flex items-center gap-2"
           >
-            <span className="hidden sm:inline text-xs">Send</span>
+            <span className="hidden sm:inline text-xs">{t('ai_coach_send_btn')}</span>
             <Send className="w-4 h-4" />
           </button>
         </div>

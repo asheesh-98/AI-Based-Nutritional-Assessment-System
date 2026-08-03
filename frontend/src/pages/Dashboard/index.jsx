@@ -12,12 +12,14 @@ import Alert from '../../components/common/Alert';
 import { useAuth } from '../../context/AuthContext';
 import dashboardService from '../../services/dashboardService';
 import { saveOfflineDashboard, getOfflineDashboard } from '../../utils/offlineStorage';
+import { useLanguage } from '../../context/LanguageContext';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } } };
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -59,16 +61,16 @@ export default function Dashboard() {
   const userName = user?.full_name || user?.name || user?.email?.split('@')[0] || 'User';
 
   const quickActions = [
-    { label: 'Run AI Assessment', desc: 'Predict nutrient deficiency risks', icon: Activity, path: '/prediction', color: 'from-cyan-500 to-blue-600', primary: true },
-    { label: 'Upload Blood Report', desc: 'Scan medical PDF lab reports', icon: TestTube2, path: '/blood-report', color: 'from-rose-500 to-pink-600' },
-    { label: 'Log Symptoms', desc: 'Track physical health markers', icon: Stethoscope, path: '/symptoms', color: 'from-purple-500 to-indigo-600' },
-    { label: 'View Meal Plan', desc: 'Personalized 7-day recipes', icon: Utensils, path: '/meal-plan', color: 'from-emerald-500 to-teal-600' },
-    { label: 'Scan Food Item', desc: 'Visual AI calorie estimation', icon: ScanBarcode, path: '/food-scanner', color: 'from-amber-500 to-orange-600' },
-    { label: 'Ask AI Coach', desc: '24/7 Clinical nutrition chat', icon: Bot, path: '/ai-coach', color: 'from-violet-500 to-purple-600' },
+    { label: t('dashboard_qa_run_ai_label'), desc: t('dashboard_qa_run_ai_desc'), icon: Activity, path: '/prediction', color: 'from-cyan-500 to-blue-600', primary: true },
+    { label: t('dashboard_qa_blood_label'), desc: t('dashboard_qa_blood_desc'), icon: TestTube2, path: '/blood-report', color: 'from-rose-500 to-pink-600' },
+    { label: t('dashboard_qa_symptoms_label'), desc: t('dashboard_qa_symptoms_desc'), icon: Stethoscope, path: '/symptoms', color: 'from-purple-500 to-indigo-600' },
+    { label: t('dashboard_qa_meal_label'), desc: t('dashboard_qa_meal_desc'), icon: Utensils, path: '/meal-plan', color: 'from-emerald-500 to-teal-600' },
+    { label: t('dashboard_qa_scan_label'), desc: t('dashboard_qa_scan_desc'), icon: ScanBarcode, path: '/food-scanner', color: 'from-amber-500 to-orange-600' },
+    { label: t('dashboard_qa_coach_label'), desc: t('dashboard_qa_coach_desc'), icon: Bot, path: '/ai-coach', color: 'from-violet-500 to-purple-600' },
   ];
 
   return (
-    <DashboardLayout title="Overview" subtitle="Your personalized metabolic and nutritional health dashboard">
+    <DashboardLayout title={t('dashboard_title')} subtitle={t('dashboard_subtitle')}>
       {error && <Alert type="error" message={error} onClose={() => setError('')} />}
 
       <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full overflow-x-hidden pb-10">
@@ -89,19 +91,19 @@ export default function Dashboard() {
               <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass border border-white/10 text-xs font-semibold text-cyan-400">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}
+                  {t('dashboard_good') + ' '}{new Date().getHours() < 12 ? t('dashboard_morning') : new Date().getHours() < 18 ? t('dashboard_afternoon') : t('dashboard_evening')}
                 </span>
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400">
-                  🔥 7-Day Health Streak
+                  {t('dashboard_health_streak')}
                 </span>
               </div>
 
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3 break-words">
-                Welcome back, <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
+                {t('dashboard_welcome_back') + ' '}<span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
               </h2>
 
               <p className="text-slate-300 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
-                Your metabolic score is performing <span className="text-cyan-300 font-bold">5% better</span> than last week. Your personalized nutritional roadmap is updated and ready.
+                {t('dashboard_metabolic_prefix') + ' '}<span className="text-cyan-300 font-bold">{t('dashboard_metabolic_highlight')}</span>{' ' + t('dashboard_metabolic_suffix')}
               </p>
             </div>
 
@@ -111,14 +113,14 @@ export default function Dashboard() {
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white gradient-bg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 transition-all"
               >
                 <Activity className="w-4 h-4" />
-                Run AI Assessment
+                {t('dashboard_btn_run_ai')}
               </Link>
               <Link
                 to="/meal-plan"
                 className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white glass border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
               >
                 <Utensils className="w-4 h-4 text-emerald-400" />
-                Meal Plan
+                {t('dashboard_btn_meal_plan')}
               </Link>
             </div>
           </div>
@@ -143,12 +145,12 @@ export default function Dashboard() {
                   <Activity className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
-                  +5% Optimal
+                  {t('dashboard_nutrition_score_badge')}
                 </span>
               </div>
               <div className="flex items-baseline justify-between">
                 <div>
-                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Nutrition Score</p>
+                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_nutrition_score_label')}</p>
                   <p className="text-3xl sm:text-4xl font-black text-white">{data?.nutrition_score || 82}<span className="text-sm font-medium text-slate-400">/100</span></p>
                 </div>
                 <div className="w-12 h-12 relative flex items-center justify-center">
@@ -167,17 +169,17 @@ export default function Dashboard() {
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
-                  2 Improved
+                  {t('dashboard_deficiency_risks_badge')}
                 </span>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Deficiency Risks</p>
-                <p className="text-3xl sm:text-4xl font-black text-white">{data?.deficiency_count ?? 3} <span className="text-xs font-medium text-slate-400">Nutrients Tracked</span></p>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_deficiency_risks_label')}</p>
+                <p className="text-3xl sm:text-4xl font-black text-white">{data?.deficiency_count ?? 3} <span className="text-xs font-medium text-slate-400">{t('dashboard_nutrients_tracked')}</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-amber-500/30 rounded-full overflow-hidden">
                     <div className="h-full bg-amber-400 rounded-full" style={{ width: '60%' }} />
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400">Mild Risk</span>
+                  <span className="text-[10px] font-bold text-slate-400">{t('dashboard_mild_risk')}</span>
                 </div>
               </div>
             </motion.div>
@@ -189,11 +191,11 @@ export default function Dashboard() {
                   <Flame className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                  Target: 2,000
+                  {t('dashboard_daily_calories_target')}
                 </span>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Daily Calories</p>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_daily_calories_label')}</p>
                 <p className="text-3xl sm:text-4xl font-black text-white">{(data?.daily_calories || 1850).toLocaleString()} <span className="text-xs font-medium text-slate-400">kcal</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
@@ -213,14 +215,14 @@ export default function Dashboard() {
                 <button
                   onClick={handleAddWater}
                   className="text-xs font-bold text-purple-300 bg-purple-500/20 hover:bg-purple-500/30 px-2.5 py-1 rounded-full border border-purple-500/30 flex items-center gap-1 transition-all active:scale-95"
-                  title="Add 250ml water"
+                  title={t('dashboard_add_water')}
                 >
                   <Plus className="w-3 h-3" /> 250ml
                 </button>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Water Hydration</p>
-                <p className="text-3xl sm:text-4xl font-black text-white">{waterAmount}L <span className="text-xs font-medium text-slate-400">/ 3.0L Target</span></p>
+                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_water_label')}</p>
+                <p className="text-3xl sm:text-4xl font-black text-white">{waterAmount}L <span className="text-xs font-medium text-slate-400">{t('dashboard_water_target')}</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
                     <div className="h-full bg-purple-400 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, (waterAmount / 3.0) * 100)}%` }} />
@@ -245,11 +247,11 @@ export default function Dashboard() {
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">Diagnostic History & Reports</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Machine learning deficiency risk predictions</p>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">{t('dashboard_diagnostic_title')}</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">{t('dashboard_diagnostic_subtitle')}</p>
                 </div>
                 <Link to="/reports" className="text-xs sm:text-sm font-bold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">
-                  View All <ChevronRight className="w-4 h-4" />
+                  {t('common_view_all')} <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
               
@@ -270,7 +272,7 @@ export default function Dashboard() {
                           <Activity className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="text-sm sm:text-base font-bold text-white leading-tight">{pred.deficiency || 'Routine Nutritional Assessment'}</p>
+                          <p className="text-sm sm:text-base font-bold text-white leading-tight">{pred.deficiency || t('dashboard_default_assessment')}</p>
                           <p className="text-xs text-slate-400 font-medium mt-0.5">{pred.date || 'Today, 10:45 AM'}</p>
                         </div>
                       </div>
@@ -279,7 +281,7 @@ export default function Dashboard() {
                         (pred.risk || 0) > 30 ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' :
                         'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
                       }`}>
-                        {(pred.risk || 0) > 60 ? 'High Risk' : (pred.risk || 0) > 30 ? 'Moderate Risk' : 'Low Risk'}
+                        {(pred.risk || 0) > 60 ? t('common_high_risk') : (pred.risk || 0) > 30 ? t('common_moderate_risk') : t('common_low_risk')}
                       </span>
                     </motion.div>
                   ))}
@@ -289,15 +291,15 @@ export default function Dashboard() {
                   <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl glass border border-white/10 flex items-center justify-center mx-auto mb-4 text-cyan-400">
                     <Activity className="w-7 h-7 sm:w-8 sm:h-8" />
                   </div>
-                  <h4 className="text-base sm:text-lg font-bold text-white mb-2">No Diagnostic Predictions Yet</h4>
+                  <h4 className="text-base sm:text-lg font-bold text-white mb-2">{t('dashboard_empty_title')}</h4>
                   <p className="text-xs sm:text-sm text-slate-400 mb-6 max-w-sm mx-auto leading-relaxed">
-                    Complete your clinical symptom questionnaire or upload blood lab reports to run your first machine learning assessment.
+                    {t('dashboard_empty_desc')}
                   </p>
                   <Link
                     to="/prediction"
                     className="inline-flex items-center gap-2 px-6 py-3 gradient-bg text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all hover:scale-105"
                   >
-                    Run First Assessment
+                    {t('dashboard_empty_btn')}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -317,7 +319,7 @@ export default function Dashboard() {
                 <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
                   <Zap className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">Quick Actions</h3>
+                <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">{t('dashboard_quick_actions_title')}</h3>
               </div>
 
               <div className="space-y-3 flex-1">

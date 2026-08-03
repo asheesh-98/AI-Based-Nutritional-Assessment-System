@@ -104,28 +104,28 @@ export default function Home() {
   ];
 
   const demoTabs = [
-    { id: 'scanner', label: 'AI Food Scanner', icon: ScanBarcode, color: 'text-cyan-400' },
-    { id: 'blood', label: 'Blood Lab OCR', icon: TestTube2, color: 'text-rose-400' },
-    { id: 'recommender', label: 'Smart Meal Recommender', icon: Utensils, color: 'text-emerald-400' },
-    { id: 'coach', label: 'Clinical AI Coach', icon: Bot, color: 'text-purple-400' },
+    { id: 'scanner', label: t('home_demo_tab_scanner'), icon: ScanBarcode, color: 'text-cyan-400' },
+    { id: 'blood', label: t('home_demo_tab_blood'), icon: TestTube2, color: 'text-rose-400' },
+    { id: 'recommender', label: t('home_demo_tab_recommender'), icon: Utensils, color: 'text-emerald-400' },
+    { id: 'coach', label: t('home_demo_tab_coach'), icon: Bot, color: 'text-purple-400' },
   ];
 
   const faqs = [
     {
-      q: 'How accurate is the AI Nutritional Assessment?',
-      a: 'NutriAI achieves a 94.8% F1-score validation by running multi-output XGBoost and Random Forest model ensembles trained on verified clinical nutrition datasets and USDA biomarker standards.',
+      q: t('home_faq_q1'),
+      a: t('home_faq_a1'),
     },
     {
-      q: 'Can I upload blood test PDF reports directly?',
-      a: 'Yes! Our multi-modal Gemini Vision OCR parses lab PDF files or photo uploads, automatically extracting Hemoglobin, Ferritin, Vitamin D3, B12, Calcium, and Magnesium values.',
+      q: t('home_faq_q2'),
+      a: t('home_faq_a2'),
     },
     {
-      q: 'Does NutriAI support vegetarian and vegan diets?',
-      a: 'Absolutely! Our meal recommender includes strict biological nutritional shields and AI compliance guards ensuring 0 non-veg or non-vegan food items enter your custom plans.',
+      q: t('home_faq_q3'),
+      a: t('home_faq_a3'),
     },
     {
-      q: 'How does the PWA App work without app store downloads?',
-      a: 'NutriAI is built with Progressive Web App (PWA) technology. Simply tap "Download PWA App" to install it directly on Android, iOS, Windows, or Mac with offline data persistence.',
+      q: t('home_faq_q4'),
+      a: t('home_faq_a4'),
     },
   ];
 
@@ -207,7 +207,7 @@ export default function Home() {
                 className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-cyan-300 glass border border-cyan-500/30 hover:border-cyan-400 rounded-2xl shadow-lg shadow-cyan-500/10 flex items-center justify-center gap-2.5 transition-all cursor-pointer bg-cyan-500/10"
               >
                 <Download className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 animate-bounce" />
-                <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
+                <span>{isInstalled ? t('home_pwa_app_installed') : t('home_pwa_download')}</span>
               </motion.button>
             </motion.div>
           </div>
@@ -228,25 +228,25 @@ export default function Home() {
                     <Activity className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-base font-extrabold text-white leading-tight">NutriAI Clinical Suite</h4>
-                    <p className="text-xs text-cyan-400 font-semibold">Live Biomarker Telemetry</p>
+                    <h4 className="text-base font-extrabold text-white leading-tight">{t('home_mockup_title')}</h4>
+                    <p className="text-xs text-cyan-400 font-semibold">{t('home_mockup_subtitle')}</p>
                   </div>
                 </div>
                 <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[11px] font-extrabold text-emerald-400 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> Optimal Accuracy
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> {t('home_mockup_badge')}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="p-4 rounded-2xl glass border border-white/5 space-y-1">
-                  <p className="text-xs text-slate-400 font-semibold uppercase">Nutrition Score</p>
+                  <p className="text-xs text-slate-400 font-semibold uppercase">{t('home_mockup_nutrition_score')}</p>
                   <p className="text-3xl font-black text-white">88<span className="text-sm font-medium text-slate-400">/100</span></p>
-                  <span className="text-[11px] font-bold text-emerald-400">+5% Optimization</span>
+                  <span className="text-[11px] font-bold text-emerald-400">{t('home_mockup_optimization')}</span>
                 </div>
                 <div className="p-4 rounded-2xl glass border border-white/5 space-y-1">
-                  <p className="text-xs text-slate-400 font-semibold uppercase">Deficiency Risk</p>
-                  <p className="text-3xl font-black text-amber-400">Mild</p>
-                  <span className="text-[11px] font-bold text-amber-300">Iron & Vit D Tracked</span>
+                  <p className="text-xs text-slate-400 font-semibold uppercase">{t('home_mockup_deficiency_risk')}</p>
+                  <p className="text-3xl font-black text-amber-400">{t('home_mockup_mild')}</p>
+                  <span className="text-[11px] font-bold text-amber-300">{t('home_mockup_tracked')}</span>
                 </div>
               </div>
 
@@ -254,16 +254,16 @@ export default function Home() {
                 <div className="flex items-center justify-between p-3.5 rounded-xl glass border border-white/5 text-xs">
                   <div className="flex items-center gap-2.5">
                     <TestTube2 className="w-4 h-4 text-rose-400" />
-                    <span className="font-bold text-slate-200">Hemoglobin Blood Lab Scan</span>
+                    <span className="font-bold text-slate-200">{t('home_mockup_item1_label')}</span>
                   </div>
-                  <span className="font-extrabold text-rose-400">Normal Range</span>
+                  <span className="font-extrabold text-rose-400">{t('home_mockup_item1_status')}</span>
                 </div>
                 <div className="flex items-center justify-between p-3.5 rounded-xl glass border border-white/5 text-xs">
                   <div className="flex items-center gap-2.5">
                     <Utensils className="w-4 h-4 text-emerald-400" />
-                    <span className="font-bold text-slate-200">7-Day Vegetarian Meal Plan</span>
+                    <span className="font-bold text-slate-200">{t('home_mockup_item2_label')}</span>
                   </div>
-                  <span className="font-extrabold text-emerald-400">Generated</span>
+                  <span className="font-extrabold text-emerald-400">{t('home_mockup_item2_status')}</span>
                 </div>
               </div>
             </div>
@@ -296,10 +296,10 @@ export default function Home() {
           <div className="glass-card p-6 sm:p-10 rounded-3xl border border-cyan-500/30 shadow-2xl relative overflow-hidden">
             <div className="text-center mb-8">
               <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20 mb-3 inline-block">
-                Instant Interactive Preview
+                {t('home_calc_badge')}
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-white">Check Your Estimated Deficiency Risk</h3>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1">Select symptoms you currently experience to see instant AI risk probability:</p>
+              <h3 className="text-2xl sm:text-3xl font-black text-white">{t('home_calc_title')}</h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">{t('home_calc_subtitle')}</p>
             </div>
 
             <div className="flex flex-wrap justify-center gap-2.5 mb-8">
@@ -323,14 +323,14 @@ export default function Home() {
 
             <div className="glass p-5 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
               <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Estimated Risk Index</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('home_calc_result_header')}</span>
                 <p className="text-lg sm:text-xl font-black text-white mt-0.5">
-                  {selectedSymptoms.length > 2 ? '⚠️ Moderate-to-High Risk (Iron & Vit D)' : '✅ Mild / Low Risk Profile'}
+                  {selectedSymptoms.length > 2 ? t('home_calc_risk_high') : t('home_calc_risk_low')}
                 </p>
               </div>
               <Link to="/register">
                 <button className="px-6 py-3 rounded-xl gradient-bg text-white text-xs font-bold shadow-lg shadow-cyan-500/20 hover:scale-105 transition-all">
-                  Run Full Clinical AI Assessment
+                  {t('home_calc_btn')}
                 </button>
               </Link>
             </div>
@@ -348,7 +348,7 @@ export default function Home() {
             className="text-center mb-16 sm:mb-24"
           >
             <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest bg-cyan-500/10 px-3.5 py-1.5 rounded-full border border-cyan-500/20 mb-4 inline-block">
-              Clinical Intelligence Suite
+              {t('home_features_badge')}
             </span>
             <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6">
               {t('features_title')}
@@ -393,10 +393,10 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
             <span className="text-xs font-bold text-purple-400 uppercase tracking-widest bg-purple-500/10 px-3.5 py-1.5 rounded-full border border-purple-500/20 mb-4 inline-block">
-              Got Questions?
+              {t('home_faq_badge')}
             </span>
-            <h2 className="text-3xl sm:text-5xl font-black text-white mb-4">Frequently Asked Questions</h2>
-            <p className="text-slate-400 text-xs sm:text-base">Everything you need to know about NutriAI clinical assessments.</p>
+            <h2 className="text-3xl sm:text-5xl font-black text-white mb-4">{t('home_faq_title')}</h2>
+            <p className="text-slate-400 text-xs sm:text-base">{t('home_faq_subtitle')}</p>
           </div>
 
           <div className="space-y-4">
@@ -447,10 +447,10 @@ export default function Home() {
                 <Smartphone className="w-8 h-8 sm:w-10 sm:h-10 animate-bounce" />
               </div>
               <h2 className="text-3xl sm:text-5xl font-black text-white mb-4 sm:mb-6">
-                Install NutriAI App on Any Device
+                {t('home_pwa_banner_title')}
               </h2>
               <p className="text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 text-xs sm:text-base leading-relaxed font-medium">
-                Enjoy offline meal plans, instant food scanning, and zero app store downloads with Progressive Web App technology.
+                {t('home_pwa_banner_subtitle')}
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
@@ -461,7 +461,7 @@ export default function Home() {
                   className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white gradient-bg rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-[0_0_30px_rgba(0,212,255,0.4)]"
                 >
                   <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  <span>{isInstalled ? 'App Installed' : 'Download PWA App'}</span>
+                  <span>{isInstalled ? t('home_pwa_app_installed') : t('home_pwa_download')}</span>
                 </motion.button>
 
                 <Link to="/register" className="w-full sm:w-auto">

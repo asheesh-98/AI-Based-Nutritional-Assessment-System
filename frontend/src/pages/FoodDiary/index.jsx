@@ -17,10 +17,21 @@ const mealTypes = [
   { value: 'snack', label: 'Snack', icon: Cookie, color: 'text-pink-400' },
 ];
 
+import { useLanguage } from '../../context/LanguageContext';
+
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } };
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } };
 
 export default function FoodDiary() {
+  const { t } = useLanguage();
+
+  const mealTypes = [
+    { value: 'breakfast', label: t('food_diary_breakfast'), icon: Coffee, color: 'text-amber-400' },
+    { value: 'lunch', label: t('food_diary_lunch'), icon: Sun, color: 'text-cyan-400' },
+    { value: 'dinner', label: t('food_diary_dinner'), icon: Moon, color: 'text-purple-400' },
+    { value: 'snack', label: t('food_diary_snack'), icon: Cookie, color: 'text-pink-400' },
+  ];
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
@@ -72,24 +83,24 @@ export default function FoodDiary() {
         carbs: food.carbohydrate_g || 0,
         fat: food.fat_g || 0,
       });
-      setAlert({ show: true, type: 'success', message: `Added ${food.food_name} to ${selectedMeal}!` });
+      setAlert({ show: true, type: 'success', message: `${food.food_name} - ${t('food_diary_added_food')}` });
       setSearchResults([]);
       setSearchQuery('');
       loadDiary();
     } catch (err) {
       console.error('Log food error:', err);
-      setAlert({ show: true, type: 'error', message: 'Failed to log food.' });
+      setAlert({ show: true, type: 'error', message: t('food_diary_log_error') });
     }
   };
 
   const handleDeleteFood = async (entryId, foodName) => {
     try {
       await foodService.deleteFoodEntry(entryId);
-      setAlert({ show: true, type: 'success', message: `Removed ${foodName} from diary.` });
+      setAlert({ show: true, type: 'success', message: `${foodName} - ${t('food_diary_removed_food')}` });
       loadDiary();
     } catch (err) {
       console.error('Delete food error:', err);
-      setAlert({ show: true, type: 'error', message: 'Failed to remove food item.' });
+      setAlert({ show: true, type: 'error', message: t('food_diary_remove_error') });
     }
   };
 
@@ -108,7 +119,7 @@ export default function FoodDiary() {
   const totalFat = diary.reduce((sum, d) => sum + (d.fat || 0), 0);
 
   return (
-    <DashboardLayout title="Food Diary" subtitle={today}>
+    <DashboardLayout title={t('food_diary_page_title')} subtitle={today}>
       {alert.show && (
         <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />
       )}
@@ -116,10 +127,10 @@ export default function FoodDiary() {
       {/* Daily Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Calories', value: Math.round(totalCalories), unit: 'kcal', icon: Flame, color: 'text-amber-400' },
-          { label: 'Protein', value: Math.round(totalProtein), unit: 'g', icon: Utensils, color: 'text-cyan-400' },
-          { label: 'Carbs', value: Math.round(totalCarbs), unit: 'g', icon: Utensils, color: 'text-purple-400' },
-          { label: 'Fat', value: Math.round(totalFat), unit: 'g', icon: Droplets, color: 'text-rose-400' },
+          { label: t('common_calories'), value: Math.round(totalCalories), unit: t('common_kcal'), icon: Flame, color: 'text-amber-400' },
+          { label: t('common_protein'), value: Math.round(totalProtein), unit: 'g', icon: Utensils, color: 'text-cyan-400' },
+          { label: t('common_carbs'), value: Math.round(totalCarbs), unit: 'g', icon: Utensils, color: 'text-purple-400' },
+          { label: t('common_fat'), value: Math.round(totalFat), unit: 'g', icon: Droplets, color: 'text-rose-400' },
         ].map((s, i) => (
           <motion.div
             key={s.label}
@@ -142,7 +153,7 @@ export default function FoodDiary() {
       {/* Search + Add Food */}
       <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-4 mb-6">
         <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-          <Plus size={16} className="text-cyan-400" /> Log Food
+          <Plus size={16} className="text-cyan-400" /> {t('food_diary_log_food_title')}
         </h3>
 
         {/* Meal Type Selector */}
@@ -170,7 +181,7 @@ export default function FoodDiary() {
         <div className="flex gap-2">
           <div className="flex-1">
             <Input
-              placeholder="Search foods (e.g., quinoa, chicken breast)..."
+              placeholder={t('food_diary_search_placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
@@ -178,7 +189,7 @@ export default function FoodDiary() {
             />
           </div>
           <Button onClick={handleSearch} loading={searching} size="sm">
-            Search
+            {t('common_search')}
           </Button>
         </div>
 
@@ -215,10 +226,10 @@ export default function FoodDiary() {
               <div className="flex items-center gap-2 mb-3">
                 <Icon size={16} className={mt.color} />
                 <h3 className="text-white font-semibold text-sm">{mt.label}</h3>
-                <span className="text-xs text-white/30">({entries.length} items)</span>
+                <span className="text-xs text-white/30">({entries.length})</span>
               </div>
               {entries.length === 0 ? (
-                <p className="text-xs text-white/20 italic">No foods logged yet</p>
+                <p className="text-xs text-white/20 italic">{t('food_diary_no_foods')}</p>
               ) : (
                 <div className="space-y-1.5">
                   {entries.map((entry) => (
@@ -227,7 +238,7 @@ export default function FoodDiary() {
                         <button
                           onClick={() => handleDeleteFood(entry.id, entry.food_name)}
                           className="p-1 rounded-lg text-gray-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
-                          title="Remove item"
+                          title={t('food_diary_remove_tooltip')}
                         >
                           <Trash2 size={14} />
                         </button>

@@ -34,9 +34,9 @@ export default function Navbar() {
   const mobileUserNavLinks = [
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
-    { path: '/symptoms', label: 'Symptoms', icon: Stethoscope },
-    { path: '/blood-report', label: 'Blood Reports', icon: TestTube2 },
-    { path: '/reports', label: 'Reports', icon: TrendingUp },
+    { path: '/symptoms', label: t('common_symptoms'), icon: Stethoscope },
+    { path: '/blood-report', label: t('common_blood_reports'), icon: TestTube2 },
+    { path: '/reports', label: t('common_reports'), icon: TrendingUp },
     { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
     { path: '/food-diary', label: t('food_diary'), icon: FileText },
     { path: '/food-scanner', label: t('scanner'), icon: ScanBarcode },
@@ -143,7 +143,7 @@ export default function Navbar() {
                             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-semibold"
                           >
                             <User className="w-4 h-4" />
-                            Exit Admin View
+                            {t('common_exit_admin')}
                           </Link>
                         ) : (
                           <Link
@@ -152,7 +152,7 @@ export default function Navbar() {
                             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-semibold"
                           >
                             <ShieldCheck className="w-4 h-4" />
-                            Admin Console
+                            {t('common_admin_console')}
                           </Link>
                         )
                       ) : null}
@@ -227,7 +227,7 @@ export default function Navbar() {
             <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto custom-scrollbar">
               {isAdminRoute ? (
                 <div className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 rounded-lg border border-cyan-500/20 mb-2">
-                  Admin Console Navigation
+                  {t('common_admin_console_nav')}
                 </div>
               ) : null}
 
@@ -259,7 +259,7 @@ export default function Navbar() {
               {user ? (
                 <div className="space-y-1 pt-1">
                   <div className="px-4 py-2 text-xs font-semibold text-gray-400 truncate">
-                    Signed in as <span className="text-white font-bold">{user.full_name || user.name || user.email}</span>
+                    {t('common_signed_in_as')} <span className="text-white font-bold">{user.full_name || user.name || user.email}</span>
                   </div>
                   {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
                     isAdminRoute ? (
@@ -269,7 +269,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-cyan-300 hover:bg-cyan-500/10 transition-colors"
                       >
                         <User className="w-5 h-5" />
-                        Exit Admin View
+                        {t('common_exit_admin')}
                       </Link>
                     ) : (
                       <Link
@@ -278,7 +278,7 @@ export default function Navbar() {
                         className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-cyan-300 hover:bg-cyan-500/10 transition-colors"
                       >
                         <ShieldCheck className="w-5 h-5" />
-                        Admin Console
+                        {t('common_admin_console')}
                       </Link>
                     )
                   ) : null}

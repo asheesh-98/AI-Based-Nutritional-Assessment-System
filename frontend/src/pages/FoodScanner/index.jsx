@@ -11,12 +11,15 @@ import Alert from '../../components/common/Alert';
 import api from '../../services/api';
 import foodService from '../../services/foodService';
 
+import { useLanguage } from '../../context/LanguageContext';
+
 const sampleBarcodes = [
   { code: '5449000000996', label: 'Coca-Cola 330ml' },
   { code: '3017620422003', label: 'Nutella Hazelnut Spread' }
 ];
 
 export default function FoodScanner() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('photo'); // 'photo' or 'barcode'
   const [barcode, setBarcode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,7 +43,7 @@ export default function FoodScanner() {
       const { data } = await api.get(`/external/scan/${queryCode}`);
       setProduct(data);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Product not found. Please try another barcode.');
+      setError(err.response?.data?.detail || t('scanner_barcode_not_found'));
     } finally {
       setLoading(false);
     }
@@ -74,7 +77,7 @@ export default function FoodScanner() {
       setScanStep(2);
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.detail || 'Could not analyze meal image with Gemini Vision. Please try a clearer photo.');
+      setError(err.response?.data?.detail || t('scanner_photo_error'));
       setScanStep(0);
     } finally {
       setLoading(false);
@@ -88,7 +91,7 @@ export default function FoodScanner() {
     try {
       setLoading(true);
       await foodService.logFood({
-        food_name: aiMeal.food_name || 'Scanned Meal',
+        food_name: aiMeal.food_name || t('scanner_scanned_meal_default'),
         meal_type: aiMeal.suggested_meal_type || 'lunch',
         quantity: 1,
         calories: aiMeal.calories || 0,
@@ -96,16 +99,16 @@ export default function FoodScanner() {
         carbs: aiMeal.carbs_g || 0,
         fat: aiMeal.fat_g || 0,
       });
-      setSuccessMsg(`Successfully logged "${aiMeal.food_name}" to your Food Diary!`);
+      setSuccessMsg(t('scanner_log_success'));
     } catch (err) {
-      setError('Failed to log meal to diary.');
+      setError(t('scanner_log_error'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <DashboardLayout title="AI Food & Meal Scanner" subtitle="Multi-modal Gemini 2.0 Vision recognition & EAN barcode lookup">
+    <DashboardLayout title={t('scanner_page_title')} subtitle={t('scanner_page_subtitle')}>
       <div className="max-w-5xl mx-auto space-y-6">
 
         {/* 🌟 Tab Switcher */}
@@ -119,7 +122,7 @@ export default function FoodScanner() {
             }`}
           >
             <Sparkles className="w-4 h-4 text-cyan-300" />
-            <span>Gemini Vision AI</span>
+            <span>{t('scanner_tab_vision')}</span>
           </button>
           <button
             onClick={() => setActiveTab('barcode')}
@@ -130,7 +133,7 @@ export default function FoodScanner() {
             }`}
           >
             <Barcode className="w-4 h-4 text-cyan-300" />
-            <span>Barcode Scanner</span>
+            <span>{t('scanner_tab_barcode')}</span>
           </button>
         </div>
 
@@ -150,9 +153,9 @@ export default function FoodScanner() {
                   <Camera className="w-10 h-10 animate-pulse" />
                 </div>
                 
-                <h3 className="text-xl sm:text-2xl font-black text-white mb-2">Snap or Upload Food Photo</h3>
+                <h3 className="text-xl sm:text-2xl font-black text-white mb-2">{t('scanner_upload_title')}</h3>
                 <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
-                  Our Gemini 2.0 Multi-Modal Vision model detects food items, estimates portion weights, and computes macro ratios automatically.
+                  {t('scanner_upload_desc')}
                 </p>
 
                 <input
@@ -164,7 +167,7 @@ export default function FoodScanner() {
                 />
 
                 <Button loading={loading} size="lg" icon={Sparkles} className="pointer-events-none shadow-lg shadow-cyan-500/20">
-                  {loading ? 'Analyzing with Gemini Vision...' : 'Select Meal Photo to Scan'}
+                  {loading ? t('scanner_analyzing_btn') : t('scanner_select_photo_btn')}
                 </Button>
               </div>
             </div>
@@ -175,7 +178,7 @@ export default function FoodScanner() {
                 <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mx-auto animate-spin">
                   <Sparkles className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-bold text-white">Scanning Image Geometry with Gemini 2.0</h4>
+                <h4 className="text-lg font-bold text-white">{t('scanner_scanning_geometry')}</h4>
                 <div className="w-full max-w-md mx-auto h-2 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
                     className="h-full gradient-bg rounded-full"
@@ -199,7 +202,7 @@ export default function FoodScanner() {
                     )}
                     <div>
                       <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 uppercase tracking-wider">
-                        {aiMeal.category || 'Recognized Meal'}
+                        {aiMeal.category || t('scanner_recognized_category')}
                       </span>
                       <h3 className="text-2xl font-black text-white mt-1.5">{aiMeal.food_name}</h3>
                       {aiMeal.confidence_notes && (
@@ -210,7 +213,7 @@ export default function FoodScanner() {
 
                   {/* Log Action Button */}
                   <Button onClick={handleLogAiMeal} loading={loading} icon={Plus} size="lg" className="w-full lg:w-auto shadow-lg shadow-cyan-500/20">
-                    Log to Food Diary
+                    {t('scanner_log_diary_btn')}
                   </Button>
                 </div>
 
@@ -219,37 +222,37 @@ export default function FoodScanner() {
                   <div className="glass-card p-5 rounded-2xl text-center bg-amber-500/10 border border-amber-500/20 shadow-lg">
                     <div className="flex items-center justify-center gap-1.5 text-amber-400 mb-1">
                       <Flame className="w-4 h-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Energy</span>
+                      <span className="text-xs font-bold uppercase tracking-wider">{t('common_energy')}</span>
                     </div>
                     <div className="text-3xl font-black text-white">{Math.round(aiMeal.calories || 0)}</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">kcal</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{t('common_kcal')}</div>
                   </div>
 
                   <div className="glass-card p-5 rounded-2xl text-center bg-cyan-500/10 border border-cyan-500/20 shadow-lg">
                     <div className="flex items-center justify-center gap-1.5 text-cyan-400 mb-1">
                       <Activity className="w-4 h-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Protein</span>
+                      <span className="text-xs font-bold uppercase tracking-wider">{t('common_protein')}</span>
                     </div>
                     <div className="text-3xl font-black text-white">{Math.round(aiMeal.protein_g || 0)}g</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">muscle synthesis</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{t('scanner_muscle_synthesis')}</div>
                   </div>
 
                   <div className="glass-card p-5 rounded-2xl text-center bg-purple-500/10 border border-purple-500/20 shadow-lg">
                     <div className="flex items-center justify-center gap-1.5 text-purple-400 mb-1">
                       <Zap className="w-4 h-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Carbs</span>
+                      <span className="text-xs font-bold uppercase tracking-wider">{t('common_carbs')}</span>
                     </div>
                     <div className="text-3xl font-black text-white">{Math.round(aiMeal.carbs_g || 0)}g</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">glycogen fuel</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{t('scanner_glycogen_fuel')}</div>
                   </div>
 
                   <div className="glass-card p-5 rounded-2xl text-center bg-rose-500/10 border border-rose-500/20 shadow-lg">
                     <div className="flex items-center justify-center gap-1.5 text-rose-400 mb-1">
                       <Droplets className="w-4 h-4" />
-                      <span className="text-xs font-bold uppercase tracking-wider">Fats</span>
+                      <span className="text-xs font-bold uppercase tracking-wider">{t('common_fats')}</span>
                     </div>
                     <div className="text-3xl font-black text-white">{Math.round(aiMeal.fat_g || 0)}g</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">essential lipids</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{t('scanner_essential_lipids')}</div>
                   </div>
                 </div>
               </motion.div>
@@ -264,8 +267,8 @@ export default function FoodScanner() {
               <form onSubmit={(e) => handleBarcodeSearch(e)} className="flex flex-col sm:flex-row gap-4 items-end">
                 <div className="flex-1 w-full">
                   <Input
-                    label="Product Barcode (EAN / UPC)"
-                    placeholder="e.g. 5449000000996"
+                    label={t('scanner_barcode_label')}
+                    placeholder={t('scanner_barcode_placeholder')}
                     value={barcode}
                     onChange={(e) => setBarcode(e.target.value)}
                     icon={Barcode}
@@ -273,13 +276,13 @@ export default function FoodScanner() {
                 </div>
                 <Button type="submit" loading={loading} className="w-full sm:w-auto px-8 h-[46px] rounded-xl flex items-center justify-center gap-2 font-bold shadow-lg shadow-cyan-500/20">
                   <Search className="w-4 h-4" />
-                  <span>Search EAN</span>
+                  <span>{t('scanner_search_ean_btn')}</span>
                 </Button>
               </form>
 
               {/* Sample Barcode Chips */}
               <div className="mt-6 pt-4 border-t border-white/10">
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-2.5">Try Quick Sample Barcodes:</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider block mb-2.5">{t('scanner_quick_samples')}</span>
                 <div className="flex flex-wrap gap-2">
                   {sampleBarcodes.map((item) => (
                     <button
@@ -306,10 +309,10 @@ export default function FoodScanner() {
                   <div className="p-6 md:w-2/3 flex flex-col justify-between">
                     <div>
                       <h2 className="text-2xl font-black text-white">{product.product_name}</h2>
-                      <p className="text-cyan-400 text-sm font-bold mt-1">{product.brands || 'Verified Product'}</p>
+                      <p className="text-cyan-400 text-sm font-bold mt-1">{product.brands || t('scanner_verified_product')}</p>
                       {product.ingredients_text && (
                         <div className="mt-4 p-4 glass rounded-2xl border border-white/5">
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Ingredients:</span>
+                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">{t('scanner_ingredients_header')}</span>
                           <p className="text-xs text-slate-300 leading-relaxed">{product.ingredients_text}</p>
                         </div>
                       )}
@@ -321,19 +324,19 @@ export default function FoodScanner() {
                 <div className="p-6 grid grid-cols-4 gap-4 bg-black/20 text-center">
                   <div>
                     <span className="text-xl font-black text-amber-400">{Math.round(product.nutriments?.energy_kcal || 0)}</span>
-                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Kcal</p>
+                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">{t('common_kcal')}</p>
                   </div>
                   <div>
                     <span className="text-xl font-black text-cyan-400">{Math.round(product.nutriments?.proteins_100g || 0)}g</span>
-                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Protein</p>
+                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">{t('common_protein')}</p>
                   </div>
                   <div>
                     <span className="text-xl font-black text-purple-400">{Math.round(product.nutriments?.carbohydrates_100g || 0)}g</span>
-                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Carbs</p>
+                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">{t('common_carbs')}</p>
                   </div>
                   <div>
                     <span className="text-xl font-black text-rose-400">{Math.round(product.nutriments?.fat_100g || 0)}g</span>
-                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">Fat</p>
+                    <p className="text-[11px] text-slate-400 font-bold uppercase mt-0.5">{t('common_fat')}</p>
                   </div>
                 </div>
               </motion.div>

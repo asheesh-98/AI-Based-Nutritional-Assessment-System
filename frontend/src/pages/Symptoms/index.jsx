@@ -10,34 +10,45 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { PageLoader } from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
-
-const symptomsList = [
-  { key: 'fatigue', label: 'Fatigue', icon: Zap },
-  { key: 'hair_loss', label: 'Hair Loss', icon: Scissors },
-  { key: 'muscle_weakness', label: 'Muscle Weakness', icon: Activity },
-  { key: 'dry_skin', label: 'Dry Skin', icon: Droplets },
-  { key: 'brittle_nails', label: 'Brittle Nails', icon: Fingerprint },
-  { key: 'mood_changes', label: 'Mood Changes', icon: Frown },
-  { key: 'pale_skin', label: 'Pale Skin', icon: Sun },
-  { key: 'bone_pain', label: 'Bone Pain', icon: Bone },
-  { key: 'poor_vision', label: 'Poor Vision', icon: Eye },
-  { key: 'slow_healing', label: 'Slow Healing', icon: Clock },
-  { key: 'loss_of_appetite', label: 'Loss of Appetite', icon: UtensilsCrossed },
-  { key: 'tingling', label: 'Tingling', icon: Zap },
-  { key: 'difficulty_concentrating', label: 'Difficulty Concentrating', icon: Brain },
-  { key: 'frequent_illness', label: 'Frequent Illness', icon: ShieldAlert },
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 const severityColors = [
   'text-gray-500', 'text-emerald-400', 'text-emerald-400',
   'text-amber-400', 'text-rose-400', 'text-rose-400'
 ];
-const severityLabels = ['None', 'Mild', 'Mild', 'Moderate', 'Severe', 'Severe'];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.03 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
 export default function Symptoms() {
+  const { t } = useLanguage();
+
+  const symptomsList = [
+    { key: 'fatigue', label: t('symptoms_fatigue'), icon: Zap },
+    { key: 'hair_loss', label: t('symptoms_hair_loss'), icon: Scissors },
+    { key: 'muscle_weakness', label: t('symptoms_muscle_weakness'), icon: Activity },
+    { key: 'dry_skin', label: t('symptoms_dry_skin'), icon: Droplets },
+    { key: 'brittle_nails', label: t('symptoms_brittle_nails'), icon: Fingerprint },
+    { key: 'mood_changes', label: t('symptoms_mood_changes'), icon: Frown },
+    { key: 'pale_skin', label: t('symptoms_pale_skin'), icon: Sun },
+    { key: 'bone_pain', label: t('symptoms_bone_pain'), icon: Bone },
+    { key: 'poor_vision', label: t('symptoms_poor_vision'), icon: Eye },
+    { key: 'slow_healing', label: t('symptoms_slow_healing'), icon: Clock },
+    { key: 'loss_of_appetite', label: t('symptoms_loss_of_appetite'), icon: UtensilsCrossed },
+    { key: 'tingling', label: t('symptoms_tingling'), icon: Zap },
+    { key: 'difficulty_concentrating', label: t('symptoms_difficulty_concentrating'), icon: Brain },
+    { key: 'frequent_illness', label: t('symptoms_frequent_illness'), icon: ShieldAlert },
+  ];
+
+  const severityLabels = [
+    t('symptoms_severity_none'),
+    t('symptoms_severity_mild'),
+    t('symptoms_severity_mild'),
+    t('symptoms_severity_moderate'),
+    t('symptoms_severity_severe'),
+    t('symptoms_severity_severe'),
+  ];
+
   const [symptoms, setSymptoms] = useState(() =>
     symptomsList.reduce((acc, s) => ({ ...acc, [s.key]: 0 }), {})
   );
@@ -79,18 +90,18 @@ export default function Symptoms() {
     setAlert({ show: false, type: 'success', message: '' });
     try {
       await assessmentService.submitSymptoms(symptoms);
-      setAlert({ show: true, type: 'success', message: 'Symptoms submitted successfully! You can now run an assessment.' });
+      setAlert({ show: true, type: 'success', message: t('symptoms_submit_success') });
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || 'Failed to submit symptoms.' });
+      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('symptoms_submit_error') });
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <DashboardLayout title="Symptom Tracker"><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title={t('symptoms_title')}><PageLoader /></DashboardLayout>;
 
   return (
-    <DashboardLayout title="Symptom Tracker" subtitle="Rate your symptoms to help our AI assess deficiencies">
+    <DashboardLayout title={t('symptoms_title')} subtitle={t('symptoms_subtitle')}>
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       <motion.div
@@ -138,7 +149,7 @@ export default function Symptoms() {
 
       <div className="mt-8">
         <Button onClick={handleSubmit} loading={submitting} icon={Send} size="lg" className="w-full sm:w-auto">
-          Submit Symptoms
+          {t('symptoms_submit_btn')}
         </Button>
       </div>
     </DashboardLayout>

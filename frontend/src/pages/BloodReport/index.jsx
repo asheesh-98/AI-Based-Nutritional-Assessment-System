@@ -7,24 +7,29 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import { PageLoader } from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
+import { useLanguage } from '../../context/LanguageContext';
 
-const bloodMarkers = [
-  { key: 'hemoglobin', label: 'Hemoglobin', unit: 'g/dL', range: 'M: 13.5-17.5 | F: 12.0-16.0' },
-  { key: 'iron', label: 'Iron', unit: 'µg/dL', range: '60 - 170' },
-  { key: 'ferritin', label: 'Ferritin', unit: 'ng/mL', range: 'M: 20-500 | F: 20-200' },
-  { key: 'vitamin_d', label: 'Vitamin D', unit: 'ng/mL', range: '30 - 100' },
-  { key: 'vitamin_b12', label: 'Vitamin B12', unit: 'pg/mL', range: '200 - 900' },
-  { key: 'calcium', label: 'Calcium', unit: 'mg/dL', range: '8.5 - 10.5' },
-  { key: 'magnesium', label: 'Magnesium', unit: 'mg/dL', range: '1.7 - 2.2' },
-  { key: 'zinc', label: 'Zinc', unit: 'µg/dL', range: '66 - 110' },
-  { key: 'blood_sugar', label: 'Blood Sugar (Fasting)', unit: 'mg/dL', range: '70 - 100' },
-  { key: 'cholesterol', label: 'Cholesterol', unit: 'mg/dL', range: '< 200' },
-];
+
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
 export default function BloodReport() {
+  const { t } = useLanguage();
+
+  const bloodMarkers = [
+    { key: 'hemoglobin', label: t('blood_marker_hemoglobin'), unit: 'g/dL', range: 'M: 13.5-17.5 | F: 12.0-16.0' },
+    { key: 'iron', label: t('blood_marker_iron'), unit: 'µg/dL', range: '60 - 170' },
+    { key: 'ferritin', label: t('blood_marker_ferritin'), unit: 'ng/mL', range: 'M: 20-500 | F: 20-200' },
+    { key: 'vitamin_d', label: t('blood_marker_vitamin_d'), unit: 'ng/mL', range: '30 - 100' },
+    { key: 'vitamin_b12', label: t('blood_marker_vitamin_b12'), unit: 'pg/mL', range: '200 - 900' },
+    { key: 'calcium', label: t('blood_marker_calcium'), unit: 'mg/dL', range: '8.5 - 10.5' },
+    { key: 'magnesium', label: t('blood_marker_magnesium'), unit: 'mg/dL', range: '1.7 - 2.2' },
+    { key: 'zinc', label: t('blood_marker_zinc'), unit: 'µg/dL', range: '66 - 110' },
+    { key: 'blood_sugar', label: t('blood_marker_blood_sugar'), unit: 'mg/dL', range: '70 - 100' },
+    { key: 'cholesterol', label: t('blood_marker_cholesterol'), unit: 'mg/dL', range: '< 200' },
+  ];
+
   const [form, setForm] = useState(() =>
     bloodMarkers.reduce((acc, m) => ({ ...acc, [m.key]: '' }), {})
   );
@@ -69,30 +74,30 @@ export default function BloodReport() {
         if (val !== '' && val !== null) payload[key] = parseFloat(val);
       });
       await assessmentService.submitBloodReport(payload);
-      setAlert({ show: true, type: 'success', message: 'Blood report submitted successfully! You can now run an assessment.' });
+      setAlert({ show: true, type: 'success', message: t('blood_submit_success') });
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || 'Failed to submit blood report.' });
+      setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('blood_submit_error') });
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <DashboardLayout title="Blood Report"><PageLoader /></DashboardLayout>;
+  if (loading) return <DashboardLayout title={t('blood_title')}><PageLoader /></DashboardLayout>;
 
   return (
-    <DashboardLayout title="Blood Report" subtitle="Enter your blood test results for analysis">
+    <DashboardLayout title={t('blood_title')} subtitle={t('blood_subtitle')}>
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
       <div className="glass-card p-4 mb-6 mt-2 flex items-start gap-3 border border-cyan-500/20 bg-cyan-500/5">
         <Info className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
         <p className="text-sm text-gray-300">
-          Enter available blood test values. Fields left empty will be skipped during analysis. Values outside normal ranges will be flagged.
+          {t('blood_info_notice')}
         </p>
       </div>
 
       <div className="glass-card p-6 mb-8 text-center border-dashed border-2 border-white/10 hover:border-cyan-500/50 transition-colors">
-        <h3 className="text-lg font-semibold text-white mb-2">Auto-fill from Report</h3>
-        <p className="text-sm text-gray-400 mb-4">Upload a PDF or Image of your blood report to automatically extract values.</p>
+        <h3 className="text-lg font-semibold text-white mb-2">{t('blood_autofill_title')}</h3>
+        <p className="text-sm text-gray-400 mb-4">{t('blood_autofill_subtitle')}</p>
         
         <input 
           type="file" 
@@ -102,21 +107,21 @@ export default function BloodReport() {
           onChange={async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            setAlert({ show: true, type: 'info', message: 'Analyzing report... Please wait.' });
+            setAlert({ show: true, type: 'info', message: t('blood_analyzing') });
             try {
               const res = await assessmentService.parseBloodReport(file);
               if (res && res.extracted) {
                 setForm(prev => ({ ...prev, ...res.extracted }));
-                setAlert({ show: true, type: 'success', message: 'Report parsed successfully! Please review the auto-filled values.' });
+                setAlert({ show: true, type: 'success', message: t('blood_parse_success') });
               }
             } catch (err) {
-              setAlert({ show: true, type: 'error', message: err.response?.data?.detail || 'Failed to parse the report.' });
+              setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('blood_parse_error') });
             }
           }} 
         />
         <label htmlFor="report-upload" className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyan-500/20 text-cyan-400 font-medium hover:bg-cyan-500/30 transition-colors">
           <TestTube2 className="w-5 h-5" />
-          Select File to Auto-fill
+          {t('blood_select_file')}
         </label>
       </div>
 
@@ -143,7 +148,7 @@ export default function BloodReport() {
             />
             <p className="text-xs text-gray-500 mt-2 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
-              Normal range: {marker.range}
+              {t('blood_normal_range')} {marker.range}
             </p>
           </motion.div>
         ))}
@@ -151,7 +156,7 @@ export default function BloodReport() {
 
       <div className="mt-8">
         <Button onClick={handleSubmit} loading={submitting} icon={Send} size="lg" className="w-full sm:w-auto">
-          Submit Blood Report
+          {t('blood_submit_btn')}
         </Button>
       </div>
     </DashboardLayout>

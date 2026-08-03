@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -7,43 +8,46 @@ import {
   ChevronLeft, ChevronRight, Stethoscope, ScanBarcode, Bot
 } from 'lucide-react';
 
-const menuSections = [
-  {
-    title: 'Overview',
-    items: [
-      { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { path: '/ai-coach', label: 'AI Nutrition Coach', icon: Bot },
-      { path: '/reports', label: 'Reports', icon: TrendingUp },
-    ],
-  },
-  {
-    title: 'Health',
-    items: [
-      { path: '/health-profile', label: 'Health Profile', icon: Heart },
-      { path: '/symptoms', label: 'Symptoms', icon: Stethoscope },
-      { path: '/blood-report', label: 'Blood Reports', icon: TestTube2 },
-      { path: '/prediction', label: 'Assessment', icon: Activity },
-    ],
-  },
-  {
-    title: 'Nutrition',
-    items: [
-      { path: '/meal-plan', label: 'Meal Plan', icon: Utensils },
-      { path: '/food-diary', label: 'Food Diary', icon: FileText },
-      { path: '/food-scanner', label: 'Food Scanner', icon: ScanBarcode },
-    ],
-  },
-  {
-    title: 'Account',
-    items: [
-      { path: '/profile', label: 'Profile', icon: User },
-    ],
-  },
-];
+
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const menuSections = [
+    {
+      title: t('sidebar_section_overview'),
+      items: [
+        { path: '/dashboard', label: t('sidebar_dashboard'), icon: LayoutDashboard },
+        { path: '/ai-coach', label: t('sidebar_ai_coach'), icon: Bot },
+        { path: '/reports', label: t('sidebar_reports'), icon: TrendingUp },
+      ],
+    },
+    {
+      title: t('sidebar_section_health'),
+      items: [
+        { path: '/health-profile', label: t('sidebar_health_profile'), icon: Heart },
+        { path: '/symptoms', label: t('sidebar_symptoms'), icon: Stethoscope },
+        { path: '/blood-report', label: t('sidebar_blood_reports'), icon: TestTube2 },
+        { path: '/prediction', label: t('sidebar_assessment'), icon: Activity },
+      ],
+    },
+    {
+      title: t('sidebar_section_nutrition'),
+      items: [
+        { path: '/meal-plan', label: t('sidebar_meal_plan'), icon: Utensils },
+        { path: '/food-diary', label: t('sidebar_food_diary'), icon: FileText },
+        { path: '/food-scanner', label: t('sidebar_food_scanner'), icon: ScanBarcode },
+      ],
+    },
+    {
+      title: t('sidebar_section_account'),
+      items: [
+        { path: '/profile', label: t('sidebar_profile'), icon: User },
+      ],
+    },
+  ];
 
   return (
     <motion.aside
@@ -122,11 +126,11 @@ export default function Sidebar() {
       <div className="p-3 border-t border-white/5">
         <Link
           to="/profile"
-          title={collapsed ? 'Settings' : ''}
+          title={collapsed ? t('sidebar_settings') : ''}
           className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
         >
           <Settings className="w-5 h-5 flex-shrink-0" />
-          {!collapsed && <span>Settings</span>}
+          {!collapsed && <span>{t('sidebar_settings')}</span>}
         </Link>
       </div>
     </motion.aside>

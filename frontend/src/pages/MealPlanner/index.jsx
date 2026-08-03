@@ -9,12 +9,7 @@ import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import mealService from '../../services/mealService';
 import { saveOfflineMealPlan, getOfflineMealPlan } from '../../utils/offlineStorage';
-
-const dietOptions = [
-  { value: 'vegetarian', label: 'Vegetarian', icon: Leaf, color: 'text-emerald-400' },
-  { value: 'non_vegetarian', label: 'Non-Veg', icon: Beef, color: 'text-rose-400' },
-  { value: 'vegan', label: 'Vegan', icon: Vegan, color: 'text-green-400' },
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 const mealIcons = {
   breakfast: Coffee,
@@ -30,16 +25,13 @@ const mealGradients = {
   snack: 'from-pink-600/80 to-rose-900/90',
 };
 
-const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const fullDayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.1 } } };
 const cardVariant = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
 };
 
-function MealCard({ slot, meal, onMealClick }) {
+function MealCard({ slot, meal, onMealClick, t }) {
   const [imgFailed, setImgFailed] = useState(false);
   const Icon = mealIcons[slot] || Utensils;
   const gradient = mealGradients[slot];
@@ -49,13 +41,13 @@ function MealCard({ slot, meal, onMealClick }) {
       <div className={`p-6 rounded-3xl bg-gradient-to-br ${gradient} border border-white/5 opacity-40 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[280px]`}>
         <Icon size={32} className="opacity-40 mb-3 text-white" />
         <span className="text-base sm:text-lg font-bold text-white capitalize opacity-60">{slot}</span>
-        <p className="text-xs sm:text-sm text-white/50 italic mt-2">No meal scheduled</p>
+        <p className="text-xs sm:text-sm text-white/50 italic mt-2">{t('meal_no_meal_scheduled')}</p>
       </div>
     );
   }
 
   const hasValidImage = meal.recipe_image && !imgFailed;
-  const titleText = meal.recipe_title || meal.food_name || 'Meal Dish';
+  const titleText = meal.recipe_title || meal.food_name || t('meal_default_title');
 
   return (
     <motion.div
@@ -92,7 +84,7 @@ function MealCard({ slot, meal, onMealClick }) {
           {meal.recipe_ready_in && (
             <div className="bg-black/60 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-white/15 shadow-lg flex items-center gap-1.5 shrink-0">
               <Clock size={12} className="text-amber-400 shrink-0" />
-              <span className="text-[10px] sm:text-xs font-bold text-white">{meal.recipe_ready_in} min</span>
+              <span className="text-[10px] sm:text-xs font-bold text-white">{meal.recipe_ready_in} {t('common_min')}</span>
             </div>
           )}
         </div>
@@ -110,19 +102,19 @@ function MealCard({ slot, meal, onMealClick }) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-black/75 backdrop-blur-md p-2 rounded-2xl border border-white/10 text-center">
             <div className="flex flex-col items-center justify-center p-1">
               <span className="text-xs font-black text-amber-400 leading-none">{Math.round(meal.calories || 0)}</span>
-              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Kcal</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">{t('common_kcal')}</span>
             </div>
             <div className="flex flex-col items-center justify-center p-1 sm:border-l border-white/10">
               <span className="text-xs font-black text-emerald-400 leading-none">{Math.round(meal.protein || 0)}g</span>
-              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Protein</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">{t('common_protein')}</span>
             </div>
             <div className="flex flex-col items-center justify-center p-1 border-l sm:border-l border-white/10">
               <span className="text-xs font-black text-blue-400 leading-none">{Math.round(meal.carbohydrates || 0)}g</span>
-              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Carbs</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">{t('common_carbs')}</span>
             </div>
             <div className="flex flex-col items-center justify-center p-1 border-l border-white/10">
               <span className="text-xs font-black text-rose-400 leading-none">{Math.round(meal.fat || 0)}g</span>
-              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">Fat</span>
+              <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tight mt-1">{t('common_fat')}</span>
             </div>
           </div>
         </div>
@@ -132,6 +124,24 @@ function MealCard({ slot, meal, onMealClick }) {
 }
 
 export default function MealPlanner() {
+  const { t } = useLanguage();
+
+  const dietOptions = [
+    { value: 'vegetarian', label: t('meal_diet_vegetarian'), icon: Leaf, color: 'text-emerald-400' },
+    { value: 'non_vegetarian', label: t('meal_diet_non_veg'), icon: Beef, color: 'text-rose-400' },
+    { value: 'vegan', label: t('meal_diet_vegan'), icon: Vegan, color: 'text-green-400' },
+  ];
+
+  const dayNames = [
+    t('common_days_mon'), t('common_days_tue'), t('common_days_wed'), t('common_days_thu'),
+    t('common_days_fri'), t('common_days_sat'), t('common_days_sun'),
+  ];
+
+  const fullDayNames = [
+    t('common_days_monday'), t('common_days_tuesday'), t('common_days_wednesday'), t('common_days_thursday'),
+    t('common_days_friday'), t('common_days_saturday'), t('common_days_sunday'),
+  ];
+
   const [selectedDiet, setSelectedDiet] = useState('vegetarian');
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [weeklyPlan, setWeeklyPlan] = useState(null);
@@ -160,9 +170,9 @@ export default function MealPlanner() {
       const cached = getOfflineMealPlan();
       if (cached) {
         setWeeklyPlan(cached);
-        setAlert({ show: true, type: 'info', message: 'Loaded cached offline meal plan.' });
+        setAlert({ show: true, type: 'info', message: t('meal_loaded_cached') });
       } else {
-        setAlert({ show: true, type: 'error', message: 'Could not load meal plan.' });
+        setAlert({ show: true, type: 'error', message: t('meal_load_error') });
       }
     } finally {
       setLoading(false);
@@ -180,10 +190,10 @@ export default function MealPlanner() {
     try {
       const data = await mealService.regeneratePlan(selectedDiet);
       setWeeklyPlan(data);
-      setAlert({ show: true, type: 'success', message: 'Generated a new personalized weekly meal plan!' });
+      setAlert({ show: true, type: 'success', message: t('meal_regenerate_success') });
     } catch (err) {
       console.error('Regenerate failed', err);
-      setAlert({ show: true, type: 'error', message: 'Failed to generate new plan.' });
+      setAlert({ show: true, type: 'error', message: t('meal_regenerate_error') });
     } finally {
       setRegenerating(false);
     }
@@ -198,7 +208,7 @@ export default function MealPlanner() {
       });
       setAiRecipes(data.recipes);
     } catch (err) {
-      setAlert({ show: true, type: 'error', message: 'Failed to generate AI recipes.' });
+      setAlert({ show: true, type: 'error', message: t('meal_ai_recipes_error') });
     } finally {
       setRecipesLoading(false);
     }
@@ -208,7 +218,7 @@ export default function MealPlanner() {
   const currentMeals = currentDayData?.meals || {};
 
   return (
-    <DashboardLayout title="Smart Meal Planner" subtitle="Personalized meal plans targeting your deficiency profile">
+    <DashboardLayout title={t('meal_page_title')} subtitle={t('meal_page_subtitle')}>
       {alert.show && (
         <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />
       )}
@@ -240,10 +250,10 @@ export default function MealPlanner() {
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full xl:w-auto">
           <Button onClick={handleGenerateAiRecipes} loading={recipesLoading} icon={Bot} variant="secondary" size="md" className="w-full justify-center text-xs sm:text-sm py-2.5">
-            ✨ Generate AI Custom Recipes
+            {t('meal_generate_ai_btn')}
           </Button>
           <Button onClick={handleRegenerate} loading={regenerating} icon={RefreshCw} size="md" className="w-full justify-center text-xs sm:text-sm py-2.5">
-            Regenerate Plan
+            {t('meal_regenerate_btn')}
           </Button>
         </div>
       </div>
@@ -257,8 +267,8 @@ export default function MealPlanner() {
           <div className="flex items-center gap-3 mb-4 pr-6">
             <div className="p-2 rounded-xl gradient-bg text-white shrink-0"><Bot size={20} /></div>
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-white">Gemini AI Customized Deficiency-Targeting Recipes</h3>
-              <p className="text-xs text-purple-300">Custom cooking instructions generated dynamically for your nutrient profile</p>
+              <h3 className="text-base sm:text-lg font-bold text-white">{t('meal_ai_recipes_title')}</h3>
+              <p className="text-xs text-purple-300">{t('meal_ai_recipes_subtitle')}</p>
             </div>
           </div>
           <div className="text-xs sm:text-sm text-gray-200 leading-relaxed whitespace-pre-wrap bg-white/5 p-4 sm:p-6 rounded-2xl border border-white/10 font-sans break-words">
@@ -314,6 +324,7 @@ export default function MealPlanner() {
               key={slot}
               slot={slot}
               meal={currentMeals[slot]}
+              t={t}
               onMealClick={(meal) => {
                 setSelectedMeal(meal);
                 setSelectedSlot(slot);
@@ -371,19 +382,19 @@ export default function MealPlanner() {
                 {/* Macro Nutrients Breakdown */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                   <div className="text-center">
-                    <span className="text-xs text-gray-400 block">Calories</span>
+                    <span className="text-xs text-gray-400 block">{t('common_calories')}</span>
                     <span className="text-xl font-black text-amber-400">{Math.round(selectedMeal.calories || 0)} kcal</span>
                   </div>
                   <div className="text-center">
-                    <span className="text-xs text-gray-400 block">Protein</span>
+                    <span className="text-xs text-gray-400 block">{t('common_protein')}</span>
                     <span className="text-xl font-black text-emerald-400">{Math.round(selectedMeal.protein || 0)}g</span>
                   </div>
                   <div className="text-center">
-                    <span className="text-xs text-gray-400 block">Carbs</span>
+                    <span className="text-xs text-gray-400 block">{t('common_carbs')}</span>
                     <span className="text-xl font-black text-blue-400">{Math.round(selectedMeal.carbohydrates || 0)}g</span>
                   </div>
                   <div className="text-center">
-                    <span className="text-xs text-gray-400 block">Fat</span>
+                    <span className="text-xs text-gray-400 block">{t('common_fat')}</span>
                     <span className="text-xl font-black text-rose-400">{Math.round(selectedMeal.fat || 0)}g</span>
                   </div>
                 </div>
@@ -391,7 +402,7 @@ export default function MealPlanner() {
                 {/* Ingredients */}
                 {selectedMeal.recipe_ingredients && selectedMeal.recipe_ingredients.length > 0 && (
                   <div>
-                    <h4 className="text-lg font-bold text-white mb-3">Ingredients</h4>
+                    <h4 className="text-lg font-bold text-white mb-3">{t('meal_ingredients')}</h4>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-300">
                       {selectedMeal.recipe_ingredients.map((ing, i) => (
                         <li key={i} className="flex items-center gap-2 bg-white/5 p-2.5 rounded-xl border border-white/5">
@@ -406,7 +417,7 @@ export default function MealPlanner() {
                 {/* Instructions */}
                 {selectedMeal.recipe_instructions && selectedMeal.recipe_instructions.length > 0 && (
                   <div>
-                    <h4 className="text-lg font-bold text-white mb-3">Cooking Instructions</h4>
+                    <h4 className="text-lg font-bold text-white mb-3">{t('meal_cooking_instructions')}</h4>
                     <ol className="space-y-3 text-sm text-gray-300">
                       {selectedMeal.recipe_instructions.map((step, i) => (
                         <li key={i} className="flex gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
