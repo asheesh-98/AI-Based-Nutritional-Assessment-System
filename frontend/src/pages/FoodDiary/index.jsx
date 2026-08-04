@@ -112,7 +112,8 @@ export default function FoodDiary() {
     const baseFat = activeConfigFood.fat_g || activeConfigFood.baseFat || 0;
 
     const unitObj = unitOptions.find((u) => u.code === configUnit) || unitOptions[1];
-    const multiplier = unitObj.scale(configQuantity);
+    const qtyNum = Number(configQuantity) || 0;
+    const multiplier = unitObj.scale(qtyNum);
 
     return {
       kcal: Math.round(baseKcal * multiplier),
@@ -472,8 +473,12 @@ export default function FoodDiary() {
                 </label>
                 <div className="flex items-center gap-3">
                   <button
-                    onClick={() => setConfigQuantity(Math.max(1, configQuantity - (configUnit === 'g' || configUnit === 'ml' ? 10 : 1)))}
-                    className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-xl flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+                    type="button"
+                    onClick={() => {
+                      const current = Number(configQuantity) || 1;
+                      setConfigQuantity(Math.max(1, current - 1));
+                    }}
+                    className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-xl flex items-center justify-center transition-colors active:scale-95 cursor-pointer select-none"
                   >
                     -
                   </button>
@@ -481,12 +486,31 @@ export default function FoodDiary() {
                     type="number"
                     min="1"
                     value={configQuantity}
-                    onChange={(e) => setConfigQuantity(Math.max(1, Number(e.target.value)))}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setConfigQuantity('');
+                      } else {
+                        const num = Number(val);
+                        if (!isNaN(num)) {
+                          setConfigQuantity(val);
+                        }
+                      }
+                    }}
+                    onBlur={() => {
+                      if (!configQuantity || Number(configQuantity) <= 0) {
+                        setConfigQuantity(1);
+                      }
+                    }}
                     className="flex-1 h-12 bg-white/5 border border-cyan-500/30 rounded-2xl text-center text-2xl font-black text-white focus:outline-none focus:border-cyan-400 shadow-inner"
                   />
                   <button
-                    onClick={() => setConfigQuantity(configQuantity + (configUnit === 'g' || configUnit === 'ml' ? 10 : 1))}
-                    className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-xl flex items-center justify-center transition-colors active:scale-95 cursor-pointer"
+                    type="button"
+                    onClick={() => {
+                      const current = Number(configQuantity) || 0;
+                      setConfigQuantity(current + 1);
+                    }}
+                    className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-white font-bold text-xl flex items-center justify-center transition-colors active:scale-95 cursor-pointer select-none"
                   >
                     +
                   </button>
