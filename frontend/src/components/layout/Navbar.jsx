@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Menu, X, ChevronDown, LogOut, User, Settings,
+  Menu, X, ChevronDown, LogOut, User, Settings, Globe,
   LayoutDashboard, Utensils, Activity, FileText, ScanBarcode, Bot, LogIn, UserPlus,
   Users, UtensilsCrossed, BarChart3, ShieldCheck, TrendingUp, Stethoscope, TestTube2
 } from 'lucide-react';
@@ -14,7 +14,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { t } = useLanguage();
+  const { t, openLanguageModal, currentLanguageObj } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -107,8 +107,8 @@ export default function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Language Selector Dropdown (Only shown on Home Page '/') */}
-            {isHomePage && <LanguageSelector compact={true} />}
+            {/* Language Selector Dropdown (Shown on all User side pages) */}
+            {!isAdminRoute && <LanguageSelector compact={true} />}
 
             {/* Desktop Auth Controls */}
             {user ? (
@@ -173,6 +173,16 @@ export default function Navbar() {
                         <Settings className="w-4 h-4 text-purple-400" />
                         {t('health_profile')}
                       </Link>
+                      <button
+                        onClick={() => {
+                          setProfileOpen(false);
+                          openLanguageModal();
+                        }}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors w-full text-left"
+                      >
+                        <Globe className="w-4 h-4 text-cyan-400" />
+                        {t('change_language')} ({currentLanguageObj.native})
+                      </button>
                       <hr className="border-white/10 my-1" />
                       <button
                         onClick={handleLogout}

@@ -123,7 +123,7 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom section */}
-      <div className="p-3 border-t border-white/5">
+      <div className="p-3 border-t border-white/5 space-y-1">
         <Link
           to="/profile"
           title={collapsed ? t('sidebar_settings') : ''}
