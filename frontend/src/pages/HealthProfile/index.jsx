@@ -557,10 +557,10 @@ export default function HealthProfile() {
           </div>
         </motion.div>
 
-        {/* Sticky Save Action Dock */}
+        {/* Save Action Dock (Fixed at bottom of page content) */}
         <motion.div
           variants={cardVariants}
-          className="sticky bottom-6 z-40 glass-strong p-4 sm:p-5 rounded-3xl border border-cyan-500/30 shadow-[0_10px_40px_rgba(0,0,0,0.8)] flex items-center justify-between backdrop-blur-2xl"
+          className="glass-card p-4 sm:p-6 rounded-3xl border border-cyan-500/30 shadow-2xl flex items-center justify-between mt-8"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
