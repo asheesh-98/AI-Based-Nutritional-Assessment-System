@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
-import LanguageModal from '../../components/common/LanguageModal';
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function Home() {
@@ -134,9 +133,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] text-slate-100 selection:bg-cyan-500/30 selection:text-white flex flex-col overflow-x-hidden w-full">
-      {/* 16-Language Initial Welcome Modal Popup */}
-      <LanguageModal />
-
       <Navbar />
 
       {/* 🌟 Hero Section */}
