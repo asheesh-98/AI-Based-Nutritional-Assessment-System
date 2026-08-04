@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { TRANSLATIONS, LANGUAGES } from '../i18n/translations';
+import { createContext, useContext, useState } from 'react';
+import i18n from '../i18n/i18n';
+import { LANGUAGES } from '../i18n/translations';
 
 const LanguageContext = createContext(null);
 
@@ -17,12 +18,11 @@ export function LanguageProvider({ children }) {
   });
 
   const selectLanguage = (langCode) => {
-    if (TRANSLATIONS[langCode]) {
-      setLanguageState(langCode);
-      localStorage.setItem('nutriai_language', langCode);
-      setHasSelectedLanguage(true);
-      setShowModal(false);
-    }
+    setLanguageState(langCode);
+    localStorage.setItem('nutriai_language', langCode);
+    i18n.changeLanguage(langCode); // Sync with i18next
+    setHasSelectedLanguage(true);
+    setShowModal(false);
   };
 
   const openLanguageModal = () => {
@@ -33,15 +33,9 @@ export function LanguageProvider({ children }) {
     setShowModal(false);
   };
 
-  // Translation function with fallback to English
+  // Use i18next's t() function — handles fallback to English automatically
   const t = (key) => {
-    if (TRANSLATIONS[language] && TRANSLATIONS[language][key]) {
-      return TRANSLATIONS[language][key];
-    }
-    if (TRANSLATIONS.en && TRANSLATIONS.en[key]) {
-      return TRANSLATIONS.en[key];
-    }
-    return key;
+    return i18n.t(key);
   };
 
   const currentLanguageObj = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
