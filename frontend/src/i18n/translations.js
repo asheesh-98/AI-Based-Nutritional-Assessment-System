@@ -1,6 +1,6 @@
 /**
  * Multi-language translation dictionaries for 16 Indian & Regional Languages.
- * Fully translated with Food Diary Quantity & Unit System additions.
+ * Includes Health Profile enhancements.
  */
 
 export const LANGUAGES = [
@@ -579,7 +579,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "Remaining",
     "food_diary_consumed": "Consumed",
     "food_diary_preset_quick": "Quick Add Popular Foods",
-    "food_diary_log_btn": "Log to Diary"
+    "food_diary_log_btn": "Log to Diary",
+    "hp_bmr_label": "Est. Basal Metabolic Rate (BMR)",
+    "hp_tdee_label": "Est. Daily Energy Expenditure (TDEE)",
+    "hp_water_rec": "Recommended Water Intake",
+    "hp_lifestyle_score": "Lifestyle & Habits",
+    "hp_unsaved_changes": "You have unsaved profile changes",
+    "hp_quick_summary": "Metabolic & Biomarker Health Summary"
   },
   "hi": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1137,7 +1143,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "sa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1695,7 +1707,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "as": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2253,7 +2271,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "bn": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2811,7 +2835,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "অবশিষ্ট",
     "food_diary_consumed": "গ্রহণ করা হয়েছে",
     "food_diary_preset_quick": "দ্রুত জনপ্রিয় খাবার",
-    "food_diary_log_btn": "ডায়েরিতে যোগ করুন"
+    "food_diary_log_btn": "ডায়েরিতে যোগ করুন",
+    "hp_bmr_label": "আনুমানিক বেসাল মেটাবলিক রেট (BMR)",
+    "hp_tdee_label": "আনুমানিক দৈনিক শক্তি ব্যয় (TDEE)",
+    "hp_water_rec": "সুপারিশকৃত পানি পানের পরিমাণ",
+    "hp_lifestyle_score": "জীবনধারা ও অভ্যাস",
+    "hp_unsaved_changes": "সংরক্ষণ না করা পরিবর্তন রয়েছে",
+    "hp_quick_summary": "বিপাকীয় ও বায়োমার্কার স্বাস্থ্য সারসংক্ষেপ"
   },
   "gu": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -3369,7 +3399,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "બાકી",
     "food_diary_consumed": "લીધેલું",
     "food_diary_preset_quick": "ઝડપી લોકપ્રિય ખોરાક",
-    "food_diary_log_btn": "ડાયરીમાં ઉમેરો"
+    "food_diary_log_btn": "ડાયરીમાં ઉમેરો",
+    "hp_bmr_label": "અંદાજિત બેસલ મેટાબોલિક રેટ (BMR)",
+    "hp_tdee_label": "અંદાજિત દૈનિક ઉર્જા ખર્ચ (TDEE)",
+    "hp_water_rec": "ભલામણ કરેલ પાણીનું સેવન",
+    "hp_lifestyle_score": "જીવનશૈલી અને ટેવો",
+    "hp_unsaved_changes": "તમારી પાસે સાચવ્યા વગરના ફેરફારો છે",
+    "hp_quick_summary": "મેટાબોલિક સ્વાસ્થ્ય સારાંશ"
   },
   "kn": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -3927,7 +3963,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "ks": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -4485,7 +4527,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "ml": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -5043,7 +5091,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "mr": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -5601,7 +5655,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "उरलेले",
     "food_diary_consumed": "सेवन केलेले",
     "food_diary_preset_quick": "झटपट लोकप्रिय अन्न",
-    "food_diary_log_btn": "डायरीत नोंदवा"
+    "food_diary_log_btn": "डायरीत नोंदवा",
+    "hp_bmr_label": "अंदाजित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अंदाजित दैनिक ऊर्जा खर्च (TDEE)",
+    "hp_water_rec": "शिफारस केलेले पाणी सेवन",
+    "hp_lifestyle_score": "जीवनशैली आणि सवयी",
+    "hp_unsaved_changes": "तुमच्याकडे जतन न केलेले बदल आहेत",
+    "hp_quick_summary": "चयापचय आरोग्य सारांश"
   },
   "ne": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6159,7 +6219,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "or": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6717,7 +6783,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "pa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7275,7 +7347,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "sd": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7833,7 +7911,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "शेष",
     "food_diary_consumed": "सेवन किया",
     "food_diary_preset_quick": "त्वरित लोकप्रिय खाद्य पदार्थ",
-    "food_diary_log_btn": "डायरी में दर्ज करें"
+    "food_diary_log_btn": "डायरी में दर्ज करें",
+    "hp_bmr_label": "अनुमानित बेसल मेटाबॉलिक दर (BMR)",
+    "hp_tdee_label": "अनुमानित दैनिक ऊर्जा व्यय (TDEE)",
+    "hp_water_rec": "अनुशंसित जल का सेवन",
+    "hp_lifestyle_score": "जीवन शैली और आदतें",
+    "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
   },
   "ta": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -8391,7 +8475,13 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "மீதமுள்ளது",
     "food_diary_consumed": "உட்கொள்ளப்பட்டது",
     "food_diary_preset_quick": "பிரபலமான உணவுகள்",
-    "food_diary_log_btn": "டைரியில் சேர்க்கவும்"
+    "food_diary_log_btn": "டைரியில் சேர்க்கவும்",
+    "hp_bmr_label": "மதிப்பிடப்பட்ட அடிப்படை வளர்சிதை மாற்ற விகிதம் (BMR)",
+    "hp_tdee_label": "மதிப்பிடப்பட்ட தினசரி ஆற்றல் செலவு (TDEE)",
+    "hp_water_rec": "பரிந்துரைக்கப்பட்ட நீர் உட்கொள்ளல்",
+    "hp_lifestyle_score": "வாழ்க்கை முறை மற்றும் பழக்கவழக்கங்கள்",
+    "hp_unsaved_changes": "சேமிக்கப்படாத மாற்றங்கள் உள்ளன",
+    "hp_quick_summary": "வளர்சிதை மாற்ற சுகாதார சுருக்கம்"
   },
   "te": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -8949,6 +9039,12 @@ export const TRANSLATIONS = {
     "food_diary_remaining": "మిగిలి ఉన్నవి",
     "food_diary_consumed": "తీసుకున్నవి",
     "food_diary_preset_quick": "ప్రసిద్ధ ఆహారాలు",
-    "food_diary_log_btn": "డైరీకి జతచేయండి"
+    "food_diary_log_btn": "డైరీకి జతచేయండి",
+    "hp_bmr_label": "అంచనా వేసిన బేసల్ మెటబాలిక్ రేటు (BMR)",
+    "hp_tdee_label": "అంచనా వేసిన రోజువారీ శక్తి వ్యయం (TDEE)",
+    "hp_water_rec": "సిఫార్సు చేసిన నీటి వినియోగం",
+    "hp_lifestyle_score": "జీవనశైలి & అలవాట్లు",
+    "hp_unsaved_changes": "సేవ్ చేయని మార్పులు ఉన్నాయి",
+    "hp_quick_summary": "జీవక్రియ ఆరోగ్య నివేదిక"
   }
 };

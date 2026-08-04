@@ -1,6 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Save, User, Heart, Dumbbell, Shield, Leaf } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Save, User, Heart, Dumbbell, Shield, Leaf, Activity,
+  Zap, Flame, Droplets, Moon, Check, Sparkles, AlertCircle,
+  RefreshCw, Scale, Compass, CheckCircle2, ChevronRight
+} from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Input from '../../components/common/Input';
 import { Select } from '../../components/common/Input';
@@ -10,29 +14,50 @@ import { PageLoader } from '../../components/common/Loader';
 import profileService from '../../services/profileService';
 import { useLanguage } from '../../context/LanguageContext';
 
-
-
 const defaultForm = {
   age: '', gender: '', height_cm: '', weight_kg: '',
-  activity_level: '', dietary_preference: '', sleep_hours: '',
+  activity_level: '', dietary_preference: '', sleep_hours: '7',
   smoking: 'No', alcohol: 'No',
   health_goals: [], medical_conditions: [], allergies: [],
 };
 
-function TogglePill({ label, selected, onClick }) {
+const containerVariants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+const cardVariants = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } } };
+
+function SectionHeader({ icon: Icon, title, colorClass, subtitle }) {
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border shadow-md ${colorClass}`}>
+        <Icon className="w-5 h-5" />
+      </div>
+      <div>
+        <h3 className="text-base font-extrabold text-white leading-tight">{title}</h3>
+        {subtitle && <p className="text-xs text-gray-400 font-medium mt-0.5">{subtitle}</p>}
+      </div>
+    </div>
+  );
+}
+
+function TogglePill({ label, selected, onClick, icon: Icon }) {
   return (
     <motion.button
       type="button"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.03, y: -1 }}
+      whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 cursor-pointer ${
+      className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer border ${
         selected
-          ? 'gradient-bg text-white shadow-lg shadow-cyan-500/20'
-          : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 hover:text-white'
+          ? 'gradient-bg text-white border-cyan-400/50 shadow-lg shadow-cyan-500/25'
+          : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border-white/10'
       }`}
     >
-      {label}
+      {Icon && <Icon className={`w-3.5 h-3.5 ${selected ? 'text-white' : 'text-gray-400'}`} />}
+      <span>{label}</span>
+      {selected && (
+        <div className="w-4 h-4 rounded-full bg-cyan-400 text-black flex items-center justify-center ml-1">
+          <Check className="w-2.5 h-2.5 stroke-[3]" />
+        </div>
+      )}
     </motion.button>
   );
 }
@@ -48,12 +73,15 @@ export default function HealthProfile() {
     t('hp_condition_diabetes'), t('hp_condition_hypertension'), t('hp_condition_thyroid'), t('hp_condition_pcos'), t('hp_condition_anemia'),
     t('hp_condition_heart'), t('hp_condition_kidney'), t('hp_condition_none')
   ];
-  const allergies = [t('hp_allergy_dairy'), t('hp_allergy_gluten'), t('hp_allergy_nuts'), t('hp_allergy_soy'), t('hp_allergy_eggs'), t('hp_allergy_seafood'), t('hp_allergy_none')];
+  const allergies = [
+    t('hp_allergy_dairy'), t('hp_allergy_gluten'), t('hp_allergy_nuts'), t('hp_allergy_soy'), t('hp_allergy_eggs'), t('hp_allergy_seafood'), t('hp_allergy_none')
+  ];
 
   const [form, setForm] = useState(defaultForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState({ show: false, type: 'success', message: '' });
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -67,7 +95,7 @@ export default function HealthProfile() {
             weight_kg: data.weight_kg ?? '',
             activity_level: data.activity_level ?? '',
             dietary_preference: data.dietary_preference ?? '',
-            sleep_hours: data.sleep_hours ?? '',
+            sleep_hours: data.sleep_hours ?? '7',
             smoking: data.smoking ? 'Yes' : 'No',
             alcohol: data.alcohol ? 'Yes' : 'No',
             health_goals: data.health_goal ? data.health_goal.split(', ').filter(Boolean) : [],
@@ -76,7 +104,7 @@ export default function HealthProfile() {
           });
         }
       } catch (err) {
-        // No existing profile — that's fine
+        // No existing profile — user can set up new profile
       } finally {
         setLoading(false);
       }
@@ -85,25 +113,29 @@ export default function HealthProfile() {
   }, []);
 
   const handleChange = (e) => {
+    setIsDirty(true);
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const toggleItem = (field, item) => {
+    setIsDirty(true);
     const current = form[field];
-    // Handle "None" as exclusive
-    if (item === 'None') {
-      setForm({ ...form, [field]: current.includes('None') ? [] : ['None'] });
+    if (item === 'None' || item === t('hp_condition_none') || item === t('hp_allergy_none')) {
+      setForm({ ...form, [field]: current.includes(item) ? [] : [item] });
       return;
     }
-    const withoutNone = current.filter(i => i !== 'None');
+    const withoutNone = current.filter(
+      (i) => i !== 'None' && i !== t('hp_condition_none') && i !== t('hp_allergy_none')
+    );
     setForm({
       ...form,
       [field]: withoutNone.includes(item)
-        ? withoutNone.filter(i => i !== item)
+        ? withoutNone.filter((i) => i !== item)
         : [...withoutNone, item],
     });
   };
 
+  // BMI Calculation & Health Category Meter
   const bmi = useMemo(() => {
     const h = parseFloat(form.height_cm);
     const w = parseFloat(form.weight_kg);
@@ -116,11 +148,46 @@ export default function HealthProfile() {
   const bmiCategory = useMemo(() => {
     if (!bmi) return null;
     const v = parseFloat(bmi);
-    if (v < 18.5) return { label: t('hp_bmi_underweight'), color: 'text-amber-400 bg-amber-500/15' };
-    if (v < 25) return { label: t('hp_bmi_normal'), color: 'text-emerald-400 bg-emerald-500/15' };
-    if (v < 30) return { label: t('hp_bmi_overweight'), color: 'text-amber-400 bg-amber-500/15' };
-    return { label: t('hp_bmi_obese'), color: 'text-rose-400 bg-rose-500/15' };
-  }, [bmi]);
+    if (v < 18.5) return { label: t('hp_bmi_underweight'), color: 'text-amber-400 bg-amber-500/15 border-amber-500/30', pct: 15 };
+    if (v < 25) return { label: t('hp_bmi_normal'), color: 'text-emerald-400 bg-emerald-500/15 border-emerald-500/30', pct: 45 };
+    if (v < 30) return { label: t('hp_bmi_overweight'), color: 'text-amber-400 bg-amber-500/15 border-amber-500/30', pct: 75 };
+    return { label: t('hp_bmi_obese'), color: 'text-rose-400 bg-rose-500/15 border-rose-500/30', pct: 95 };
+  }, [bmi, t]);
+
+  // Basal Metabolic Rate (BMR) Estimation
+  const estimatedBMR = useMemo(() => {
+    const h = parseFloat(form.height_cm);
+    const w = parseFloat(form.weight_kg);
+    const a = parseInt(form.age);
+    if (h && w && a) {
+      const isMale = form.gender === 'male';
+      return Math.round(10 * w + 6.25 * h - 5 * a + (isMale ? 5 : -161));
+    }
+    return null;
+  }, [form.height_cm, form.weight_kg, form.age, form.gender]);
+
+  // Total Daily Energy Expenditure (TDEE) Estimation
+  const estimatedTDEE = useMemo(() => {
+    if (!estimatedBMR) return null;
+    const multipliers = {
+      sedentary: 1.2,
+      lightly_active: 1.375,
+      moderately_active: 1.55,
+      very_active: 1.725,
+      extremely_active: 1.9,
+    };
+    const factor = multipliers[form.activity_level] || 1.2;
+    return Math.round(estimatedBMR * factor);
+  }, [estimatedBMR, form.activity_level]);
+
+  // Recommended Water Intake (L/day)
+  const recommendedWater = useMemo(() => {
+    const w = parseFloat(form.weight_kg);
+    if (w && w > 0) {
+      return (w * 0.033).toFixed(1);
+    }
+    return '2.5';
+  }, [form.weight_kg]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -142,6 +209,7 @@ export default function HealthProfile() {
       };
       await profileService.updateHealthProfile(payload);
       setAlert({ show: true, type: 'success', message: t('hp_save_success') });
+      setIsDirty(false);
     } catch (err) {
       setAlert({ show: true, type: 'error', message: err.response?.data?.detail || t('hp_save_error') });
     } finally {
@@ -149,47 +217,233 @@ export default function HealthProfile() {
     }
   };
 
-  if (loading) return <DashboardLayout title={t('hp_page_title')}><PageLoader /></DashboardLayout>;
+  if (loading) {
+    return (
+      <DashboardLayout title={t('hp_page_title')}>
+        <PageLoader />
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout title={t('hp_page_title')} subtitle={t('hp_page_subtitle')}>
-      <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
+      {alert.show && (
+        <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />
+      )}
 
-      <div className="space-y-6 mt-4 max-w-4xl">
-        {/* Personal Info */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-cyan-500/10"><User className="w-5 h-5 text-cyan-400" /></div>
-            <h3 className="text-lg font-semibold text-white">{t('hp_personal_info')}</h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input label={t('hp_age_label')} name="age" type="number" placeholder="25" min="1" max="120" value={form.age} onChange={handleChange} />
-            <Select label={t('hp_gender_label')} name="gender" value={form.gender} onChange={handleChange}>
-              <option value="">{t('hp_select_gender')}</option>
-              <option value="male">{t('hp_gender_male')}</option>
-              <option value="female">{t('hp_gender_female')}</option>
-              <option value="other">{t('hp_gender_other')}</option>
-            </Select>
-            <Input label={t('hp_height_label')} name="height_cm" type="number" placeholder="170" min="50" max="300" value={form.height_cm} onChange={handleChange} />
-            <Input label={t('hp_weight_label')} name="weight_kg" type="number" placeholder="70" min="10" max="500" value={form.weight_kg} onChange={handleChange} />
-          </div>
-          {bmi && bmiCategory && (
-            <div className="mt-4 flex items-center gap-3">
-              <span className="text-sm text-gray-400">{t('hp_bmi_prefix')}</span>
-              <span className="text-lg font-bold text-white">{bmi}</span>
-              <span className={`text-xs px-3 py-1 rounded-full font-medium ${bmiCategory.color}`}>{bmiCategory.label}</span>
+      {/* 🌟 Top Hero Health & Metabolic Intelligence Card */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8 mt-2">
+        
+        {/* Live BMI Meter & Category */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-6 rounded-3xl border border-white/10 relative overflow-hidden flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <Scale className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-white leading-tight">Body Mass Index (BMI)</h4>
+                <p className="text-[11px] text-gray-400">Biometric Indicator</p>
+              </div>
             </div>
-          )}
+            {bmiCategory && (
+              <span className={`text-xs font-extrabold px-3 py-1 rounded-full border ${bmiCategory.color}`}>
+                {bmiCategory.label}
+              </span>
+            )}
+          </div>
+
+          <div className="my-3 text-center">
+            <p className="text-4xl font-black text-white tracking-tight">
+              {bmi || '--'} <span className="text-sm font-medium text-gray-400">kg/m²</span>
+            </p>
+          </div>
+
+          {/* Visual BMI Range Gauge Spectrum Bar */}
+          <div className="space-y-1 mt-2">
+            <div className="relative w-full h-3 rounded-full bg-white/10 overflow-hidden flex">
+              <div className="w-[18.5%] h-full bg-amber-500/50" title="Underweight (<18.5)" />
+              <div className="w-[30%] h-full bg-emerald-500/60" title="Normal (18.5 - 24.9)" />
+              <div className="w-[25%] h-full bg-amber-500/60" title="Overweight (25 - 29.9)" />
+              <div className="w-[26.5%] h-full bg-rose-500/60" title="Obese (30+)" />
+            </div>
+
+            {bmiCategory && (
+              <div className="flex justify-between text-[10px] font-bold text-gray-400 px-1 pt-1">
+                <span>15.0</span>
+                <span>18.5</span>
+                <span>25.0</span>
+                <span>30.0</span>
+                <span>40.0</span>
+              </div>
+            )}
+          </div>
         </motion.div>
 
-        {/* Lifestyle */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-purple-500/10"><Dumbbell className="w-5 h-5 text-purple-400" /></div>
-            <h3 className="text-lg font-semibold text-white">{t('hp_lifestyle')}</h3>
+        {/* Metabolic Rate & Hydration Intelligence */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="lg:col-span-2 glass-card p-6 rounded-3xl border border-white/10 flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              <h4 className="text-sm font-bold text-white">{t('hp_quick_summary')}</h4>
+            </div>
+            <span className="text-xs text-cyan-300 font-semibold bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+              AI Calculated
+            </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Select label={t('hp_activity_label')} name="activity_level" value={form.activity_level} onChange={handleChange}>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            {/* BMR Stat */}
+            <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/15">
+              <div className="flex items-center gap-2 text-purple-300 text-xs font-bold mb-1">
+                <Flame className="w-4 h-4 text-purple-400" />
+                <span>BMR (Basal)</span>
+              </div>
+              <p className="text-2xl font-black text-white mt-1">
+                {estimatedBMR ? `${estimatedBMR}` : '--'}{' '}
+                <span className="text-xs font-normal text-gray-400">kcal/day</span>
+              </p>
+              <p className="text-[10px] text-gray-400 mt-1">{t('hp_bmr_label')}</p>
+            </div>
+
+            {/* TDEE Stat */}
+            <div className="p-4 rounded-2xl bg-cyan-500/5 border border-cyan-500/15">
+              <div className="flex items-center gap-2 text-cyan-300 text-xs font-bold mb-1">
+                <Zap className="w-4 h-4 text-cyan-400" />
+                <span>TDEE (Daily Energy)</span>
+              </div>
+              <p className="text-2xl font-black text-white mt-1">
+                {estimatedTDEE ? `${estimatedTDEE}` : '--'}{' '}
+                <span className="text-xs font-normal text-gray-400">kcal/day</span>
+              </p>
+              <p className="text-[10px] text-gray-400 mt-1">{t('hp_tdee_label')}</p>
+            </div>
+
+            {/* Water Target Stat */}
+            <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/15">
+              <div className="flex items-center gap-2 text-blue-300 text-xs font-bold mb-1">
+                <Droplets className="w-4 h-4 text-blue-400" />
+                <span>Water Rec.</span>
+              </div>
+              <p className="text-2xl font-black text-white mt-1">
+                {recommendedWater}{' '}
+                <span className="text-xs font-normal text-gray-400">Liters/day</span>
+              </p>
+              <p className="text-[10px] text-gray-400 mt-1">{t('hp_water_rec')}</p>
+            </div>
+
+          </div>
+        </motion.div>
+
+      </div>
+
+      {/* 📝 Main Health Form Grid */}
+      <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6 max-w-5xl">
+        
+        {/* Section 1: Personal Biometrics */}
+        <motion.div variants={cardVariants} className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <SectionHeader
+            icon={User}
+            title={t('hp_personal_info')}
+            subtitle="Enter your physical measurements for accurate caloric calculations"
+            colorClass="bg-cyan-500/10 border-cyan-500/20 text-cyan-400"
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <Input
+              label={t('hp_age_label')}
+              name="age"
+              type="number"
+              placeholder="25"
+              min="1"
+              max="120"
+              value={form.age}
+              onChange={handleChange}
+            />
+
+            <div>
+              <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                {t('hp_gender_label')}
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { code: 'male', label: t('hp_gender_male'), icon: '♂️' },
+                  { code: 'female', label: t('hp_gender_female'), icon: '♀️' },
+                  { code: 'other', label: t('hp_gender_other'), icon: '⚧️' },
+                ].map((g) => {
+                  const selected = form.gender === g.code;
+                  return (
+                    <button
+                      key={g.code}
+                      type="button"
+                      onClick={() => {
+                        setIsDirty(true);
+                        setForm({ ...form, gender: g.code });
+                      }}
+                      className={`p-3 rounded-2xl text-xs font-bold transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
+                        selected
+                          ? 'gradient-bg text-white border-cyan-400 shadow-md shadow-cyan-500/20'
+                          : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border-white/10'
+                      }`}
+                    >
+                      <span>{g.icon}</span>
+                      <span>{g.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <Input
+              label={t('hp_height_label')}
+              name="height_cm"
+              type="number"
+              placeholder="170"
+              min="50"
+              max="300"
+              value={form.height_cm}
+              onChange={handleChange}
+            />
+
+            <Input
+              label={t('hp_weight_label')}
+              name="weight_kg"
+              type="number"
+              placeholder="70"
+              min="10"
+              max="500"
+              value={form.weight_kg}
+              onChange={handleChange}
+            />
+          </div>
+        </motion.div>
+
+        {/* Section 2: Lifestyle & Habits */}
+        <motion.div variants={cardVariants} className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <SectionHeader
+            icon={Dumbbell}
+            title={t('hp_lifestyle')}
+            subtitle="Your activity level, dietary preference, and sleep habits"
+            colorClass="bg-purple-500/10 border-purple-500/20 text-purple-400"
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+            <Select
+              label={t('hp_activity_label')}
+              name="activity_level"
+              value={form.activity_level}
+              onChange={handleChange}
+            >
               <option value="">{t('hp_select_activity')}</option>
               <option value="sedentary">{t('hp_activity_sedentary')}</option>
               <option value="lightly_active">{t('hp_activity_lightly')}</option>
@@ -197,7 +451,13 @@ export default function HealthProfile() {
               <option value="very_active">{t('hp_activity_very')}</option>
               <option value="extremely_active">{t('hp_activity_extremely')}</option>
             </Select>
-            <Select label={t('hp_diet_label')} name="dietary_preference" value={form.dietary_preference} onChange={handleChange}>
+
+            <Select
+              label={t('hp_diet_label')}
+              name="dietary_preference"
+              value={form.dietary_preference}
+              onChange={handleChange}
+            >
               <option value="">{t('hp_select_diet')}</option>
               <option value="vegetarian">{t('hp_diet_vegetarian')}</option>
               <option value="non_vegetarian">{t('hp_diet_non_veg')}</option>
@@ -205,12 +465,27 @@ export default function HealthProfile() {
               <option value="eggetarian">{t('hp_diet_eggetarian')}</option>
               <option value="keto">{t('hp_diet_keto')}</option>
             </Select>
-            <Input label={t('hp_sleep_label')} name="sleep_hours" type="number" placeholder="7" min="1" max="24" step="0.5" value={form.sleep_hours} onChange={handleChange} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <Input
+              label={t('hp_sleep_label')}
+              name="sleep_hours"
+              type="number"
+              placeholder="7"
+              min="1"
+              max="24"
+              step="0.5"
+              value={form.sleep_hours}
+              onChange={handleChange}
+            />
+
             <Select label={t('hp_smoking_label')} name="smoking" value={form.smoking} onChange={handleChange}>
               <option value="No">{t('hp_freq_no')}</option>
               <option value="Occasionally">{t('hp_freq_occasionally')}</option>
               <option value="Regularly">{t('hp_freq_regularly')}</option>
             </Select>
+
             <Select label={t('hp_alcohol_label')} name="alcohol" value={form.alcohol} onChange={handleChange}>
               <option value="No">{t('hp_freq_no')}</option>
               <option value="Occasionally">{t('hp_freq_occasionally')}</option>
@@ -219,52 +494,102 @@ export default function HealthProfile() {
           </div>
         </motion.div>
 
-        {/* Health Goals */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-emerald-500/10"><Heart className="w-5 h-5 text-emerald-400" /></div>
-            <h3 className="text-lg font-semibold text-white">{t('hp_health_goals')}</h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
+        {/* Section 3: Health Goals */}
+        <motion.div variants={cardVariants} className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <SectionHeader
+            icon={Heart}
+            title={t('hp_health_goals')}
+            subtitle="Select all health objectives you wish NutriAI to target"
+            colorClass="bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+          />
+          <div className="flex flex-wrap gap-2.5">
             {healthGoals.map((goal) => (
-              <TogglePill key={goal} label={goal} selected={form.health_goals.includes(goal)} onClick={() => toggleItem('health_goals', goal)} />
+              <TogglePill
+                key={goal}
+                label={goal}
+                selected={form.health_goals.includes(goal)}
+                onClick={() => toggleItem('health_goals', goal)}
+                icon={Heart}
+              />
             ))}
           </div>
         </motion.div>
 
-        {/* Medical Conditions */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-rose-500/10"><Shield className="w-5 h-5 text-rose-400" /></div>
-            <h3 className="text-lg font-semibold text-white">{t('hp_medical_conditions')}</h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
+        {/* Section 4: Medical Conditions */}
+        <motion.div variants={cardVariants} className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <SectionHeader
+            icon={Shield}
+            title={t('hp_medical_conditions')}
+            subtitle="Clinical conditions used by machine learning to screen deficiency risks"
+            colorClass="bg-rose-500/10 border-rose-500/20 text-rose-400"
+          />
+          <div className="flex flex-wrap gap-2.5">
             {medicalConditions.map((cond) => (
-              <TogglePill key={cond} label={cond} selected={form.medical_conditions.includes(cond)} onClick={() => toggleItem('medical_conditions', cond)} />
+              <TogglePill
+                key={cond}
+                label={cond}
+                selected={form.medical_conditions.includes(cond)}
+                onClick={() => toggleItem('medical_conditions', cond)}
+                icon={Shield}
+              />
             ))}
           </div>
         </motion.div>
 
-        {/* Allergies */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-amber-500/10"><Leaf className="w-5 h-5 text-amber-400" /></div>
-            <h3 className="text-lg font-semibold text-white">{t('hp_allergies_title')}</h3>
-          </div>
-          <div className="flex flex-wrap gap-2">
+        {/* Section 5: Allergies & Intolerances */}
+        <motion.div variants={cardVariants} className="glass-card p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <SectionHeader
+            icon={Leaf}
+            title={t('hp_allergies_title')}
+            subtitle="Nutritional shields will exclude these items from meal plans"
+            colorClass="bg-amber-500/10 border-amber-500/20 text-amber-400"
+          />
+          <div className="flex flex-wrap gap-2.5">
             {allergies.map((allergy) => (
-              <TogglePill key={allergy} label={allergy} selected={form.allergies.includes(allergy)} onClick={() => toggleItem('allergies', allergy)} />
+              <TogglePill
+                key={allergy}
+                label={allergy}
+                selected={form.allergies.includes(allergy)}
+                onClick={() => toggleItem('allergies', allergy)}
+                icon={Leaf}
+              />
             ))}
           </div>
         </motion.div>
 
-        {/* Save Button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-          <Button onClick={handleSave} loading={saving} icon={Save} size="lg" className="w-full sm:w-auto">
+        {/* Sticky Save Action Dock */}
+        <motion.div
+          variants={cardVariants}
+          className="sticky bottom-6 z-40 glass-strong p-4 sm:p-5 rounded-3xl border border-cyan-500/30 shadow-[0_10px_40px_rgba(0,0,0,0.8)] flex items-center justify-between backdrop-blur-2xl"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <Activity className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Health Profile Status</p>
+              <p className="text-xs text-gray-400">
+                {isDirty ? (
+                  <span className="text-amber-300 font-semibold">⚠️ Unsaved changes pending</span>
+                ) : (
+                  <span className="text-emerald-400 font-semibold">✓ Profile synced with AI</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          <Button
+            onClick={handleSave}
+            loading={saving}
+            icon={Save}
+            size="lg"
+            className="gradient-bg text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50"
+          >
             {t('hp_save_btn')}
           </Button>
         </motion.div>
-      </div>
+
+      </motion.div>
     </DashboardLayout>
   );
 }
