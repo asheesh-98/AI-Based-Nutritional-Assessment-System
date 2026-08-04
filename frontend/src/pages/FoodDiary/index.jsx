@@ -74,10 +74,42 @@ export default function FoodDiary() {
     unit: 'servings',
   });
   const [savingCustom, setSavingCustom] = useState(false);
+  const [estimatingAI, setEstimatingAI] = useState(false);
+  const [aiEstimated, setAiEstimated] = useState(false);
+
+  const handleAutoEstimateNutrition = async (nameOverride = null, qtyOverride = null, unitOverride = null) => {
+    const targetName = (nameOverride !== null ? nameOverride : customForm.food_name).trim();
+    if (!targetName) return;
+
+    setEstimatingAI(true);
+    try {
+      const data = await foodService.estimateNutrition({
+        food_name: targetName,
+        quantity: Number(qtyOverride !== null ? qtyOverride : customForm.quantity) || 1,
+        unit: unitOverride !== null ? unitOverride : (customForm.unit || 'servings'),
+      });
+
+      if (data) {
+        setCustomForm((prev) => ({
+          ...prev,
+          calories: data.calories !== undefined ? String(data.calories) : prev.calories,
+          protein: data.protein !== undefined ? String(data.protein) : prev.protein,
+          carbs: data.carbs !== undefined ? String(data.carbs) : prev.carbs,
+          fat: data.fat !== undefined ? String(data.fat) : prev.fat,
+        }));
+        setAiEstimated(true);
+      }
+    } catch (err) {
+      console.error('AI estimate error:', err);
+    } finally {
+      setEstimatingAI(false);
+    }
+  };
 
   const openCustomModal = (defaultName = '') => {
+    const initialName = defaultName || searchQuery || '';
     setCustomForm({
-      food_name: defaultName || searchQuery || '',
+      food_name: initialName,
       calories: '',
       protein: '0',
       carbs: '0',
@@ -85,7 +117,11 @@ export default function FoodDiary() {
       quantity: '1',
       unit: 'servings',
     });
+    setAiEstimated(false);
     setShowCustomModal(true);
+    if (initialName.trim()) {
+      handleAutoEstimateNutrition(initialName, '1', 'servings');
+    }
   };
 
   const handleSaveCustomFood = async (e) => {
@@ -718,15 +754,53 @@ export default function FoodDiary() {
               </div>
 
               <form onSubmit={handleSaveCustomFood} className="space-y-4">
+                {/* AI Guidance Banner */}
+                <div className="p-3 bg-gradient-to-r from-cyan-500/15 to-purple-500/15 border border-cyan-500/30 rounded-2xl flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+                    <p className="text-xs text-cyan-200 font-medium">
+                      Enter product name & Gemini AI will auto-calculate Calories & Macros!
+                    </p>
+                  </div>
+                </div>
+
                 {/* Product Name */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
-                    {t('food_diary_custom_name_label')} *
-                  </label>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider">
+                      {t('food_diary_custom_name_label')} *
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoEstimateNutrition()}
+                      disabled={estimatingAI || !customForm.food_name.trim()}
+                      className="text-xs text-cyan-300 hover:text-white bg-cyan-500/15 hover:bg-cyan-500/25 px-2.5 py-1 rounded-lg border border-cyan-500/30 font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      {estimatingAI ? (
+                        <>
+                          <RefreshCw className="w-3 h-3 animate-spin text-cyan-400" />
+                          <span>Gemini Calculating...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3 h-3 text-amber-300" />
+                          <span>✨ Auto-Calculate with Gemini</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                   <Input
                     placeholder={t('food_diary_custom_name_placeholder')}
                     value={customForm.food_name}
-                    onChange={(e) => setCustomForm({ ...customForm, food_name: e.target.value })}
+                    onChange={(e) => {
+                      const newName = e.target.value;
+                      setCustomForm({ ...customForm, food_name: newName });
+                    }}
+                    onBlur={() => {
+                      if (customForm.food_name.trim() && !customForm.calories) {
+                        handleAutoEstimateNutrition();
+                      }
+                    }}
                     required
                   />
                 </div>
@@ -755,7 +829,13 @@ export default function FoodDiary() {
                       placeholder="1"
                       min="1"
                       value={customForm.quantity}
-                      onChange={(e) => setCustomForm({ ...customForm, quantity: e.target.value })}
+                      onChange={(e) => {
+                        const newQty = e.target.value;
+                        setCustomForm({ ...customForm, quantity: newQty });
+                        if (customForm.food_name.trim()) {
+                          handleAutoEstimateNutrition(null, newQty, null);
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -772,7 +852,12 @@ export default function FoodDiary() {
                         <button
                           key={unit.code}
                           type="button"
-                          onClick={() => setCustomForm({ ...customForm, unit: unit.code })}
+                          onClick={() => {
+                            setCustomForm({ ...customForm, unit: unit.code });
+                            if (customForm.food_name.trim()) {
+                              handleAutoEstimateNutrition(null, null, unit.code);
+                            }
+                          }}
                           className={`p-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer ${
                             selected
                               ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white border-cyan-400 shadow-md shadow-cyan-500/20'
@@ -786,7 +871,18 @@ export default function FoodDiary() {
                   </div>
                 </div>
 
-                {/* Optional Macros (Protein, Carbs, Fat) */}
+                {/* AI Success Badge */}
+                {aiEstimated && (
+                  <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 font-bold flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Auto-Filled by Gemini AI</span>
+                    </div>
+                    <span className="text-[10px] text-gray-400 font-medium">Editable below</span>
+                  </div>
+                )}
+
+                {/* Macros (Protein, Carbs, Fat) */}
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
                   <div>
                     <label className="block text-[11px] font-bold text-cyan-300 uppercase mb-1">

@@ -20,6 +20,7 @@ from backend.app.services.gemini_service import (
     analyze_meal_photo,
     generate_clinical_summary,
     generate_ai_meal_plan_recipes,
+    estimate_food_nutrition,
 )
 
 router = APIRouter(prefix="/api/ai", tags=["AI Assistance"])
@@ -188,3 +189,32 @@ def generate_ai_recipes(
         return {"recipes": recipe_text}
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
+
+
+class NutritionEstimateRequest(BaseModel):
+    food_name: str
+    quantity: Optional[float] = 1.0
+    unit: Optional[str] = "servings"
+
+
+@router.post("/estimate-nutrition")
+def estimate_nutrition(
+    payload: NutritionEstimateRequest,
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Use Google Gemini AI to auto-calculate calories, protein, carbs, and fat for any food item.
+    """
+    if not payload.food_name or not payload.food_name.strip():
+        raise HTTPException(status_code=400, detail="Food name is required.")
+
+    try:
+        data = estimate_food_nutrition(
+            food_name=payload.food_name.strip(),
+            quantity=payload.quantity or 1.0,
+            unit=payload.unit or "servings"
+        )
+        return data
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+

@@ -370,3 +370,51 @@ def verify_meal_plan_diet(days: List[dict], diet_preference: str) -> List[dict]:
         logger.warning("Gemini meal audit parse skipped: %s", exc)
 
     return days
+
+
+def estimate_food_nutrition(food_name: str, quantity: float = 1.0, unit: str = "servings") -> Dict[str, Any]:
+    """
+    Estimate calories and macronutrients (protein, carbs, fat) for any named food item using Google Gemini API.
+    """
+    system_prompt = (
+        "You are an expert Nutritional Database & Calorie Estimator AI. "
+        "Analyze the provided food name, quantity, and unit, and return a JSON object ONLY. "
+        "Do not include markdown code blocks, explanations, or conversational text. "
+        "The JSON MUST follow this exact schema:\n"
+        "{\n"
+        '  "food_name": "Name of food item",\n'
+        '  "calories": 150,\n'
+        '  "protein": 3.5,\n'
+        '  "carbs": 25.0,\n'
+        '  "fat": 1.2\n'
+        "}"
+    )
+
+    prompt = f"Estimate nutritional content for: {quantity} {unit} of '{food_name}'"
+    contents = [{"role": "user", "parts": [{"text": prompt}]}]
+
+    raw = _call_gemini_api(contents, system_instruction=system_prompt)
+    clean_json = raw.strip()
+    if clean_json.startswith("```json"): clean_json = clean_json[7:]
+    if clean_json.startswith("```"): clean_json = clean_json[3:]
+    if clean_json.endswith("```"): clean_json = clean_json[:-3]
+
+    try:
+        data = json.loads(clean_json.strip())
+        return {
+            "food_name": data.get("food_name", food_name),
+            "calories": round(float(data.get("calories", 150))),
+            "protein": round(float(data.get("protein", 3.0)), 1),
+            "carbs": round(float(data.get("carbs", 20.0)), 1),
+            "fat": round(float(data.get("fat", 2.0)), 1),
+        }
+    except Exception as exc:
+        logger.error("Failed to parse Gemini nutrition estimate: %s", exc)
+        return {
+            "food_name": food_name,
+            "calories": 150,
+            "protein": 3.0,
+            "carbs": 20.0,
+            "fat": 2.0
+        }
+

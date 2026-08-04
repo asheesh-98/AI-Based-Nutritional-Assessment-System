@@ -30,6 +30,11 @@ export const foodService = {
   async deleteFoodEntry(entryId) {
     await api.delete(`/food-diary/${entryId}`);
   },
+
+  async estimateNutrition(payload) {
+    const { data } = await api.post('/ai/estimate-nutrition', payload);
+    return data;
+  },
 };
 
 export default foodService;
