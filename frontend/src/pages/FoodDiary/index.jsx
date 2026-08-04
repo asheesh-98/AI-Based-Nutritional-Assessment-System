@@ -62,6 +62,74 @@ export default function FoodDiary() {
   const [configUnit, setConfigUnit] = useState('servings');
   const [loggingProgress, setLoggingProgress] = useState(false);
 
+  // Custom Product Creation State
+  const [showCustomModal, setShowCustomModal] = useState(false);
+  const [customForm, setCustomForm] = useState({
+    food_name: '',
+    calories: '',
+    protein: '0',
+    carbs: '0',
+    fat: '0',
+    quantity: '1',
+    unit: 'servings',
+  });
+  const [savingCustom, setSavingCustom] = useState(false);
+
+  const openCustomModal = (defaultName = '') => {
+    setCustomForm({
+      food_name: defaultName || searchQuery || '',
+      calories: '',
+      protein: '0',
+      carbs: '0',
+      fat: '0',
+      quantity: '1',
+      unit: 'servings',
+    });
+    setShowCustomModal(true);
+  };
+
+  const handleSaveCustomFood = async (e) => {
+    if (e) e.preventDefault();
+    if (!customForm.food_name.trim()) {
+      setAlert({ show: true, type: 'error', message: 'Please enter a product name.' });
+      return;
+    }
+    const kcal = parseFloat(customForm.calories);
+    if (isNaN(kcal) || kcal < 0) {
+      setAlert({ show: true, type: 'error', message: 'Please enter valid calories.' });
+      return;
+    }
+
+    setSavingCustom(true);
+    try {
+      await foodService.logFood({
+        food_name: customForm.food_name.trim(),
+        meal_type: selectedMeal,
+        quantity: Number(customForm.quantity) || 1,
+        unit: customForm.unit || 'servings',
+        calories: Math.round(kcal),
+        protein: parseFloat(customForm.protein) || 0,
+        carbs: parseFloat(customForm.carbs) || 0,
+        fat: parseFloat(customForm.fat) || 0,
+      });
+
+      setAlert({
+        show: true,
+        type: 'success',
+        message: `${customForm.food_name} ${t('food_diary_added_food')}`,
+      });
+      setShowCustomModal(false);
+      setSearchResults([]);
+      setSearchQuery('');
+      loadDiary();
+    } catch (err) {
+      console.error('Custom log food error:', err);
+      setAlert({ show: true, type: 'error', message: t('food_diary_log_error') });
+    } finally {
+      setSavingCustom(false);
+    }
+  };
+
   useEffect(() => {
     loadDiary();
   }, []);
@@ -345,6 +413,14 @@ export default function FoodDiary() {
             <Plus className="w-5 h-5 text-cyan-400" />
             <span>{t('food_diary_log_food_title')}</span>
           </h3>
+          <button
+            type="button"
+            onClick={() => openCustomModal()}
+            className="px-3.5 py-1.5 rounded-xl gradient-bg text-white text-xs font-bold shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>{t('food_diary_add_custom_btn')}</span>
+          </button>
         </div>
 
         {/* Meal Type Selector Chips */}
@@ -409,7 +485,7 @@ export default function FoodDiary() {
 
         {/* Search Results Dropdown */}
         {searchResults.length > 0 && (
-          <div className="mt-3 space-y-2 max-h-72 overflow-y-auto custom-scrollbar p-2 bg-[#0d1322] border border-white/15 rounded-2xl shadow-2xl">
+          <div className="mt-3 space-y-2 max-h-80 overflow-y-auto custom-scrollbar p-2.5 bg-[#0d1322] border border-white/15 rounded-2xl shadow-2xl">
             {searchResults.map((food, i) => (
               <motion.div
                 key={food.id || i}
@@ -432,6 +508,21 @@ export default function FoodDiary() {
                 </div>
               </motion.div>
             ))}
+
+            {/* Custom Product Prompt Footer */}
+            <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl flex items-center justify-between mt-3">
+              <div>
+                <p className="text-xs font-bold text-cyan-300">{t('food_diary_cant_find')}</p>
+                <p className="text-[11px] text-gray-400">Log your own custom food item or meal</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openCustomModal(searchQuery)}
+                className="px-3 py-1.5 rounded-lg gradient-bg text-white text-xs font-black hover:brightness-110 transition-all cursor-pointer shadow-md"
+              >
+                {t('food_diary_add_custom_btn')}
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -592,6 +683,168 @@ export default function FoodDiary() {
                   )}
                 </button>
               </div>
+            </motion.div>
+          </div>
+        )}
+
+        {/* ✨ Custom Product / Food Creation Modal Overlay */}
+        {showCustomModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-lg glass-strong border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(0,212,255,0.2)] my-auto"
+            >
+              <div className="flex items-center justify-between mb-5 pb-4 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl gradient-bg flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+                    <Sparkles className="w-5 h-5 text-amber-300" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-white leading-tight">
+                      {t('food_diary_create_custom_title')}
+                    </h3>
+                    <p className="text-xs text-cyan-400 font-semibold">Custom Nutritional Entry</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCustomModal(false)}
+                  className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 cursor-pointer"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveCustomFood} className="space-y-4">
+                {/* Product Name */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
+                    {t('food_diary_custom_name_label')} *
+                  </label>
+                  <Input
+                    placeholder={t('food_diary_custom_name_placeholder')}
+                    value={customForm.food_name}
+                    onChange={(e) => setCustomForm({ ...customForm, food_name: e.target.value })}
+                    required
+                  />
+                </div>
+
+                {/* Calories & Quantity */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
+                      {t('food_diary_custom_kcal_label')} *
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="150"
+                      min="0"
+                      value={customForm.calories}
+                      onChange={(e) => setCustomForm({ ...customForm, calories: e.target.value })}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
+                      {t('food_diary_quantity')}
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="1"
+                      min="1"
+                      value={customForm.quantity}
+                      onChange={(e) => setCustomForm({ ...customForm, quantity: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                {/* Measurement Unit Selector */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                    {t('food_diary_unit')}
+                  </label>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {unitOptions.map((unit) => {
+                      const selected = customForm.unit === unit.code;
+                      return (
+                        <button
+                          key={unit.code}
+                          type="button"
+                          onClick={() => setCustomForm({ ...customForm, unit: unit.code })}
+                          className={`p-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer ${
+                            selected
+                              ? 'bg-gradient-to-r from-cyan-500 to-purple-600 text-white border-cyan-400 shadow-md shadow-cyan-500/20'
+                              : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border-white/10'
+                          }`}
+                        >
+                          {unit.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Optional Macros (Protein, Carbs, Fat) */}
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
+                  <div>
+                    <label className="block text-[11px] font-bold text-cyan-300 uppercase mb-1">
+                      {t('food_diary_custom_protein_label')}
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      step="0.1"
+                      value={customForm.protein}
+                      onChange={(e) => setCustomForm({ ...customForm, protein: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-purple-300 uppercase mb-1">
+                      {t('food_diary_custom_carbs_label')}
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      step="0.1"
+                      value={customForm.carbs}
+                      onChange={(e) => setCustomForm({ ...customForm, carbs: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-rose-300 uppercase mb-1">
+                      {t('food_diary_custom_fat_label')}
+                    </label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      step="0.1"
+                      value={customForm.fat}
+                      onChange={(e) => setCustomForm({ ...customForm, fat: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomModal(false)}
+                    className="w-1/3 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 cursor-pointer"
+                  >
+                    {t('common_cancel')}
+                  </button>
+                  <Button
+                    type="submit"
+                    loading={savingCustom}
+                    size="md"
+                    className="w-2/3 py-3 gradient-bg text-white font-black rounded-2xl shadow-lg shadow-cyan-500/30"
+                  >
+                    {t('food_diary_save_custom_btn')}
+                  </Button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}

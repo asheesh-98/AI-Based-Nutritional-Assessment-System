@@ -1,6 +1,6 @@
 /**
  * Multi-language translation dictionaries for 16 Indian & Regional Languages.
- * Includes Health Profile enhancements.
+ * Includes Custom Product Creation keys for Food Diary.
  */
 
 export const LANGUAGES = [
@@ -585,7 +585,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "Recommended Water Intake",
     "hp_lifestyle_score": "Lifestyle & Habits",
     "hp_unsaved_changes": "You have unsaved profile changes",
-    "hp_quick_summary": "Metabolic & Biomarker Health Summary"
+    "hp_quick_summary": "Metabolic & Biomarker Health Summary",
+    "food_diary_add_custom_btn": "+ Add Custom Product",
+    "food_diary_cant_find": "Can't find your product?",
+    "food_diary_create_custom_title": "Create Custom Food / Product",
+    "food_diary_custom_name_label": "Product Name",
+    "food_diary_custom_name_placeholder": "e.g. Fresh Banana, Home-cooked Meal",
+    "food_diary_custom_kcal_label": "Calories (kcal)",
+    "food_diary_custom_protein_label": "Protein (g)",
+    "food_diary_custom_carbs_label": "Carbohydrates (g)",
+    "food_diary_custom_fat_label": "Fat (g)",
+    "food_diary_save_custom_btn": "Save & Log Custom Product"
   },
   "hi": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1149,7 +1159,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "sa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1713,7 +1733,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "as": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2277,7 +2307,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "bn": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2841,7 +2881,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "সুপারিশকৃত পানি পানের পরিমাণ",
     "hp_lifestyle_score": "জীবনধারা ও অভ্যাস",
     "hp_unsaved_changes": "সংরক্ষণ না করা পরিবর্তন রয়েছে",
-    "hp_quick_summary": "বিপাকীয় ও বায়োমার্কার স্বাস্থ্য সারসংক্ষেপ"
+    "hp_quick_summary": "বিপাকীয় ও বায়োমার্কার স্বাস্থ্য সারসংক্ষেপ",
+    "food_diary_add_custom_btn": "+ কাস্টম পণ্য যোগ করুন",
+    "food_diary_cant_find": "আপনার কাঙ্ক্ষিত পণ্য খুঁজে পাচ্ছেন না?",
+    "food_diary_create_custom_title": "কাস্টম খাবার / পণ্য তৈরি করুন",
+    "food_diary_custom_name_label": "পণ্যের নাম",
+    "food_diary_custom_name_placeholder": "যেমন: টাটকা কলা, ঘরের তৈরি খাবার",
+    "food_diary_custom_kcal_label": "ক্যালোরি (kcal)",
+    "food_diary_custom_protein_label": "প্রোটিন (g)",
+    "food_diary_custom_carbs_label": "কার্বোহাইড্রেট (g)",
+    "food_diary_custom_fat_label": "ফ্যাট (g)",
+    "food_diary_save_custom_btn": "কাস্টম পণ্য সংরক্ষণ ও যোগ করুন"
   },
   "gu": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -3405,7 +3455,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "ભલામણ કરેલ પાણીનું સેવન",
     "hp_lifestyle_score": "જીવનશૈલી અને ટેવો",
     "hp_unsaved_changes": "તમારી પાસે સાચવ્યા વગરના ફેરફારો છે",
-    "hp_quick_summary": "મેટાબોલિક સ્વાસ્થ્ય સારાંશ"
+    "hp_quick_summary": "મેટાબોલિક સ્વાસ્થ્ય સારાંશ",
+    "food_diary_add_custom_btn": "+ કસ્ટમ પ્રોડક્ટ ઉમેરો",
+    "food_diary_cant_find": "તમારી પ્રોડક્ટ મળી નથી?",
+    "food_diary_create_custom_title": "કસ્ટમ ખોરાક / પ્રોડક્ટ બનાવો",
+    "food_diary_custom_name_label": "પ્રોડક્ટનું નામ",
+    "food_diary_custom_name_placeholder": "દા.ત. કેળા, ઘરનું ભોજન",
+    "food_diary_custom_kcal_label": "કેલરી (kcal)",
+    "food_diary_custom_protein_label": "પ્રોટીન (g)",
+    "food_diary_custom_carbs_label": "કાર્બોહાઇડ્રેટ્સ (g)",
+    "food_diary_custom_fat_label": "ચરબી (g)",
+    "food_diary_save_custom_btn": "કસ્ટમ પ્રોડક્ટ સાચવો અને ઉમેરો"
   },
   "kn": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -3969,7 +4029,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ks": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -4533,7 +4603,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ml": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -5097,7 +5177,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "mr": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -5661,7 +5751,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "शिफारस केलेले पाणी सेवन",
     "hp_lifestyle_score": "जीवनशैली आणि सवयी",
     "hp_unsaved_changes": "तुमच्याकडे जतन न केलेले बदल आहेत",
-    "hp_quick_summary": "चयापचय आरोग्य सारांश"
+    "hp_quick_summary": "चयापचय आरोग्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम उत्पादन जोडा",
+    "food_diary_cant_find": "तुमचे उत्पादन सापडले नाही?",
+    "food_diary_create_custom_title": "कस्टम अन्न / उत्पादन तयार करा",
+    "food_diary_custom_name_label": "उत्पादनाचे नाव",
+    "food_diary_custom_name_placeholder": "उदा. ताजे केळे, घरी बनवलेले जेवण",
+    "food_diary_custom_kcal_label": "कॅलरीज (kcal)",
+    "food_diary_custom_protein_label": "प्रथिने (g)",
+    "food_diary_custom_carbs_label": "कार्बोहायड्रेट्स (g)",
+    "food_diary_custom_fat_label": "मेद (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पादन जतन करा"
   },
   "ne": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6225,7 +6325,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "or": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6789,7 +6899,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "pa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7353,7 +7473,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "sd": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7917,7 +8047,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "अनुशंसित जल का सेवन",
     "hp_lifestyle_score": "जीवन शैली और आदतें",
     "hp_unsaved_changes": "आपके पास अवांछित परिवर्तन हैं",
-    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश"
+    "hp_quick_summary": "चयापचय और बायोमार्कर स्वास्थ्य सारांश",
+    "food_diary_add_custom_btn": "+ कस्टम प्रोडक्ट जोड़ें",
+    "food_diary_cant_find": "अपना उत्पाद नहीं मिला?",
+    "food_diary_create_custom_title": "कस्टम भोजन / उत्पाद बनाएं",
+    "food_diary_custom_name_label": "उत्पाद का नाम",
+    "food_diary_custom_name_placeholder": "उदा. ताज़ा केला, घर का बना भोजन",
+    "food_diary_custom_kcal_label": "कैलोरी (kcal)",
+    "food_diary_custom_protein_label": "प्रोटीन (g)",
+    "food_diary_custom_carbs_label": "कार्बोहाइड्रेट (g)",
+    "food_diary_custom_fat_label": "वसा (g)",
+    "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ta": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -8481,7 +8621,17 @@ export const TRANSLATIONS = {
     "hp_water_rec": "பரிந்துரைக்கப்பட்ட நீர் உட்கொள்ளல்",
     "hp_lifestyle_score": "வாழ்க்கை முறை மற்றும் பழக்கவழக்கங்கள்",
     "hp_unsaved_changes": "சேமிக்கப்படாத மாற்றங்கள் உள்ளன",
-    "hp_quick_summary": "வளர்சிதை மாற்ற சுகாதார சுருக்கம்"
+    "hp_quick_summary": "வளர்சிதை மாற்ற சுகாதார சுருக்கம்",
+    "food_diary_add_custom_btn": "+ கஸ்டம் பொருளைச் சேர்க்கவும்",
+    "food_diary_cant_find": "உங்கள் பொருளைக் கண்டுபிடிக்க முடியவில்லையா?",
+    "food_diary_create_custom_title": "கஸ்டம் உணவு / பொருளை உருவாக்கவும்",
+    "food_diary_custom_name_label": "பொருளின் பெயர்",
+    "food_diary_custom_name_placeholder": "எ.கா. பழம், சமைத்த உணவு",
+    "food_diary_custom_kcal_label": "கலோரிகள் (kcal)",
+    "food_diary_custom_protein_label": "புரதம் (g)",
+    "food_diary_custom_carbs_label": "கார்போஹைட்ரேட்டுகள் (g)",
+    "food_diary_custom_fat_label": "கொழுப்பு (g)",
+    "food_diary_save_custom_btn": "சேமித்துச் சேர்க்கவும்"
   },
   "te": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -9045,6 +9195,16 @@ export const TRANSLATIONS = {
     "hp_water_rec": "సిఫార్సు చేసిన నీటి వినియోగం",
     "hp_lifestyle_score": "జీవనశైలి & అలవాట్లు",
     "hp_unsaved_changes": "సేవ్ చేయని మార్పులు ఉన్నాయి",
-    "hp_quick_summary": "జీవక్రియ ఆరోగ్య నివేదిక"
+    "hp_quick_summary": "జీవక్రియ ఆరోగ్య నివేదిక",
+    "food_diary_add_custom_btn": "+ కస్టమ్ ప్రొడక్ట్ జోడించండి",
+    "food_diary_cant_find": "మీరు కోరిన ఆహారం దొరకలేదా?",
+    "food_diary_create_custom_title": "కస్టమ్ ఆహారం / ప్రొడక్ట్ సృష్టించండి",
+    "food_diary_custom_name_label": "ప్రొడక్ట్ పేరు",
+    "food_diary_custom_name_placeholder": "ఉదా. అరటిపండు, ఇంటి వంట",
+    "food_diary_custom_kcal_label": "కేలరీలు (kcal)",
+    "food_diary_custom_protein_label": "ప్రోటీన్ (g)",
+    "food_diary_custom_carbs_label": "కార్బోహైడ్రేట్లు (g)",
+    "food_diary_custom_fat_label": "కొవ్వు (g)",
+    "food_diary_save_custom_btn": "సేవ్ చేసి డైరీలో నమోదు చేయండి"
   }
 };
