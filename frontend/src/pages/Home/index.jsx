@@ -299,19 +299,27 @@ export default function Home() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-2.5 mb-8">
-              {['Fatigue', 'Dizziness', 'Muscle Weakness', 'Brittle Nails', 'Cold Hands', 'Hair Thinning', 'Frequent Cramps'].map((sym) => {
-                const selected = selectedSymptoms.includes(sym);
+              {[
+                { id: 'Fatigue', label: t('home_calc_symptom_fatigue') },
+                { id: 'Dizziness', label: t('home_calc_symptom_dizziness') },
+                { id: 'Muscle Weakness', label: t('home_calc_symptom_muscle') },
+                { id: 'Brittle Nails', label: t('home_calc_symptom_nails') },
+                { id: 'Cold Hands', label: t('home_calc_symptom_cold') },
+                { id: 'Hair Thinning', label: t('home_calc_symptom_hair') },
+                { id: 'Frequent Cramps', label: t('home_calc_symptom_cramps') },
+              ].map((symObj) => {
+                const selected = selectedSymptoms.includes(symObj.id);
                 return (
                   <button
-                    key={sym}
-                    onClick={() => toggleSymptom(sym)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                    key={symObj.id}
+                    onClick={() => toggleSymptom(symObj.id)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       selected
                         ? 'gradient-bg text-white shadow-md shadow-cyan-500/20'
                         : 'glass border border-white/10 text-slate-400 hover:text-white'
                     }`}
                   >
-                    {selected ? '✓ ' : '+ '} {sym}
+                    {selected ? '✓ ' : '+ '} {symObj.label}
                   </button>
                 );
               })}
