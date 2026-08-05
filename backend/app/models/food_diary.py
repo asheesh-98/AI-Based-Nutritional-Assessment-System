@@ -18,6 +18,7 @@ class FoodDiary(Base):
     food_name = Column(String(200), nullable=False)
     meal_type = Column(String(30), nullable=True)   # breakfast, lunch, dinner, snack
     quantity = Column(Float, default=1.0)
+    unit = Column(String(50), nullable=True, default="servings")
     meal_time = Column(DateTime, nullable=True)
 
     calories = Column(Float, default=0)

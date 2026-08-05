@@ -54,6 +54,7 @@ class FoodDiaryCreate(BaseModel):
     food_name: str
     meal_type: Optional[str] = None      # breakfast / lunch / dinner / snack
     quantity: float = 1.0
+    unit: Optional[str] = "servings"
     meal_time: Optional[datetime] = None
     calories: float = 0
     protein: float = 0
