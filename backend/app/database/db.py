@@ -36,15 +36,19 @@ def init_db():
     Base.metadata.create_all(bind=engine)
 
     # Safe auto-migration for schema updates across SQLite & PostgreSQL
-    with engine.connect() as conn:
-        for query in [
-            "ALTER TABLE health_profiles ADD COLUMN medical_conditions VARCHAR(200)",
-            "ALTER TABLE health_profiles ADD COLUMN allergies VARCHAR(200)",
-            "ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)",
-            "ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)",
-        ]:
-            try:
-                conn.execute(text(query))
-                conn.commit()
-            except Exception:
-                pass
+    try:
+        with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+            for query in [
+                "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS medical_conditions VARCHAR(200)",
+                "ALTER TABLE health_profiles ADD COLUMN medical_conditions VARCHAR(200)",
+                "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS allergies VARCHAR(200)",
+                "ALTER TABLE health_profiles ADD COLUMN allergies VARCHAR(200)",
+                "ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)",
+                "ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)",
+            ]:
+                try:
+                    conn.execute(text(query))
+                except Exception:
+                    pass
+    except Exception:
+        pass

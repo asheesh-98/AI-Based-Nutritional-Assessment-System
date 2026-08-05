@@ -76,41 +76,22 @@ def log_food_entry(
         db.commit()
         db.refresh(entry)
         return entry
-    except Exception:
+    except Exception as exc:
         db.rollback()
-        # Attempt schema auto-migration for unit column on live DB connection
+        # Fallback if DB table lacks 'unit' column on production database
+        data_no_unit = {k: v for k, v in data.items() if k != "unit"}
+        entry_fallback = FoodDiary(
+            user_id=current_user.id,
+            **data_no_unit,
+        )
+        db.add(entry_fallback)
         try:
-            db.execute(sa_func.text("ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)"))
             db.commit()
-        except Exception:
-            try:
-                db.execute(sa_func.text("ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)"))
-                db.commit()
-            except Exception:
-                db.rollback()
-
-        # Retry with unit
-        try:
-            entry = FoodDiary(
-                user_id=current_user.id,
-                **data,
-            )
-            db.add(entry)
-            db.commit()
-            db.refresh(entry)
-            return entry
-        except Exception:
+            db.refresh(entry_fallback)
+            return entry_fallback
+        except Exception as exc2:
             db.rollback()
-            # Final fallback without unit field if column cannot be added
-            data_no_unit = {k: v for k, v in data.items() if k != "unit"}
-            entry = FoodDiary(
-                user_id=current_user.id,
-                **data_no_unit,
-            )
-            db.add(entry)
-            db.commit()
-            db.refresh(entry)
-            return entry
+            raise HTTPException(status_code=500, detail=f"Database error logging food: {str(exc2)}")
 
 
 @router.get("/api/food-diary", response_model=List[FoodDiaryResponse])

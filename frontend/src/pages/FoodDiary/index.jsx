@@ -153,7 +153,8 @@ export default function FoodDiary() {
       loadDiary();
     } catch (err) {
       console.error('AI food log error:', err);
-      setAlert({ show: true, type: 'error', message: t('food_diary_log_error') });
+      const msg = err?.response?.data?.detail || t('food_diary_log_error') || 'Failed to log food.';
+      setAlert({ show: true, type: 'error', message: msg });
     } finally {
       setLoggingAI(false);
     }
