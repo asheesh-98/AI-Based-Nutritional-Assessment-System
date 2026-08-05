@@ -31,18 +31,18 @@ const cardVariants = {
   }
 };
 
-// Quick 1-tap presets for popular food items
-const POPULAR_PRESETS = [
-  { name: 'Apple', qty: 1, unit: 'pcs', icon: '🍎' },
-  { name: 'Whole Milk', qty: 250, unit: 'ml', icon: '🥛' },
-  { name: 'Brown Rice', qty: 150, unit: 'g', icon: '🍚' },
-  { name: 'Avocado', qty: 1, unit: 'pcs', icon: '🥑' },
-  { name: 'Almonds', qty: 30, unit: 'g', icon: '🥜' },
-  { name: 'Oatmeal Porridge', qty: 1, unit: 'cups', icon: '🥣' },
-];
-
 export default function FoodDiary() {
   const { t } = useLanguage();
+
+  // Presets mapped with translated labels
+  const popularPresets = [
+    { key: 'apple', name: t('food_diary_preset_apple') || 'Apple', queryName: 'Apple', qty: 1, unit: 'pcs', icon: '🍎' },
+    { key: 'milk', name: t('food_diary_preset_milk') || 'Whole Milk', queryName: 'Whole Milk', qty: 250, unit: 'ml', icon: '🥛' },
+    { key: 'rice', name: t('food_diary_preset_rice') || 'Brown Rice', queryName: 'Brown Rice', qty: 150, unit: 'g', icon: '🍚' },
+    { key: 'avocado', name: t('food_diary_preset_avocado') || 'Avocado', queryName: 'Avocado', qty: 1, unit: 'pcs', icon: '🥑' },
+    { key: 'almonds', name: t('food_diary_preset_almonds') || 'Almonds', queryName: 'Almonds', qty: 30, unit: 'g', icon: '🥜' },
+    { key: 'oatmeal', name: t('food_diary_preset_oatmeal') || 'Oatmeal Porridge', queryName: 'Oatmeal Porridge', qty: 1, unit: 'cups', icon: '🥣' },
+  ];
 
   const mealTypes = [
     { value: 'breakfast', label: t('food_diary_breakfast'), icon: Coffee, color: 'text-amber-400', accentBg: 'bg-amber-500/10 border-amber-500/30 text-amber-300', gradient: 'from-amber-500/15 via-amber-500/5 to-transparent', border: 'border-amber-500/20' },
@@ -52,13 +52,13 @@ export default function FoodDiary() {
   ];
 
   const unitOptions = [
-    { code: 'servings', label: t('food_diary_unit_serving') },
-    { code: 'pcs', label: t('food_diary_unit_pcs') },
-    { code: 'g', label: t('food_diary_unit_g') },
-    { code: 'ml', label: t('food_diary_unit_ml') },
-    { code: 'cups', label: t('food_diary_unit_cups') },
-    { code: 'oz', label: t('food_diary_unit_oz') },
-    { code: 'tbsp', label: t('food_diary_unit_tbsp') },
+    { code: 'servings', label: t('food_diary_unit_serving') || 'Servings' },
+    { code: 'pcs', label: t('food_diary_unit_pcs') || 'Pieces (pcs)' },
+    { code: 'g', label: t('food_diary_unit_g') || 'Grams (g)' },
+    { code: 'ml', label: t('food_diary_unit_ml') || 'Milliliters (ml)' },
+    { code: 'cups', label: t('food_diary_unit_cups') || 'Cups' },
+    { code: 'oz', label: t('food_diary_unit_oz') || 'Ounces (oz)' },
+    { code: 'tbsp', label: t('food_diary_unit_tbsp') || 'Tablespoon (tbsp)' },
   ];
 
   // Core Page State
@@ -106,7 +106,7 @@ export default function FoodDiary() {
   const handleDirectAILog = async (overrideName = null, overrideQty = null, overrideUnit = null) => {
     const targetName = (overrideName !== null ? overrideName : foodInput).trim();
     if (!targetName) {
-      setAlert({ show: true, type: 'error', message: 'Please enter a food item or dish name.' });
+      setAlert({ show: true, type: 'error', message: t('food_diary_input_placeholder') || 'Please enter a food item or dish name.' });
       return;
     }
 
@@ -144,7 +144,7 @@ export default function FoodDiary() {
       setAlert({
         show: true,
         type: 'success',
-        message: `✨ ${targetName} (${qty} ${unit}) — ${kcal} kcal ${t('food_diary_added_food')}`,
+        message: `✨ ${targetName} (${qty} ${unit}) — ${kcal} kcal ${t('food_diary_added_food') || 'Added to your diary!'}`,
       });
 
       setFoodInput('');
@@ -161,7 +161,7 @@ export default function FoodDiary() {
   // Opens the Fine-Tuning / Review Modal with pre-estimated Gemini values
   const handleOpenDetailModal = async () => {
     if (!foodInput.trim()) {
-      setAlert({ show: true, type: 'error', message: 'Please enter a food name first.' });
+      setAlert({ show: true, type: 'error', message: t('food_diary_input_placeholder') || 'Please enter a food name first.' });
       return;
     }
 
@@ -226,7 +226,7 @@ export default function FoodDiary() {
       setAlert({
         show: true,
         type: 'success',
-        message: `${detailForm.food_name} ${t('food_diary_added_food')}`,
+        message: `${detailForm.food_name} ${t('food_diary_added_food') || 'Added to your diary!'}`,
       });
       setShowDetailModal(false);
       setFoodInput('');
@@ -243,11 +243,11 @@ export default function FoodDiary() {
   const handleDeleteFood = async (entryId, foodName) => {
     try {
       await foodService.deleteFoodEntry(entryId);
-      setAlert({ show: true, type: 'success', message: `${foodName} ${t('food_diary_removed_food')}` });
+      setAlert({ show: true, type: 'success', message: `${foodName} ${t('food_diary_removed_food') || 'Removed from diary.'}` });
       loadDiary();
     } catch (err) {
       console.error('Delete food error:', err);
-      setAlert({ show: true, type: 'error', message: t('food_diary_remove_error') });
+      setAlert({ show: true, type: 'error', message: t('food_diary_remove_error') || 'Failed to remove food item.' });
     }
   };
 
@@ -273,7 +273,7 @@ export default function FoodDiary() {
 
   if (loading) {
     return (
-      <DashboardLayout title={t('sidebar_food_diary')}>
+      <DashboardLayout title={t('food_diary_page_title') || t('sidebar_food_diary')}>
         <div className="flex flex-col items-center justify-center min-h-[400px]">
           <RefreshCw className="w-10 h-10 text-cyan-400 animate-spin mb-3" />
           <p className="text-sm font-bold text-gray-300">Loading your AI Food Diary...</p>
@@ -283,7 +283,10 @@ export default function FoodDiary() {
   }
 
   return (
-    <DashboardLayout title={t('sidebar_food_diary')} subtitle="Direct AI-powered caloric and macronutrient food logging">
+    <DashboardLayout
+      title={t('food_diary_page_title') || t('sidebar_food_diary')}
+      subtitle={t('food_diary_subtitle') || "Direct AI-powered caloric and macronutrient food logging"}
+    >
       {alert.show && (
         <Alert
           type={alert.type}
@@ -333,12 +336,14 @@ export default function FoodDiary() {
           </div>
 
           <div className="flex-1 min-w-0">
-            <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight truncate">Daily Calorie Goal</h4>
+            <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight truncate">
+              {t('food_diary_daily_goal') || 'Daily Calorie Goal'}
+            </h4>
             <p className="text-[11px] sm:text-xs text-gray-400 mt-1 truncate">
-              Remaining: <strong className="text-cyan-300 font-bold">{Math.max(0, targetKcal - totalKcal)} kcal</strong>
+              {t('food_diary_remaining') || 'Remaining:'} <strong className="text-cyan-300 font-bold">{Math.max(0, targetKcal - totalKcal)} kcal</strong>
             </p>
             <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-extrabold text-cyan-300 shadow-inner">
-              <Zap className="w-3 h-3 text-cyan-400 shrink-0" /> {kcalPct}% Target
+              <Zap className="w-3 h-3 text-cyan-400 shrink-0" /> {kcalPct}% {t('food_diary_target_met') || 'Target Met'}
             </div>
           </div>
         </motion.div>
@@ -352,7 +357,9 @@ export default function FoodDiary() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
-              <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider">Protein</span>
+              <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider">
+                {t('food_diary_protein') || 'PROTEIN'}
+              </span>
             </div>
             <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalProtein)} / {targetProtein}g</span>
           </div>
@@ -380,7 +387,9 @@ export default function FoodDiary() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0" />
-              <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">Carbs</span>
+              <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">
+                {t('food_diary_carbs') || 'CARBS'}
+              </span>
             </div>
             <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalCarbs)} / {targetCarbs}g</span>
           </div>
@@ -408,7 +417,9 @@ export default function FoodDiary() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-rose-400 animate-pulse shrink-0" />
-              <span className="text-xs font-bold text-rose-300 uppercase tracking-wider">Fat</span>
+              <span className="text-xs font-bold text-rose-300 uppercase tracking-wider">
+                {t('food_diary_fat') || 'FAT'}
+              </span>
             </div>
             <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalFat)} / {targetFat}g</span>
           </div>
@@ -444,10 +455,10 @@ export default function FoodDiary() {
             </div>
             <div>
               <h3 className="text-base sm:text-lg font-black text-white leading-tight">
-                Direct Gemini AI Food Logger
+                {t('food_diary_logger_title') || 'Direct Gemini AI Food Logger'}
               </h3>
               <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold mt-0.5">
-                Type any dish or meal — AI automatically calculates Calories & Macros
+                {t('food_diary_logger_subtitle') || 'Type any dish or meal — AI automatically calculates Calories & Macros'}
               </p>
             </div>
           </div>
@@ -489,7 +500,7 @@ export default function FoodDiary() {
           {/* Main Food Input */}
           <div className="flex-1">
             <Input
-              placeholder="What did you eat? (e.g. Masala Dosa, 1 Apple, 250ml Milk)"
+              placeholder={t('food_diary_input_placeholder') || "What did you eat? (e.g. Masala Dosa, 1 Apple, 250ml Milk)"}
               value={foodInput}
               onChange={(e) => setFoodInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleDirectAILog()}
@@ -559,14 +570,14 @@ export default function FoodDiary() {
               className="gradient-bg text-white font-black shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 whitespace-nowrap px-5 sm:px-6 h-12 rounded-2xl flex-1 lg:flex-none cursor-pointer text-xs sm:text-sm"
             >
               <Sparkles className="w-4 h-4 text-amber-300 mr-1.5 animate-pulse shrink-0" />
-              <span>Calculate & Log</span>
+              <span>{t('food_diary_btn_calculate_log') || 'Calculate & Log'}</span>
             </Button>
 
             {/* Fine-Tuning Adjust Button */}
             <button
               type="button"
               onClick={handleOpenDetailModal}
-              title="Fine-tune macros manually before saving"
+              title={t('food_diary_tooltip_finetune') || "Fine-tune macros manually before saving"}
               className="w-12 h-12 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/15 text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer shrink-0 active:scale-95"
             >
               <Sliders className="w-5 h-5 text-cyan-400" />
@@ -579,16 +590,16 @@ export default function FoodDiary() {
         <div>
           <p className="text-xs font-bold text-gray-400 mb-2.5 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>Quick 1-Tap AI Logging Presets</span>
+            <span>{t('food_diary_presets_header') || 'Quick 1-Tap AI Logging Presets'}</span>
           </p>
           <div className="flex flex-wrap gap-2">
-            {POPULAR_PRESETS.map((preset) => (
+            {popularPresets.map((preset) => (
               <motion.button
-                key={preset.name}
+                key={preset.key}
                 type="button"
                 whileHover={{ scale: 1.04, y: -1 }}
                 whileTap={{ scale: 0.96 }}
-                onClick={() => handleDirectAILog(preset.name, preset.qty, preset.unit)}
+                onClick={() => handleDirectAILog(preset.queryName, preset.qty, preset.unit)}
                 disabled={loggingAI}
                 className="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shrink-0"
               >
@@ -630,7 +641,7 @@ export default function FoodDiary() {
                     <h3 className="text-sm sm:text-lg font-black text-white flex items-center gap-2 leading-tight truncate">
                       <span>{mt.label}</span>
                       <span className="text-[10px] sm:text-xs text-gray-400 font-bold bg-white/5 px-2 py-0.5 rounded-lg border border-white/10">
-                        {entries.length}
+                        {entries.length} {t('food_diary_items_count') || 'items'}
                       </span>
                     </h3>
                     <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 font-medium truncate">
@@ -670,7 +681,7 @@ export default function FoodDiary() {
                           <div className="min-w-0">
                             <p className="text-xs sm:text-sm font-extrabold text-white truncate">{entry.food_name}</p>
                             <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 truncate">
-                              Portion: <strong className="text-cyan-300 font-bold">{entry.quantity} {entry.unit || 'servings'}</strong> • P: {entry.protein}g • C: {entry.carbs}g • F: {entry.fat}g
+                              {t('food_diary_portion') || 'Portion:'} <strong className="text-cyan-300 font-bold">{entry.quantity} {entry.unit || 'servings'}</strong> • P: {entry.protein}g • C: {entry.carbs}g • F: {entry.fat}g
                             </p>
                           </div>
                         </div>
@@ -714,9 +725,11 @@ export default function FoodDiary() {
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-extrabold text-white leading-tight">
-                      Review & Fine-Tune AI Food Entry
+                      {t('food_diary_modal_title') || 'Review & Fine-Tune AI Food Entry'}
                     </h3>
-                    <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold">Gemini AI Calculated Breakdown</p>
+                    <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold">
+                      {t('food_diary_modal_subtitle') || 'Gemini AI Calculated Breakdown'}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -732,7 +745,7 @@ export default function FoodDiary() {
                 {/* Product Name */}
                 <div>
                   <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
-                    Food / Dish Name *
+                    {t('food_diary_modal_food_name') || 'Food / Dish Name'} *
                   </label>
                   <Input
                     placeholder="e.g. Masala Dosa, Chicken Curry"
@@ -746,7 +759,7 @@ export default function FoodDiary() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
-                      Calories (kcal) *
+                      {t('food_diary_modal_calories') || 'Calories (kcal)'} *
                     </label>
                     <Input
                       type="number"
@@ -758,7 +771,7 @@ export default function FoodDiary() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-1.5">
-                      Quantity
+                      {t('food_diary_modal_quantity') || 'Quantity'}
                     </label>
                     <Input
                       type="number"
@@ -773,7 +786,7 @@ export default function FoodDiary() {
                 {/* Measurement Unit Selector */}
                 <div>
                   <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
-                    Measurement Unit
+                    {t('food_diary_modal_unit') || 'Measurement Unit'}
                   </label>
                   <div className="grid grid-cols-4 gap-1.5">
                     {unitOptions.map((unit) => {
@@ -800,7 +813,7 @@ export default function FoodDiary() {
                 <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/10">
                   <div>
                     <label className="block text-[11px] font-bold text-cyan-300 uppercase mb-1">
-                      Protein (g)
+                      {t('food_diary_modal_protein') || 'Protein (g)'}
                     </label>
                     <Input
                       type="number"
@@ -812,7 +825,7 @@ export default function FoodDiary() {
                   </div>
                   <div>
                     <label className="block text-[11px] font-bold text-purple-300 uppercase mb-1">
-                      Carbs (g)
+                      {t('food_diary_modal_carbs') || 'Carbs (g)'}
                     </label>
                     <Input
                       type="number"
@@ -824,7 +837,7 @@ export default function FoodDiary() {
                   </div>
                   <div>
                     <label className="block text-[11px] font-bold text-rose-300 uppercase mb-1">
-                      Fat (g)
+                      {t('food_diary_modal_fat') || 'Fat (g)'}
                     </label>
                     <Input
                       type="number"
@@ -843,7 +856,7 @@ export default function FoodDiary() {
                     onClick={() => setShowDetailModal(false)}
                     className="w-1/3 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 cursor-pointer"
                   >
-                    Cancel
+                    {t('food_diary_modal_cancel') || 'Cancel'}
                   </button>
                   <Button
                     type="submit"
@@ -851,7 +864,7 @@ export default function FoodDiary() {
                     size="md"
                     className="w-2/3 py-3 gradient-bg text-white font-black rounded-2xl shadow-lg shadow-cyan-500/30"
                   >
-                    Log Food to Diary
+                    {t('food_diary_modal_submit') || 'Log Food to Diary'}
                   </Button>
                 </div>
               </form>

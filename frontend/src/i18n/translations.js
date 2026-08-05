@@ -24,6 +24,38 @@ export const LANGUAGES = [
 
 export const TRANSLATIONS = {
   "en": {
+    "food_diary_subtitle": "Direct AI-powered caloric and macronutrient food logging",
+    "food_diary_daily_goal": "Daily Calorie Goal",
+    "food_diary_target_met": "Target Met",
+    "food_diary_protein": "PROTEIN",
+    "food_diary_carbs": "CARBS",
+    "food_diary_fat": "FAT",
+    "food_diary_logger_title": "Direct Gemini AI Food Logger",
+    "food_diary_logger_subtitle": "Type any dish or meal — AI automatically calculates Calories & Macros",
+    "food_diary_input_placeholder": "What did you eat? (e.g. Masala Dosa, 1 Apple, 250ml Milk)",
+    "food_diary_btn_calculate_log": "Calculate & Log",
+    "food_diary_presets_header": "Quick 1-Tap AI Logging Presets",
+    "food_diary_preset_apple": "Apple",
+    "food_diary_preset_milk": "Whole Milk",
+    "food_diary_preset_rice": "Brown Rice",
+    "food_diary_preset_avocado": "Avocado",
+    "food_diary_preset_almonds": "Almonds",
+    "food_diary_preset_oatmeal": "Oatmeal Porridge",
+    "food_diary_items_count": "items",
+    "food_diary_portion": "Portion:",
+    "food_diary_modal_title": "Review & Fine-Tune AI Food Entry",
+    "food_diary_modal_subtitle": "Gemini AI Calculated Breakdown",
+    "food_diary_modal_food_name": "Food / Dish Name",
+    "food_diary_modal_calories": "Calories (kcal)",
+    "food_diary_modal_quantity": "Quantity",
+    "food_diary_modal_unit": "Measurement Unit",
+    "food_diary_modal_protein": "Protein (g)",
+    "food_diary_modal_carbs": "Carbs (g)",
+    "food_diary_modal_fat": "Fat (g)",
+    "food_diary_modal_cancel": "Cancel",
+    "food_diary_modal_submit": "Log Food to Diary",
+    "food_diary_tooltip_finetune": "Fine-tune macros manually before saving",
+
     "select_language": "Select Preferred Language",
     "choose_language_sub": "Choose your language to personalize your NutriAI experience",
     "continue_btn": "Continue to NutriAI",
@@ -598,6 +630,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "Save & Log Custom Product"
   },
   "hi": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -1172,6 +1205,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "sa": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -1746,6 +1780,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "as": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -2320,6 +2355,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "bn": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -2894,6 +2930,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "কাস্টম পণ্য সংরক্ষণ ও যোগ করুন"
   },
   "gu": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -3468,6 +3505,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "કસ્ટમ પ્રોડક્ટ સાચવો અને ઉમેરો"
   },
   "kn": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -4042,6 +4080,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ks": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -4616,6 +4655,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ml": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -5190,6 +5230,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "mr": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -5764,6 +5805,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पादन जतन करा"
   },
   "ne": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -6338,6 +6380,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "or": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -6912,6 +6955,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "pa": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -7486,6 +7530,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "sd": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -8060,6 +8105,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "कस्टम उत्पाद सहेजें और दर्ज करें"
   },
   "ta": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
@@ -8634,6 +8680,7 @@ export const TRANSLATIONS = {
     "food_diary_save_custom_btn": "சேமித்துச் சேர்க்கவும்"
   },
   "te": {
+
     "select_language": "अपनी पसंदीदा भाषा चुनें",
     "choose_language_sub": "अपने न्यूट्री-एआई अनुभव को वैयक्तिकृत करने के लिए भाषा चुनें",
     "continue_btn": "न्यूट्री-एआई शुरू करें",
