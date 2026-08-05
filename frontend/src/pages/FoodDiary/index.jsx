@@ -233,7 +233,8 @@ export default function FoodDiary() {
       loadDiary();
     } catch (err) {
       console.error('Save detail food error:', err);
-      setAlert({ show: true, type: 'error', message: t('food_diary_log_error') });
+      const msg = err?.response?.data?.detail || t('food_diary_log_error') || 'Failed to log food.';
+      setAlert({ show: true, type: 'error', message: msg });
     } finally {
       setLoggingAI(false);
     }
@@ -273,7 +274,7 @@ export default function FoodDiary() {
   if (loading) {
     return (
       <DashboardLayout title={t('sidebar_food_diary')}>
-        <div className="flex flex-col items-center justify-center min-h-[450px]">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
           <RefreshCw className="w-10 h-10 text-cyan-400 animate-spin mb-3" />
           <p className="text-sm font-bold text-gray-300">Loading your AI Food Diary...</p>
         </div>
@@ -297,17 +298,17 @@ export default function FoodDiary() {
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8 mt-2"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6 sm:mb-8 mt-2"
       >
         {/* Radial Calorie Progress Gauge Card */}
         <motion.div
           variants={cardVariants}
           whileHover={{ y: -3 }}
-          className="glass-card p-6 rounded-3xl border border-white/10 flex items-center gap-5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden lg:col-span-1"
+          className="glass-card p-5 sm:p-6 rounded-3xl border border-white/10 flex items-center gap-4 sm:gap-5 shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden sm:col-span-2 lg:col-span-1"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
 
-          <div className="relative w-24 h-24 shrink-0 flex items-center justify-center">
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 shrink-0 flex items-center justify-center">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
                 className="text-white/10 stroke-current"
@@ -326,18 +327,18 @@ export default function FoodDiary() {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
               <Flame className="w-4 h-4 text-amber-400 mb-0.5 animate-bounce" />
-              <span className="text-base font-black text-white leading-none">{totalKcal}</span>
+              <span className="text-sm sm:text-base font-black text-white leading-none">{totalKcal}</span>
               <span className="text-[9px] font-bold text-gray-400 uppercase mt-0.5">/ {targetKcal}</span>
             </div>
           </div>
 
-          <div className="flex-1">
-            <h4 className="text-sm font-extrabold text-white leading-tight">Daily Calorie Goal</h4>
-            <p className="text-xs text-gray-400 mt-1">
+          <div className="flex-1 min-w-0">
+            <h4 className="text-xs sm:text-sm font-extrabold text-white leading-tight truncate">Daily Calorie Goal</h4>
+            <p className="text-[11px] sm:text-xs text-gray-400 mt-1 truncate">
               Remaining: <strong className="text-cyan-300 font-bold">{Math.max(0, targetKcal - totalKcal)} kcal</strong>
             </p>
-            <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-extrabold text-cyan-300 shadow-inner">
-              <Zap className="w-3 h-3 text-cyan-400" /> {kcalPct}% Target Met
+            <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-extrabold text-cyan-300 shadow-inner">
+              <Zap className="w-3 h-3 text-cyan-400 shrink-0" /> {kcalPct}% Target
             </div>
           </div>
         </motion.div>
@@ -346,16 +347,16 @@ export default function FoodDiary() {
         <motion.div
           variants={cardVariants}
           whileHover={{ y: -3 }}
-          className="glass-card p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
+          className="glass-card p-4 sm:p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0" />
               <span className="text-xs font-bold text-cyan-300 uppercase tracking-wider">Protein</span>
             </div>
-            <span className="text-[11px] text-gray-400 font-bold">{Math.round(totalProtein)} / {targetProtein}g</span>
+            <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalProtein)} / {targetProtein}g</span>
           </div>
-          <p className="text-3xl font-black text-white my-2.5">
+          <p className="text-2xl sm:text-3xl font-black text-white my-2">
             {Math.round(totalProtein)} <span className="text-xs font-medium text-gray-400">g</span>
           </p>
           <div>
@@ -374,16 +375,16 @@ export default function FoodDiary() {
         <motion.div
           variants={cardVariants}
           whileHover={{ y: -3 }}
-          className="glass-card p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
+          className="glass-card p-4 sm:p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0" />
               <span className="text-xs font-bold text-purple-300 uppercase tracking-wider">Carbs</span>
             </div>
-            <span className="text-[11px] text-gray-400 font-bold">{Math.round(totalCarbs)} / {targetCarbs}g</span>
+            <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalCarbs)} / {targetCarbs}g</span>
           </div>
-          <p className="text-3xl font-black text-white my-2.5">
+          <p className="text-2xl sm:text-3xl font-black text-white my-2">
             {Math.round(totalCarbs)} <span className="text-xs font-medium text-gray-400">g</span>
           </p>
           <div>
@@ -402,16 +403,16 @@ export default function FoodDiary() {
         <motion.div
           variants={cardVariants}
           whileHover={{ y: -3 }}
-          className="glass-card p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
+          className="glass-card p-4 sm:p-5 rounded-3xl border border-white/10 flex flex-col justify-between shadow-xl relative overflow-hidden group"
         >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-rose-400 animate-pulse" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-rose-400 animate-pulse shrink-0" />
               <span className="text-xs font-bold text-rose-300 uppercase tracking-wider">Fat</span>
             </div>
-            <span className="text-[11px] text-gray-400 font-bold">{Math.round(totalFat)} / {targetFat}g</span>
+            <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold">{Math.round(totalFat)} / {targetFat}g</span>
           </div>
-          <p className="text-3xl font-black text-white my-2.5">
+          <p className="text-2xl sm:text-3xl font-black text-white my-2">
             {Math.round(totalFat)} <span className="text-xs font-medium text-gray-400">g</span>
           </p>
           <div>
@@ -433,77 +434,80 @@ export default function FoodDiary() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="glass-card p-6 sm:p-8 rounded-3xl border border-cyan-500/30 mb-8 shadow-[0_15px_40px_rgba(0,0,0,0.6)] relative overflow-hidden"
+        className="glass-card p-4 sm:p-6 lg:p-8 rounded-3xl border border-cyan-500/30 mb-8 shadow-[0_15px_40px_rgba(0,0,0,0.6)] relative overflow-hidden"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        {/* Logger Header & Responsive Mobile Meal Tabs */}
+        <div className="flex flex-col gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl gradient-bg flex items-center justify-center text-white shadow-lg shadow-cyan-500/25 shrink-0">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl gradient-bg flex items-center justify-center text-white shadow-lg shadow-cyan-500/25 shrink-0">
               <Sparkles className="w-5 h-5 text-amber-300" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-white leading-tight">
+              <h3 className="text-base sm:text-lg font-black text-white leading-tight">
                 Direct Gemini AI Food Logger
               </h3>
-              <p className="text-xs text-cyan-400 font-semibold mt-0.5">
+              <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold mt-0.5">
                 Type any dish or meal — AI automatically calculates Calories & Macros
               </p>
             </div>
           </div>
 
-          {/* Animated Meal Category Selector Tabs */}
-          <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10 self-start sm:self-auto">
-            {mealTypes.map((mt) => {
-              const Icon = mt.icon;
-              const active = selectedMeal === mt.value;
-              return (
-                <button
-                  key={mt.value}
-                  type="button"
-                  onClick={() => setSelectedMeal(mt.value)}
-                  className={`relative px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer select-none ${
-                    active ? 'text-white' : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {active && (
-                    <motion.div
-                      layoutId="activeMealTab"
-                      className="absolute inset-0 gradient-bg rounded-xl shadow-md shadow-cyan-500/30"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
-                  )}
-                  <Icon className={`w-3.5 h-3.5 relative z-10 ${active ? 'text-white' : mt.color}`} />
-                  <span className="relative z-10">{mt.label}</span>
-                </button>
-              );
-            })}
+          {/* Fully Scrollable & Responsive Meal Category Selector Tabs */}
+          <div className="w-full overflow-x-auto pb-1 custom-scrollbar">
+            <div className="inline-flex bg-white/5 p-1 rounded-2xl border border-white/10 gap-1 min-w-full sm:min-w-0">
+              {mealTypes.map((mt) => {
+                const Icon = mt.icon;
+                const active = selectedMeal === mt.value;
+                return (
+                  <button
+                    key={mt.value}
+                    type="button"
+                    onClick={() => setSelectedMeal(mt.value)}
+                    className={`relative px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer select-none whitespace-nowrap flex-1 sm:flex-initial min-w-[95px] sm:min-w-0 ${
+                      active ? 'text-white' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {active && (
+                      <motion.div
+                        layoutId="activeMealTab"
+                        className="absolute inset-0 gradient-bg rounded-xl shadow-md shadow-cyan-500/30"
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
+                    <Icon className={`w-3.5 h-3.5 relative z-10 shrink-0 ${active ? 'text-white' : mt.color}`} />
+                    <span className="relative z-10">{mt.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Interactive Food Input Bar & Quantity Stepper */}
+        {/* Interactive Food Input Bar & Portion Stepper */}
         <div className="flex flex-col lg:flex-row gap-3 mb-6">
           
-          {/* Food Input Box */}
+          {/* Main Food Input */}
           <div className="flex-1">
             <Input
-              placeholder="What did you eat? (e.g., 2 Boiled Eggs, Masala Dosa, 1 Apple, Chicken Curry & 2 Roti)"
+              placeholder="What did you eat? (e.g. Masala Dosa, 1 Apple, 250ml Milk)"
               value={foodInput}
               onChange={(e) => setFoodInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleDirectAILog()}
             />
           </div>
 
-          {/* Quantity Stepper & Unit Options Row */}
-          <div className="flex gap-2">
+          {/* Responsive Stepper & Unit Selector Row */}
+          <div className="grid grid-cols-2 gap-2 w-full lg:w-auto">
             
             {/* Quantity Stepper */}
-            <div className="flex items-center bg-white/5 border border-white/15 rounded-2xl p-1 shrink-0">
+            <div className="flex items-center justify-between bg-white/5 border border-white/15 rounded-2xl p-1 w-full">
               <button
                 type="button"
                 onClick={() => {
                   const curr = Number(inputQuantity) || 1;
                   setInputQuantity(String(Math.max(1, curr - 1)));
                 }}
-                className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none"
+                className="w-8 h-9 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none shrink-0"
               >
                 -
               </button>
@@ -518,7 +522,7 @@ export default function FoodDiary() {
                 onBlur={() => {
                   if (!inputQuantity || Number(inputQuantity) <= 0) setInputQuantity('1');
                 }}
-                className="w-12 h-9 text-center bg-transparent text-sm font-black text-white focus:outline-none"
+                className="w-10 sm:w-12 h-9 text-center bg-transparent text-xs sm:text-sm font-black text-white focus:outline-none"
               />
               <button
                 type="button"
@@ -526,7 +530,7 @@ export default function FoodDiary() {
                   const curr = Number(inputQuantity) || 0;
                   setInputQuantity(String(curr + 1));
                 }}
-                className="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none"
+                className="w-8 h-9 sm:w-9 sm:h-9 rounded-xl bg-white/5 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none shrink-0"
               >
                 +
               </button>
@@ -536,7 +540,7 @@ export default function FoodDiary() {
             <select
               value={inputUnit}
               onChange={(e) => setInputUnit(e.target.value)}
-              className="h-12 bg-[#0d1322] border border-white/15 rounded-2xl px-3.5 text-xs font-bold text-white focus:outline-none focus:border-cyan-400 cursor-pointer shadow-inner shrink-0"
+              className="h-12 bg-[#0d1322] border border-white/15 rounded-2xl px-3 text-xs font-bold text-white focus:outline-none focus:border-cyan-400 cursor-pointer shadow-inner w-full"
             >
               {unitOptions.map((u) => (
                 <option key={u.code} value={u.code} className="bg-[#0f172a] text-white">
@@ -546,15 +550,15 @@ export default function FoodDiary() {
             </select>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-2">
+          {/* Action Buttons Row */}
+          <div className="flex gap-2 w-full lg:w-auto">
             <Button
               onClick={() => handleDirectAILog()}
               loading={loggingAI}
               size="md"
-              className="gradient-bg text-white font-black shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 whitespace-nowrap px-6 h-12 rounded-2xl flex-1 lg:flex-none cursor-pointer"
+              className="gradient-bg text-white font-black shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 whitespace-nowrap px-5 sm:px-6 h-12 rounded-2xl flex-1 lg:flex-none cursor-pointer text-xs sm:text-sm"
             >
-              <Sparkles className="w-4 h-4 text-amber-300 mr-2 animate-pulse" />
+              <Sparkles className="w-4 h-4 text-amber-300 mr-1.5 animate-pulse shrink-0" />
               <span>Calculate & Log</span>
             </Button>
 
@@ -574,7 +578,7 @@ export default function FoodDiary() {
         {/* Quick 1-Tap Preset Food Chips */}
         <div>
           <p className="text-xs font-bold text-gray-400 mb-2.5 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>Quick 1-Tap AI Logging Presets</span>
           </p>
           <div className="flex flex-wrap gap-2">
@@ -586,11 +590,11 @@ export default function FoodDiary() {
                 whileTap={{ scale: 0.96 }}
                 onClick={() => handleDirectAILog(preset.name, preset.qty, preset.unit)}
                 disabled={loggingAI}
-                className="px-3.5 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 hover:text-white transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 shadow-md"
+                className="px-3 py-2 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-gray-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-md shrink-0"
               >
                 <span>{preset.icon}</span>
                 <span>{preset.name}</span>
-                <span className="text-[10px] text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-lg font-extrabold">
+                <span className="text-[10px] text-cyan-300 bg-cyan-500/10 border border-cyan-500/20 px-1.5 py-0.5 rounded-lg font-extrabold">
                   {preset.qty} {preset.unit}
                 </span>
               </motion.button>
@@ -600,7 +604,7 @@ export default function FoodDiary() {
       </motion.div>
 
       {/* 🍽️ Logged Meal Category Section Cards */}
-      <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
+      <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-4 sm:space-y-6">
         {mealTypes.map((mt) => {
           const Icon = mt.icon;
           const entries = groupedDiary[mt.value] || [];
@@ -614,22 +618,22 @@ export default function FoodDiary() {
             <motion.div
               key={mt.value}
               variants={cardVariants}
-              className={`glass-card rounded-3xl p-6 sm:p-7 border ${mt.border} bg-gradient-to-r ${mt.gradient} shadow-2xl relative overflow-hidden`}
+              className={`glass-card rounded-3xl p-4 sm:p-6 lg:p-7 border ${mt.border} bg-gradient-to-r ${mt.gradient} shadow-2xl relative overflow-hidden`}
             >
               {/* Meal Section Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-11 h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner">
-                    <Icon className={`w-6 h-6 ${mt.color}`} />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner shrink-0">
+                    <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${mt.color}`} />
                   </div>
-                  <div>
-                    <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2 leading-tight">
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-lg font-black text-white flex items-center gap-2 leading-tight truncate">
                       <span>{mt.label}</span>
-                      <span className="text-xs text-gray-400 font-bold bg-white/5 px-2.5 py-0.5 rounded-lg border border-white/10">
-                        {entries.length} items
+                      <span className="text-[10px] sm:text-xs text-gray-400 font-bold bg-white/5 px-2 py-0.5 rounded-lg border border-white/10">
+                        {entries.length}
                       </span>
                     </h3>
-                    <p className="text-xs text-gray-400 mt-1 font-medium">
+                    <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 font-medium truncate">
                       P: <strong className="text-cyan-300 font-bold">{Math.round(mealProtein)}g</strong> • C:{' '}
                       <strong className="text-purple-300 font-bold">{Math.round(mealCarbs)}g</strong> • F:{' '}
                       <strong className="text-rose-300 font-bold">{Math.round(mealFat)}g</strong>
@@ -637,19 +641,19 @@ export default function FoodDiary() {
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-xl font-black text-amber-400 tracking-tight">{Math.round(mealKcal)}</span>
-                  <span className="text-xs text-gray-400 font-bold ml-1">kcal</span>
+                <div className="text-right shrink-0">
+                  <span className="text-base sm:text-xl font-black text-amber-400 tracking-tight">{Math.round(mealKcal)}</span>
+                  <span className="text-[10px] sm:text-xs text-gray-400 font-bold ml-1">kcal</span>
                 </div>
               </div>
 
               {/* Logged Food Entries List */}
               {entries.length === 0 ? (
-                <div className="py-7 text-center text-gray-500 text-xs italic bg-white/[0.01] rounded-2xl border border-dashed border-white/10">
+                <div className="py-6 sm:py-7 text-center text-gray-500 text-xs italic bg-white/[0.01] rounded-2xl border border-dashed border-white/10">
                   {t('food_diary_no_foods')}
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-2.5 sm:space-y-3">
                   <AnimatePresence>
                     {entries.map((entry) => (
                       <motion.div
@@ -657,22 +661,22 @@ export default function FoodDiary() {
                         initial={{ opacity: 0, x: -15 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 15 }}
-                        className="flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group shadow-md"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group gap-2 sm:gap-4 shadow-md"
                       >
-                        <div className="flex items-center gap-3.5 min-w-0">
-                          <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 shadow-inner">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 shadow-inner">
                             <Utensils className="w-4 h-4" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-extrabold text-white truncate">{entry.food_name}</p>
-                            <p className="text-xs text-gray-400 mt-0.5">
+                            <p className="text-xs sm:text-sm font-extrabold text-white truncate">{entry.food_name}</p>
+                            <p className="text-[11px] sm:text-xs text-gray-400 mt-0.5 truncate">
                               Portion: <strong className="text-cyan-300 font-bold">{entry.quantity} {entry.unit || 'servings'}</strong> • P: {entry.protein}g • C: {entry.carbs}g • F: {entry.fat}g
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3.5 shrink-0">
-                          <span className="text-sm font-black text-amber-400 bg-amber-500/10 px-3 py-1 rounded-xl border border-amber-500/20 shadow-inner">
+                        <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                          <span className="text-xs sm:text-sm font-black text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20 shadow-inner">
                             {entry.calories} kcal
                           </span>
                           <button
@@ -701,24 +705,24 @@ export default function FoodDiary() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-lg glass-strong border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_0_60px_rgba(0,212,255,0.25)] my-auto"
+              className="relative w-full max-w-lg glass-strong border border-cyan-500/30 rounded-3xl p-5 sm:p-8 shadow-[0_0_60px_rgba(0,212,255,0.25)] my-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
-              <div className="flex items-center justify-between mb-5 pb-4 border-b border-white/10">
+              <div className="flex items-center justify-between mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl gradient-bg flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
-                    <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl gradient-bg flex items-center justify-center text-white shadow-lg shadow-cyan-500/20 shrink-0">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 animate-pulse" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-extrabold text-white leading-tight">
+                    <h3 className="text-base sm:text-lg font-extrabold text-white leading-tight">
                       Review & Fine-Tune AI Food Entry
                     </h3>
-                    <p className="text-xs text-cyan-400 font-semibold">Gemini AI Calculated Breakdown</p>
+                    <p className="text-[11px] sm:text-xs text-cyan-400 font-semibold">Gemini AI Calculated Breakdown</p>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowDetailModal(false)}
-                  className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 cursor-pointer"
+                  className="text-gray-400 hover:text-white p-2 rounded-full bg-white/5 hover:bg-white/10 cursor-pointer shrink-0"
                 >
                   ✕
                 </button>
