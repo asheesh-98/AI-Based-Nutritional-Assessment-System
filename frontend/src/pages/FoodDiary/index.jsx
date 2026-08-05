@@ -33,11 +33,9 @@ const cardVariants = {
 
 // Quick 1-tap presets for popular food items
 const POPULAR_PRESETS = [
-  { name: 'Boiled Egg', qty: 1, unit: 'pcs', icon: '🥚' },
   { name: 'Apple', qty: 1, unit: 'pcs', icon: '🍎' },
   { name: 'Whole Milk', qty: 250, unit: 'ml', icon: '🥛' },
   { name: 'Brown Rice', qty: 150, unit: 'g', icon: '🍚' },
-  { name: 'Chicken Breast', qty: 150, unit: 'g', icon: '🍗' },
   { name: 'Avocado', qty: 1, unit: 'pcs', icon: '🥑' },
   { name: 'Almonds', qty: 30, unit: 'g', icon: '🥜' },
   { name: 'Oatmeal Porridge', qty: 1, unit: 'cups', icon: '🥣' },
