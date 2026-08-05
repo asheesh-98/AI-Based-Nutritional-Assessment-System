@@ -101,7 +101,7 @@ export default function AdminDashboard() {
               <RefreshCw className="w-4 h-4 text-cyan-400" /> Refresh Telemetry
             </button>
             <Link
-              to="/admin/food-database"
+              to="/admin/foods"
               className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white gradient-bg shadow-lg shadow-cyan-500/25 hover:scale-[1.02] transition-all"
             >
               <Database className="w-4 h-4" /> Food Database
