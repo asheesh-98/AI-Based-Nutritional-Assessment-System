@@ -35,17 +35,16 @@ def init_db():
     import backend.app.models  # noqa: F401
     Base.metadata.create_all(bind=engine)
 
-    # Safe auto-migration for schema updates
+    # Safe auto-migration for schema updates across SQLite & PostgreSQL
     with engine.connect() as conn:
-        for col, col_type in [("medical_conditions", "VARCHAR(200)"), ("allergies", "VARCHAR(200)")]:
+        for query in [
+            "ALTER TABLE health_profiles ADD COLUMN medical_conditions VARCHAR(200)",
+            "ALTER TABLE health_profiles ADD COLUMN allergies VARCHAR(200)",
+            "ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)",
+            "ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)",
+        ]:
             try:
-                conn.execute(text(f"ALTER TABLE health_profiles ADD COLUMN {col} {col_type}"))
+                conn.execute(text(query))
                 conn.commit()
             except Exception:
                 pass
-
-        try:
-            conn.execute(text("ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)"))
-            conn.commit()
-        except Exception:
-            pass

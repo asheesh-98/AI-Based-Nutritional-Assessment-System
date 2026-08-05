@@ -66,14 +66,51 @@ def log_food_entry(
     current_user: User = Depends(get_current_user),
 ):
     """Log a food entry in the user's diary."""
+    data = payload.model_dump()
     entry = FoodDiary(
         user_id=current_user.id,
-        **payload.model_dump(),
+        **data,
     )
     db.add(entry)
-    db.commit()
-    db.refresh(entry)
-    return entry
+    try:
+        db.commit()
+        db.refresh(entry)
+        return entry
+    except Exception:
+        db.rollback()
+        # Attempt schema auto-migration for unit column on live DB connection
+        try:
+            db.execute(sa_func.text("ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)"))
+            db.commit()
+        except Exception:
+            try:
+                db.execute(sa_func.text("ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)"))
+                db.commit()
+            except Exception:
+                db.rollback()
+
+        # Retry with unit
+        try:
+            entry = FoodDiary(
+                user_id=current_user.id,
+                **data,
+            )
+            db.add(entry)
+            db.commit()
+            db.refresh(entry)
+            return entry
+        except Exception:
+            db.rollback()
+            # Final fallback without unit field if column cannot be added
+            data_no_unit = {k: v for k, v in data.items() if k != "unit"}
+            entry = FoodDiary(
+                user_id=current_user.id,
+                **data_no_unit,
+            )
+            db.add(entry)
+            db.commit()
+            db.refresh(entry)
+            return entry
 
 
 @router.get("/api/food-diary", response_model=List[FoodDiaryResponse])
