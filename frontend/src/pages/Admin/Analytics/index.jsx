@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
-  BarChart, Bar, Cell, PieChart, Pie, Legend
+  BarChart, Bar, Cell, PieChart, Pie
 } from 'recharts';
 import {
   TrendingUp, Users, Activity, Sparkles, Cpu, Zap, ShieldCheck,
-  BarChart3, RefreshCw, Layers, PieChart as PieIcon, ArrowUpRight
+  BarChart3, RefreshCw, PieChart as PieIcon, ArrowUpRight
 } from 'lucide-react';
 import adminService from '../../../services/adminService';
 import { PageLoader } from '../../../components/common/Loader';
@@ -15,7 +15,7 @@ import Alert from '../../../components/common/Alert';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
-const DEFICIENCY_BAR_COLORS = ['#f43f5e', '#06b6d4', '#a855f7', '#f59e0b', '#10b981', '#3b82f6'];
+const DEFICIENCY_BAR_COLORS = ['#f43f5e', '#0284c7', '#8b5cf6', '#f59e0b', '#10b981', '#6366f1'];
 
 const deficiencyPrevalence = [
   { nutrient: 'Iron Anemia', count: 342, percentage: 38 },
@@ -29,7 +29,7 @@ const deficiencyPrevalence = [
 const dietDistribution = [
   { name: 'Vegetarian', value: 45, color: '#10b981' },
   { name: 'Non-Vegetarian', value: 38, color: '#f43f5e' },
-  { name: 'Vegan', value: 17, color: '#06b6d4' },
+  { name: 'Vegan', value: 17, color: '#0284c7' },
 ];
 
 const modelMetrics = [
@@ -81,7 +81,7 @@ export default function AdminAnalytics() {
       ];
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full pb-12 overflow-x-hidden">
+    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full pb-12 overflow-x-hidden text-[#0a192f]">
       
       {/* 🌟 Hero Analytics Header Banner */}
       <motion.div
@@ -198,19 +198,19 @@ export default function AdminAnalytics() {
         </motion.div>
 
         {/* Scan Velocity */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-rose-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-rose-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-400">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
               <Activity className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
               High Traffic
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">1,420</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Weekly Scan Velocity</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Scans & photo estimations</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">1,420</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Weekly Scan Velocity</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Scans & photo estimations</p>
           </div>
         </motion.div>
       </motion.div>
@@ -222,15 +222,15 @@ export default function AdminAnalytics() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-white/10 flex flex-col justify-between"
+          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs flex flex-col justify-between"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-[#0284c7]" />
                 User Registrations vs. Scan Volume
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">Platform adoption velocity over time</p>
+              <p className="text-xs text-slate-500 font-semibold mt-0.5">Platform adoption velocity over time</p>
             </div>
           </div>
 
@@ -239,28 +239,30 @@ export default function AdminAnalytics() {
               <AreaChart data={growthData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="analyticsUsers" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#0284c7" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#0284c7" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="analyticsScans" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="date" stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#cbd5e1',
                     borderRadius: '16px',
-                    color: '#fff',
-                    fontSize: '12px'
+                    color: '#0a192f',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                   }}
                 />
-                <Area type="monotone" dataKey="Scans" stroke="#a855f7" fillOpacity={1} fill="url(#analyticsScans)" strokeWidth={2.5} />
-                <Area type="monotone" dataKey="Users" stroke="#06b6d4" fillOpacity={1} fill="url(#analyticsUsers)" strokeWidth={2.5} />
+                <Area type="monotone" dataKey="Scans" stroke="#8b5cf6" fillOpacity={1} fill="url(#analyticsScans)" strokeWidth={2.5} />
+                <Area type="monotone" dataKey="Users" stroke="#0284c7" fillOpacity={1} fill="url(#analyticsUsers)" strokeWidth={2.5} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -271,31 +273,33 @@ export default function AdminAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-white/10 flex flex-col justify-between"
+          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs flex flex-col justify-between"
         >
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-rose-400" />
+              <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-rose-600" />
                 Micronutrient Deficiency Risk Prevalence
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">Most common clinical deficiencies detected</p>
+              <p className="text-xs text-slate-500 font-semibold mt-0.5">Most common clinical deficiencies detected</p>
             </div>
           </div>
 
           <div className="h-[300px] w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={deficiencyPrevalence} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="nutrient" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="nutrient" stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#cbd5e1',
                     borderRadius: '16px',
-                    color: '#fff',
-                    fontSize: '12px'
+                    color: '#0a192f',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                   }}
                 />
                 <Bar dataKey="count" radius={[8, 8, 0, 0]}>
@@ -317,14 +321,14 @@ export default function AdminAnalytics() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl border border-white/10 flex flex-col justify-between"
+          className="glass-card p-5 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-xs flex flex-col justify-between"
         >
           <div className="mb-4">
-            <h3 className="text-lg font-extrabold text-white tracking-tight flex items-center gap-2">
-              <PieIcon className="w-5 h-5 text-emerald-400" />
+            <h3 className="text-lg font-black text-[#0a192f] tracking-tight flex items-center gap-2">
+              <PieIcon className="w-5 h-5 text-emerald-600" />
               Dietary Preference Share
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">Vegetarian, Non-Veg, and Vegan user demographics</p>
+            <p className="text-xs text-slate-500 font-semibold mt-0.5">Vegetarian, Non-Veg, and Vegan user demographics</p>
           </div>
 
           <div className="h-[220px] w-full flex items-center justify-center">
@@ -345,10 +349,13 @@ export default function AdminAnalytics() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#cbd5e1',
                     borderRadius: '12px',
-                    fontSize: '12px'
+                    color: '#0a192f',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.08)'
                   }}
                 />
               </PieChart>
@@ -357,12 +364,12 @@ export default function AdminAnalytics() {
 
           <div className="space-y-2 pt-2">
             {dietDistribution.map((item) => (
-              <div key={item.name} className="flex items-center justify-between text-xs font-semibold">
+              <div key={item.name} className="flex items-center justify-between text-xs font-bold">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-slate-300">{item.name}</span>
+                  <span className="text-slate-700">{item.name}</span>
                 </div>
-                <span className="text-white font-bold">{item.value}%</span>
+                <span className="text-[#0a192f] font-black">{item.value}%</span>
               </div>
             ))}
           </div>
@@ -373,16 +380,16 @@ export default function AdminAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl lg:col-span-2 border border-white/10 overflow-hidden"
+          className="glass-card p-5 sm:p-8 rounded-3xl lg:col-span-2 border border-slate-200 bg-white shadow-xs overflow-hidden"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-cyan-500/10 text-cyan-400">
+              <div className="p-2.5 rounded-2xl bg-sky-50 text-[#0284c7]">
                 <Cpu className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">Machine Learning Model Telemetry</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Real-time model accuracy, latency, and status monitoring</p>
+                <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">Machine Learning Model Telemetry</h3>
+                <p className="text-xs text-slate-500 font-semibold mt-0.5">Real-time model accuracy, latency, and status monitoring</p>
               </div>
             </div>
           </div>
@@ -390,26 +397,26 @@ export default function AdminAnalytics() {
           <div className="overflow-x-auto custom-scrollbar -mx-5 px-5 sm:mx-0 sm:px-0">
             <table className="w-full min-w-[600px] text-xs sm:text-sm text-left">
               <thead>
-                <tr className="border-b border-white/10 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
-                  <th className="pb-3 px-4">Model Engine</th>
-                  <th className="pb-3 px-4">Task Description</th>
-                  <th className="pb-3 px-4">Accuracy</th>
-                  <th className="pb-3 px-4">Latency</th>
-                  <th className="pb-3 px-4 text-right">Health Status</th>
+                <tr className="bg-slate-50 text-slate-600 font-black uppercase text-[11px] tracking-wider border-b border-slate-200">
+                  <th className="py-3 px-4 rounded-l-xl">Model Engine</th>
+                  <th className="py-3 px-4">Task Description</th>
+                  <th className="py-3 px-4">Accuracy</th>
+                  <th className="py-3 px-4">Latency</th>
+                  <th className="py-3 px-4 text-right rounded-r-xl">Health Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-slate-100">
                 {modelMetrics.map((m) => (
-                  <tr key={m.model} className="hover:bg-white/5 transition-all">
-                    <td className="py-4 px-4 font-bold text-white flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <tr key={m.model} className="hover:bg-sky-50/50 transition-all">
+                    <td className="py-4 px-4 font-black text-[#0a192f] flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-[#0284c7] shrink-0" />
                       {m.model}
                     </td>
-                    <td className="py-4 px-4 text-slate-300 font-medium">{m.type}</td>
-                    <td className="py-4 px-4 font-extrabold text-emerald-400">{m.accuracy}</td>
-                    <td className="py-4 px-4 font-bold text-cyan-400">{m.latency}</td>
+                    <td className="py-4 px-4 text-slate-700 font-bold">{m.type}</td>
+                    <td className="py-4 px-4 font-black text-emerald-600">{m.accuracy}</td>
+                    <td className="py-4 px-4 font-black text-[#0284c7]">{m.latency}</td>
                     <td className="py-4 px-4 text-right">
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-bold text-emerald-400">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-black text-emerald-600">
                         ● {m.status}
                       </span>
                     </td>
