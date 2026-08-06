@@ -80,46 +80,46 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden gradient-border shadow-[0_12px_40px_rgba(0,0,0,0.5)] rounded-3xl"
+          className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-md rounded-3xl bg-white/95 border border-sky-200/90"
         >
-          {/* Ambient Background Glow Spheres */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-500/20 via-cyan-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+          {/* Ambient Soft Sky Glow Orbs */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/40 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="max-w-2xl">
               <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-xs font-bold text-cyan-300 shadow-inner">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-black text-[#0284c7]">
+                  <Sparkles className="w-3.5 h-3.5 text-[#0284c7]" />
                   {t('dashboard_good') + ' '}{new Date().getHours() < 12 ? t('dashboard_morning') : new Date().getHours() < 18 ? t('dashboard_afternoon') : t('dashboard_evening')}
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-black text-emerald-400 shadow-inner">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-black text-emerald-600">
                   {t('dashboard_health_streak')}
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3 break-words">
-                {t('dashboard_welcome_back') + ' '}<span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-300 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0a192f] tracking-tight mb-3 break-words">
+                {t('dashboard_welcome_back') + ' '}<span className="bg-gradient-to-r from-[#0284c7] via-indigo-600 to-emerald-600 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
               </h2>
 
-              <p className="text-slate-300 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
-                {t('dashboard_metabolic_prefix') + ' '}<span className="text-cyan-400 font-bold">{t('dashboard_metabolic_highlight')}</span>{' ' + t('dashboard_metabolic_suffix')}
+              <p className="text-slate-600 text-xs sm:text-base max-w-xl font-semibold leading-relaxed">
+                {t('dashboard_metabolic_prefix') + ' '}<span className="text-[#0284c7] font-black">{t('dashboard_metabolic_highlight')}</span>{' ' + t('dashboard_metabolic_suffix')}
               </p>
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
               <Link
                 to="/prediction"
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-white bg-gradient-to-r from-[#0077ff] to-cyan-500 shadow-lg shadow-blue-500/30 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 transition-all"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] shadow-md transition-all"
               >
-                <Activity className="w-4 h-4" />
+                <Activity className="w-4 h-4 text-sky-400" />
                 {t('dashboard_btn_run_ai')}
               </Link>
               <Link
                 to="/meal-plan"
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-md"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all shadow-xs"
               >
-                <Utensils className="w-4 h-4 text-emerald-400" />
+                <Utensils className="w-4 h-4 text-emerald-600" />
                 {t('dashboard_btn_meal_plan')}
               </Link>
             </div>
@@ -139,82 +139,82 @@ export default function Dashboard() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
           >
             {/* Card 1: Nutrition Score */}
-            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group hover:border-cyan-500/30 transition-all">
+            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group border border-slate-200/80 bg-white hover:border-sky-300 transition-all shadow-xs">
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7] shrink-0">
                   <Activity className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-bold text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+                <span className="text-xs font-black text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
                   {t('dashboard_nutrition_score_badge')}
                 </span>
               </div>
               <div className="flex items-baseline justify-between">
                 <div>
-                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_nutrition_score_label')}</p>
-                  <p className="text-3xl sm:text-4xl font-black text-white">{data?.nutrition_score || 82}<span className="text-sm font-medium text-slate-400">/100</span></p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_nutrition_score_label')}</p>
+                  <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{data?.nutrition_score || 82}<span className="text-sm font-medium text-slate-400">/100</span></p>
                 </div>
                 <div className="w-12 h-12 relative flex items-center justify-center">
                   <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                    <path className="text-white/10" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-cyan-400" strokeDasharray={`${data?.nutrition_score || 82}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-[#0284c7]" strokeDasharray={`${data?.nutrition_score || 82}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   </svg>
                 </div>
               </div>
             </motion.div>
 
             {/* Card 2: Deficiency Risks */}
-            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group hover:border-amber-500/30 transition-all">
+            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group border border-slate-200/80 bg-white hover:border-amber-300 transition-all shadow-xs">
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shrink-0">
                   <AlertTriangle className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+                <span className="text-xs font-black text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
                   {t('dashboard_deficiency_risks_badge')}
                 </span>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_deficiency_risks_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-white">{data?.deficiency_count ?? 3} <span className="text-xs font-medium text-slate-400">{t('dashboard_nutrients_tracked')}</span></p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_deficiency_risks_label')}</p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{data?.deficiency_count ?? 3} <span className="text-xs font-medium text-slate-400">{t('dashboard_nutrients_tracked')}</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
-                  <div className="h-1.5 flex-1 bg-amber-500/30 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-400 rounded-full" style={{ width: '60%' }} />
+                  <div className="h-1.5 flex-1 bg-amber-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500 rounded-full" style={{ width: '60%' }} />
                   </div>
-                  <span className="text-[10px] font-bold text-slate-400">{t('dashboard_mild_risk')}</span>
+                  <span className="text-[10px] font-black text-amber-600">{t('dashboard_mild_risk')}</span>
                 </div>
               </div>
             </motion.div>
 
             {/* Card 3: Daily Calories Meter */}
-            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group border border-slate-200/80 bg-white hover:border-emerald-300 transition-all shadow-xs">
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
                   <Flame className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
                   {t('dashboard_daily_calories_target')}
                 </span>
               </div>
               <div>
-                <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">{t('dashboard_daily_calories_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-white">{(data?.daily_calories || 1850).toLocaleString()} <span className="text-xs font-medium text-slate-400">kcal</span></p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_daily_calories_label')}</p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{(data?.daily_calories || 1850).toLocaleString()} <span className="text-xs font-medium text-slate-400">kcal</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
-                  <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-400 rounded-full" style={{ width: `${Math.min(100, ((data?.daily_calories || 1850) / 2000) * 100)}%` }} />
+                  <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min(100, ((data?.daily_calories || 1850) / 2000) * 100)}%` }} />
                   </div>
-                  <span className="text-[10px] font-bold text-emerald-400">{Math.round(((data?.daily_calories || 1850) / 2000) * 100)}%</span>
+                  <span className="text-[10px] font-black text-emerald-600">{Math.round(((data?.daily_calories || 1850) / 2000) * 100)}%</span>
                 </div>
               </div>
             </motion.div>
 
             {/* Card 4: Interactive Hydration Tracker */}
-            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group hover:border-purple-500/30 transition-all">
+            <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-2xl relative overflow-hidden group border border-slate-200/80 bg-white hover:border-purple-300 transition-all shadow-xs">
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 shrink-0">
                   <Droplets className="w-5 h-5" />
                 </div>
                 <button
                   onClick={handleAddWater}
-                  className="text-xs font-bold text-purple-300 bg-purple-500/20 hover:bg-purple-500/30 px-2.5 py-1 rounded-full border border-purple-500/30 flex items-center gap-1 transition-all active:scale-95"
+                  className="text-xs font-black text-purple-600 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full border border-purple-100 flex items-center gap-1 transition-all active:scale-95"
                   title={t('dashboard_add_water')}
                 >
                   <Plus className="w-3 h-3" /> 250ml

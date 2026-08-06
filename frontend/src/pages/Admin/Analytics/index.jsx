@@ -88,38 +88,38 @@ export default function AdminAnalytics() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden gradient-border shadow-[0_12px_40px_rgba(0,0,0,0.5)] rounded-3xl"
+        className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-md rounded-3xl bg-white/95 border border-sky-200/90"
       >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-500/20 via-cyan-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-500/20 via-rose-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/40 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass border border-white/10 text-xs font-semibold text-purple-300">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-xs font-black text-indigo-600">
                 <BarChart3 className="w-3.5 h-3.5" /> Platform Intelligence Engine
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-xs font-bold text-cyan-400">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-black text-[#0284c7]">
                 <Zap className="w-3 h-3 animate-pulse" /> ML Model Latency: 142ms
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
-              Telemetry & <span className="bg-gradient-to-r from-purple-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Analytics Suite</span>
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0a192f] tracking-tight mb-3">
+              Telemetry & <span className="bg-gradient-to-r from-[#0284c7] via-indigo-600 to-emerald-600 bg-clip-text text-transparent">Analytics Suite</span>
             </h1>
-            <p className="text-slate-300 text-xs sm:text-base font-medium leading-relaxed">
+            <p className="text-slate-600 text-xs sm:text-base font-semibold leading-relaxed">
               Deep biomarker prevalence metrics, machine learning inference benchmarks, user registration funnels, and dietary preference distribution.
             </p>
           </div>
 
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-            <div className="flex items-center gap-1 glass p-1 rounded-2xl border border-white/10">
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
               {['7d', '30d', 'all'].map((range) => (
                 <button
                   key={range}
                   onClick={() => setTimeRange(range)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all uppercase ${
-                    timeRange === range ? 'gradient-bg text-white shadow-md' : 'text-slate-400 hover:text-white'
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all uppercase cursor-pointer ${
+                    timeRange === range ? 'bg-[#0a192f] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {range}
@@ -128,10 +128,10 @@ export default function AdminAnalytics() {
             </div>
             <button
               onClick={fetchAnalytics}
-              className="p-3.5 rounded-2xl text-xs font-bold text-white glass border border-white/10 hover:bg-white/10 active:scale-95 transition-all"
+              className="p-3.5 rounded-2xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 active:scale-95 transition-all shadow-xs cursor-pointer"
               title="Refresh Analytics Data"
             >
-              <RefreshCw className="w-4 h-4 text-cyan-400" />
+              <RefreshCw className="w-4 h-4 text-[#0284c7]" />
             </button>
           </div>
         </div>
@@ -147,53 +147,53 @@ export default function AdminAnalytics() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
       >
         {/* User Conversion Rate */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-purple-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-purple-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+            <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
               <Users className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20 flex items-center gap-1">
+            <span className="text-[10px] font-black uppercase tracking-wider text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100 flex items-center gap-1">
               <ArrowUpRight className="w-3 h-3" /> +18.4%
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">88.4%</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">User Activity Retention</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Monthly active users ratio</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">88.4%</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">User Activity Retention</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Monthly active users ratio</p>
           </div>
         </motion.div>
 
         {/* Model Latency */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-cyan-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-sky-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7]">
               <Zap className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
               Fast Inference
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">142ms</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Avg ML Model Latency</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Ensemble prediction time</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">142ms</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Avg ML Model Latency</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Ensemble prediction time</p>
           </div>
         </motion.div>
 
         {/* Prediction Accuracy */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-emerald-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-emerald-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
               Validated
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">94.2%</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Classification Precision</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">XGBoost & RF Model F1-Score</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">94.2%</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Classification Precision</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">XGBoost & RF Model F1-Score</p>
           </div>
         </motion.div>
 

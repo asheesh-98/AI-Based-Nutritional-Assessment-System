@@ -31,8 +31,6 @@ export default function AdminLogin() {
       if (data.user.role === 'ADMIN' || data.user.role === 'SUPER_ADMIN') {
         navigate('/admin/dashboard');
       } else {
-        // If a normal user tries to log in here, we route them to normal dashboard
-        // Or we could log them out and show error. Let's just route to normal dashboard.
         navigate('/dashboard');
       }
     } catch (err) {
@@ -43,14 +41,14 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#0a0e1a] overflow-hidden text-slate-100">
+    <div className="min-h-screen flex bg-gradient-to-br from-sky-100/80 via-slate-50 to-white overflow-hidden text-[#0a192f]">
       
       {/* Left side: Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-4 sm:px-12 lg:px-24 xl:px-32 relative z-10">
         
         {/* Back Link */}
         <div className="absolute top-8 left-4 sm:left-12 lg:left-24">
-          <Link to="/" className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+          <Link to="/" className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-[#0284c7] transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
@@ -64,16 +62,16 @@ export default function AdminLogin() {
         >
           {/* Logo */}
           <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center shadow-lg shadow-purple-500/20 border border-purple-500/30">
-              <ShieldCheck className="w-6 h-6 text-purple-400" />
+            <div className="w-12 h-12 rounded-xl bg-[#0a192f] flex items-center justify-center shadow-md">
+              <ShieldCheck className="w-6 h-6 text-sky-400" />
             </div>
-            <span className="text-2xl font-black bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="text-2xl font-black text-[#0a192f]">
               NutriAI Admin
             </span>
           </div>
 
-          <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">Admin Portal</h2>
-          <p className="text-slate-400 text-sm mb-8">Sign in with administrator credentials.</p>
+          <h2 className="text-3xl font-black text-[#0a192f] mb-2 tracking-tight">Admin Portal</h2>
+          <p className="text-slate-600 text-sm mb-8 font-semibold">Sign in with administrator credentials.</p>
 
           <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
 
@@ -101,7 +99,7 @@ export default function AdminLogin() {
                 type="submit"
                 loading={loading}
                 icon={LogIn}
-                className="w-full text-base rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.2)] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
+                className="w-full text-base rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md"
                 size="lg"
               >
                 Secure Sign In
@@ -112,23 +110,23 @@ export default function AdminLogin() {
       </div>
 
       {/* Right side: Branding Graphic */}
-      <div className="hidden lg:flex w-1/2 relative bg-gradient-to-br from-purple-900/40 to-slate-900/40 border-l border-white/5 items-center justify-center p-12">
+      <div className="hidden lg:flex w-1/2 relative bg-gradient-to-br from-sky-200/50 via-sky-100/30 to-indigo-100/40 border-l border-slate-200/80 items-center justify-center p-12">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[20%] left-[20%] w-96 h-96 bg-purple-500/20 rounded-full blur-[120px] animate-pulse-glow" />
-          <div className="absolute bottom-[20%] right-[20%] w-[30rem] h-[30rem] bg-pink-500/10 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[20%] left-[20%] w-96 h-96 bg-sky-300/30 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[20%] right-[20%] w-[30rem] h-[30rem] bg-indigo-300/20 rounded-full blur-[150px]" />
         </div>
         
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative z-10 glass-card p-12 max-w-lg text-center border border-purple-500/20"
+          className="relative z-10 glass-card p-12 max-w-lg text-center border border-sky-200/90 shadow-xl bg-white/95"
         >
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center mb-8 shadow-2xl shadow-purple-500/30">
-            <ShieldCheck className="w-10 h-10 text-purple-400" />
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-[#0a192f] flex items-center justify-center mb-8 shadow-xl">
+            <ShieldCheck className="w-10 h-10 text-sky-400" />
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Secure Administration</h3>
-          <p className="text-slate-300 leading-relaxed">
+          <h3 className="text-3xl font-black text-[#0a192f] mb-4">Secure Administration</h3>
+          <p className="text-slate-600 leading-relaxed font-semibold">
             Access the NutriAI backend systems. Manage users, monitor predictive analytics, and update nutritional datasets securely.
           </p>
         </motion.div>

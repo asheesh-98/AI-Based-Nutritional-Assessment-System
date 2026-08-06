@@ -39,11 +39,11 @@ function AdminSidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 256 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="hidden lg:flex flex-col h-full flex-shrink-0 bg-[#0c1427]/95 border-r border-slate-800/80 shadow-2xl relative z-10 backdrop-blur-xl"
+      className="hidden lg:flex flex-col h-full flex-shrink-0 bg-white/95 backdrop-blur-md border-r border-slate-200/80 shadow-xs relative z-10"
     >
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0077ff] flex items-center justify-center text-white shadow-lg shadow-blue-500/30 z-20 cursor-pointer hover:bg-cyan-400 transition-colors"
+        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0a192f] flex items-center justify-center text-white shadow-md z-20 cursor-pointer hover:bg-[#0284c7] transition-colors"
       >
         {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
       </button>
@@ -57,7 +57,7 @@ function AdminSidebar() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest text-cyan-400"
+                  className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest text-sky-700"
                 >
                   {section.title}
                 </motion.p>
@@ -72,15 +72,15 @@ function AdminSidebar() {
                     to={item.path}
                     title={collapsed ? item.label : ''}
                     className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm
+                      flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm
                       transition-all duration-200 group relative overflow-hidden
                       ${isActive
-                        ? 'bg-gradient-to-r from-[#0077ff] to-cyan-500 text-white shadow-lg shadow-blue-500/25 font-bold border border-blue-400/30'
-                        : 'text-slate-300 hover:text-white hover:bg-white/10 font-semibold'
+                        ? 'bg-[#0a192f] text-white shadow-md shadow-sky-950/20 font-bold'
+                        : 'text-slate-700 hover:text-slate-900 hover:bg-sky-50 font-semibold'
                       }
                     `}
                   >
-                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-cyan-400'}`} />
+                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-sky-400' : 'text-slate-500 group-hover:text-sky-600'}`} />
                     <AnimatePresence>
                       {!collapsed && (
                         <motion.span
@@ -101,11 +101,11 @@ function AdminSidebar() {
         ))}
       </div>
 
-      <div className="p-3 border-t border-slate-800/80 space-y-1 bg-[#090e1c]/60">
+      <div className="p-3 border-t border-slate-200/80 space-y-1 bg-slate-50/50">
         <Link
           to="/dashboard"
           title={collapsed ? 'User View' : ''}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+          className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-200/60 transition-all"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
           {!collapsed && <span>Exit Admin</span>}
@@ -117,11 +117,11 @@ function AdminSidebar() {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="flex h-screen bg-[#090d16] text-slate-100 overflow-hidden font-sans">
+    <div className="flex h-screen bg-gradient-to-br from-sky-100/70 via-indigo-50/40 to-slate-50 text-[#0a192f] overflow-hidden font-sans">
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[160px] pointer-events-none z-0" />
-        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-sky-300/20 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-indigo-300/15 rounded-full blur-[130px] pointer-events-none z-0" />
         
         <Navbar />
         <main className="flex-1 overflow-y-auto overflow-x-hidden relative z-10 custom-scrollbar">

@@ -20,7 +20,6 @@ export default function Navbar() {
 
   const isAdminRoute = location.pathname.startsWith('/admin');
 
-  // Navigation links for mobile drawer menu
   const mobileUserNavLinks = [
     { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { path: '/prediction', label: t('assessment'), icon: Activity },
@@ -33,7 +32,6 @@ export default function Navbar() {
     { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
   ];
 
-  // Links for admin view
   const adminNavLinks = [
     { path: '/admin/dashboard', label: 'Admin Dashboard', icon: LayoutDashboard },
     { path: '/admin/users', label: 'Users', icon: Users },
@@ -50,19 +48,19 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#090d16]/90 backdrop-blur-xl w-full border-b border-slate-800/80 shadow-2xl">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md w-full border-b border-slate-200/80 shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2">
           
           {/* Left: Brand Logo */}
-          <Link to={isAdminRoute ? '/admin/dashboard' : '/'} className="flex items-center gap-2 group shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-[#0077ff] via-cyan-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-cyan-500/25">
-              <Utensils className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          <Link to={isAdminRoute ? '/admin/dashboard' : '/'} className="flex items-center gap-2.5 group shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-[#0a192f] flex items-center justify-center shadow-md shadow-sky-950/20">
+              <Utensils className="w-4 h-4 text-sky-400" />
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-base sm:text-lg font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-300 bg-clip-text text-transparent tracking-tight">NutriAI</span>
+              <span className="text-lg font-black text-[#0a192f] tracking-tight">NutriAI</span>
               {isAdminRoute && (
-                <span className="px-2 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
+                <span className="px-2 py-0.5 rounded-md bg-sky-50 border border-sky-200 text-[#0284c7] text-[10px] font-black uppercase tracking-wider">
                   Admin
                 </span>
               )}
@@ -71,20 +69,18 @@ export default function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-            {/* Language Selector Dropdown */}
             {!isAdminRoute && <LanguageSelector compact={true} />}
 
-            {/* Desktop Auth Controls */}
             {user ? (
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-white/10 transition-colors cursor-pointer"
+                  className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#0077ff] to-cyan-400 flex items-center justify-center text-white text-xs font-bold shadow-md">
+                  <div className="w-8 h-8 rounded-lg bg-[#0a192f] flex items-center justify-center text-white text-xs font-bold shadow-xs">
                     {user.full_name?.[0] || user.name?.[0] || user.email?.[0] || 'U'}
                   </div>
-                  <span className="hidden xl:block text-xs sm:text-sm text-slate-200 max-w-[110px] truncate font-semibold">
+                  <span className="hidden xl:block text-xs sm:text-sm text-slate-800 max-w-[110px] truncate font-bold">
                     {user.full_name || user.name || user.email}
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
@@ -97,14 +93,14 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-56 bg-[#0f172a] rounded-2xl p-2 shadow-2xl border border-slate-700/80 z-50 text-white"
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-2xl p-2 shadow-xl border border-slate-200 z-50 text-slate-800"
                     >
                       {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
                         isAdminRoute ? (
                           <Link
                             to="/dashboard"
                             onClick={() => setProfileOpen(false)}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-bold"
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#0284c7] hover:bg-sky-50 transition-colors font-bold"
                           >
                             <User className="w-4 h-4" />
                             {t('common_exit_admin')}
@@ -113,7 +109,7 @@ export default function Navbar() {
                           <Link
                             to="/admin/dashboard"
                             onClick={() => setProfileOpen(false)}
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-300 hover:bg-cyan-500/10 transition-colors font-bold"
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#0284c7] hover:bg-sky-50 transition-colors font-bold"
                           >
                             <ShieldCheck className="w-4 h-4" />
                             {t('common_admin_console')}
@@ -124,17 +120,17 @@ export default function Navbar() {
                       <Link
                         to="/profile"
                         onClick={() => setProfileOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                       >
-                        <User className="w-4 h-4 text-cyan-400" />
+                        <User className="w-4 h-4 text-[#0284c7]" />
                         {t('profile')}
                       </Link>
                       <Link
                         to="/health-profile"
                         onClick={() => setProfileOpen(false)}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-colors"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                       >
-                        <Settings className="w-4 h-4 text-purple-400" />
+                        <Settings className="w-4 h-4 text-indigo-600" />
                         {t('health_profile')}
                       </Link>
                       <button
@@ -142,15 +138,15 @@ export default function Navbar() {
                           setProfileOpen(false);
                           openLanguageModal();
                         }}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-colors w-full text-left cursor-pointer"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors w-full text-left cursor-pointer"
                       >
-                        <Globe className="w-4 h-4 text-cyan-400" />
+                        <Globe className="w-4 h-4 text-[#0284c7]" />
                         {t('change_language')} ({currentLanguageObj.native})
                       </button>
-                      <hr className="border-slate-800 my-1" />
+                      <hr className="border-slate-100 my-1" />
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-rose-400 hover:bg-rose-500/10 transition-colors w-full cursor-pointer"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors w-full cursor-pointer"
                       >
                         <LogOut className="w-4 h-4" />
                         {t('logout')}
@@ -163,13 +159,13 @@ export default function Navbar() {
               <div className="hidden md:flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-3.5 py-2 text-xs sm:text-sm text-slate-300 hover:text-white transition-colors font-bold whitespace-nowrap"
+                  className="px-3.5 py-2 text-xs sm:text-sm text-slate-700 hover:text-slate-900 transition-colors font-bold whitespace-nowrap"
                 >
                   {t('login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-[#0077ff] to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-xl shadow-lg shadow-cyan-500/20 transition-all whitespace-nowrap"
+                  className="px-4.5 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-xl shadow-md shadow-sky-950/20 transition-colors whitespace-nowrap"
                 >
                   {t('get_started')}
                 </Link>
@@ -179,7 +175,7 @@ export default function Navbar() {
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-xl hover:bg-white/10 text-slate-300 transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -196,11 +192,11 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="lg:hidden bg-[#0d1527] border-b border-slate-800 shadow-2xl overflow-hidden"
+            className="lg:hidden bg-white border-b border-slate-200 shadow-xl overflow-hidden"
           >
             <div className="p-4 space-y-2 max-h-[80vh] overflow-y-auto custom-scrollbar">
               {isAdminRoute ? (
-                <div className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-cyan-400 bg-cyan-500/10 rounded-lg border border-cyan-500/20 mb-2">
+                <div className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-[#0284c7] bg-sky-50 rounded-lg border border-sky-100 mb-2">
                   {t('common_admin_console_nav')}
                 </div>
               ) : null}
@@ -213,34 +209,34 @@ export default function Navbar() {
                     to={link.path}
                     onClick={() => setMobileOpen(false)}
                     className={`
-                      flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold
+                      flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold
                       transition-all duration-200
                       ${isActive
-                        ? 'bg-gradient-to-r from-[#0077ff] to-cyan-500 text-white shadow-lg shadow-blue-500/25'
-                        : 'text-slate-300 hover:text-white hover:bg-white/10'
+                        ? 'bg-[#0a192f] text-white shadow-md'
+                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                       }
                     `}
                   >
-                    <link.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-cyan-400'}`} />
+                    <link.icon className={`w-5 h-5 ${isActive ? 'text-sky-400' : 'text-slate-500'}`} />
                     {link.label}
                   </Link>
                 );
               })}
 
-              <hr className="border-slate-800 my-2" />
+              <hr className="border-slate-200 my-2" />
 
-              {/* Mobile Auth Actions */}
+              {/* Mobile Auth & Admin Actions */}
               {user ? (
                 <div className="space-y-1 pt-1">
-                  <div className="px-4 py-2 text-xs font-semibold text-slate-400 truncate">
-                    {t('common_signed_in_as')} <span className="text-white font-bold">{user.full_name || user.name || user.email}</span>
+                  <div className="px-4 py-2 text-xs font-semibold text-slate-500 truncate">
+                    {t('common_signed_in_as')} <span className="text-[#0a192f] font-bold">{user.full_name || user.name || user.email}</span>
                   </div>
                   {user.role === 'ADMIN' || user.role === 'SUPER_ADMIN' ? (
                     isAdminRoute ? (
                       <Link
                         to="/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-cyan-300 hover:bg-cyan-500/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-[#0284c7] hover:bg-sky-50 transition-colors"
                       >
                         <User className="w-5 h-5" />
                         {t('common_exit_admin')}
@@ -249,7 +245,7 @@ export default function Navbar() {
                       <Link
                         to="/admin/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-cyan-300 hover:bg-cyan-500/10 transition-colors"
+                        className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-[#0284c7] hover:bg-sky-50 transition-colors"
                       >
                         <ShieldCheck className="w-5 h-5" />
                         {t('common_admin_console')}
@@ -259,22 +255,22 @@ export default function Navbar() {
                   <Link
                     to="/profile"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 transition-colors"
                   >
-                    <User className="w-5 h-5 text-cyan-400" />
+                    <User className="w-5 h-5 text-[#0284c7]" />
                     {t('profile')}
                   </Link>
                   <Link
                     to="/health-profile"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 hover:bg-white/10 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-100 transition-colors"
                   >
-                    <Settings className="w-5 h-5 text-purple-400" />
+                    <Settings className="w-5 h-5 text-indigo-600" />
                     {t('health_profile')}
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-rose-400 hover:bg-rose-500/10 transition-colors w-full cursor-pointer"
+                    className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold text-rose-600 hover:bg-rose-50 transition-colors w-full cursor-pointer"
                   >
                     <LogOut className="w-5 h-5" />
                     {t('logout')}
@@ -285,7 +281,7 @@ export default function Navbar() {
                   <Link
                     to="/login"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-300 bg-white/10 hover:bg-white/15 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
                   >
                     <LogIn className="w-4 h-4" />
                     {t('login')}
@@ -293,7 +289,7 @@ export default function Navbar() {
                   <Link
                     to="/register"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#0077ff] to-cyan-500 shadow-md"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-[#0a192f]"
                   >
                     <UserPlus className="w-4 h-4" />
                     {t('get_started')}
