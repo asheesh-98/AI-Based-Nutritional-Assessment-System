@@ -132,14 +132,15 @@ export default function Home() {
   const item = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } } };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 selection:bg-blue-500/20 selection:text-[#0077ff] flex flex-col overflow-x-hidden w-full relative">
+    <div className="min-h-screen bg-[#090d16] text-slate-100 selection:bg-cyan-500/30 selection:text-white flex flex-col overflow-x-hidden w-full relative">
       <Navbar />
 
       {/* 🌟 Hero Section */}
       <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full overflow-hidden">
-        {/* Soft Ambient Radial Mesh */}
-        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
-        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[130px] pointer-events-none z-0" />
+        {/* Ambient Radial Mesh Lights */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[160px] pointer-events-none z-0" />
+        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-cyan-500/12 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-purple-500/12 rounded-full blur-[150px] pointer-events-none z-0" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           
@@ -149,9 +150,9 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-extrabold text-[#0077ff] mb-6 tracking-wider uppercase shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-xs font-bold text-cyan-300 mb-6 tracking-wider uppercase shadow-inner"
             >
-              <Shield className="w-4 h-4 text-[#0077ff] shrink-0" />
+              <Shield className="w-4 h-4 text-cyan-400 shrink-0" />
               <span>{t('hero_badge')}</span>
             </motion.div>
 
@@ -159,20 +160,20 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 leading-tight text-slate-900"
+              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 leading-tight text-white"
             >
-              <span className="bg-gradient-to-r from-[#0077ff] via-blue-600 to-indigo-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-300 bg-clip-text text-transparent">
                 {t('hero_title_1')}
               </span>
               <br />
-              <span className="mt-1 block text-slate-900">{t('hero_title_2')}</span>
+              <span className="mt-1 block text-white">{t('hero_title_2')}</span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-sm sm:text-lg text-slate-600 mb-8 sm:mb-10 leading-relaxed font-medium"
+              className="text-sm sm:text-lg text-slate-300 mb-8 sm:mb-10 leading-relaxed font-medium"
             >
               {t('hero_subtitle')}
             </motion.p>
@@ -187,7 +188,7 @@ export default function Home() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-white bg-[#0077ff] hover:bg-[#0066ff] rounded-2xl shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-black text-white bg-gradient-to-r from-[#0077ff] to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-2xl shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <span>{t('start_assessment')}</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />

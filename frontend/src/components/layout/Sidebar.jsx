@@ -51,12 +51,12 @@ export default function Sidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 256 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="hidden lg:flex flex-col h-full flex-shrink-0 bg-white border-r border-slate-200/80 shadow-sm relative z-10"
+      className="hidden lg:flex flex-col h-full flex-shrink-0 bg-[#0c1427]/95 border-r border-slate-800/80 shadow-2xl relative z-10 backdrop-blur-xl"
     >
       {/* Collapse button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0077ff] flex items-center justify-center text-white shadow-md shadow-blue-500/30 z-20 cursor-pointer hover:bg-[#0066ff] transition-colors"
+        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0077ff] flex items-center justify-center text-white shadow-lg shadow-blue-500/30 z-20 cursor-pointer hover:bg-cyan-400 transition-colors"
       >
         {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
       </button>
@@ -88,12 +88,12 @@ export default function Sidebar() {
                       flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm
                       transition-all duration-200 group relative overflow-hidden
                       ${isActive
-                        ? 'bg-[#0077ff] text-white shadow-md shadow-blue-500/20 font-bold'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold'
+                        ? 'bg-gradient-to-r from-[#0077ff] to-cyan-500 text-white shadow-lg shadow-blue-500/25 font-bold border border-blue-400/30'
+                        : 'text-slate-300 hover:text-white hover:bg-white/10 font-semibold'
                       }
                     `}
                   >
-                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`} />
+                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-cyan-400'}`} />
                     <AnimatePresence>
                       {!collapsed && (
                         <motion.span
@@ -115,13 +115,13 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom section */}
-      <div className="p-3 border-t border-slate-200 space-y-1 bg-slate-50/50">
+      <div className="p-3 border-t border-slate-800/80 space-y-1 bg-[#090e1c]/60">
         <Link
           to="/profile"
           title={collapsed ? t('sidebar_settings') : ''}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-white/10 transition-all"
         >
-          <Settings className="w-5 h-5 flex-shrink-0 text-slate-500" />
+          <Settings className="w-5 h-5 flex-shrink-0 text-slate-400" />
           {!collapsed && <span>{t('sidebar_settings')}</span>}
         </Link>
       </div>

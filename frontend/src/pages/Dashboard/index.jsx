@@ -83,41 +83,41 @@ export default function Dashboard() {
           className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden gradient-border shadow-[0_12px_40px_rgba(0,0,0,0.5)] rounded-3xl"
         >
           {/* Ambient Background Glow Spheres */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-blue-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-500/20 via-cyan-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
           
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="max-w-2xl">
               <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass border border-white/10 text-xs font-semibold text-cyan-400">
-                  <Sparkles className="w-3.5 h-3.5" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-xs font-bold text-cyan-300 shadow-inner">
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
                   {t('dashboard_good') + ' '}{new Date().getHours() < 12 ? t('dashboard_morning') : new Date().getHours() < 18 ? t('dashboard_afternoon') : t('dashboard_evening')}
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-bold text-emerald-400">
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-xs font-black text-emerald-400 shadow-inner">
                   {t('dashboard_health_streak')}
                 </span>
               </div>
 
               <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3 break-words">
-                {t('dashboard_welcome_back') + ' '}<span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
+                {t('dashboard_welcome_back') + ' '}<span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-300 bg-clip-text text-transparent break-all sm:break-normal">{userName}</span>!
               </h2>
 
               <p className="text-slate-300 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
-                {t('dashboard_metabolic_prefix') + ' '}<span className="text-cyan-300 font-bold">{t('dashboard_metabolic_highlight')}</span>{' ' + t('dashboard_metabolic_suffix')}
+                {t('dashboard_metabolic_prefix') + ' '}<span className="text-cyan-400 font-bold">{t('dashboard_metabolic_highlight')}</span>{' ' + t('dashboard_metabolic_suffix')}
               </p>
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
               <Link
                 to="/prediction"
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white gradient-bg shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 transition-all"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-white bg-gradient-to-r from-[#0077ff] to-cyan-500 shadow-lg shadow-blue-500/30 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-95 transition-all"
               >
                 <Activity className="w-4 h-4" />
                 {t('dashboard_btn_run_ai')}
               </Link>
               <Link
                 to="/meal-plan"
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white glass border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all shadow-md"
               >
                 <Utensils className="w-4 h-4 text-emerald-400" />
                 {t('dashboard_btn_meal_plan')}
