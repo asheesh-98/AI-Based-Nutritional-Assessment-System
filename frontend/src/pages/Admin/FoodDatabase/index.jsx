@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Trash2, Edit2, Search } from 'lucide-react';
+import { Plus, Trash2, Edit2, Search, Database } from 'lucide-react';
 import adminService from '../../../services/adminService';
 import { PageLoader } from '../../../components/common/Loader';
 import Button from '../../../components/common/Button';
@@ -49,13 +49,18 @@ export default function AdminFoodDatabase() {
   if (loading) return <PageLoader />;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Food Database</h1>
-          <p className="text-slate-400">Manage nutritional datasets and food items.</p>
+    <div className="space-y-6 max-w-7xl mx-auto w-full text-[#0a192f]">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl bg-white/95 border border-sky-200/90 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
+            <Database className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-4xl font-black text-[#0a192f] tracking-tight">Food Database</h1>
+            <p className="text-slate-600 text-sm font-semibold mt-0.5">Manage nutritional datasets, calories, and macronutrient items.</p>
+          </div>
         </div>
-        <Button icon={Plus} size="lg">Add Food Item</Button>
+        <Button icon={Plus} size="lg" className="bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">Add Food Item</Button>
       </div>
 
       <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
@@ -64,35 +69,39 @@ export default function AdminFoodDatabase() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-6 rounded-2xl space-y-6"
+        className="glass-card p-6 sm:p-8 rounded-3xl bg-white/95 border border-slate-200 shadow-md space-y-6 overflow-hidden"
       >
         <div className="max-w-md">
           <Input 
             icon={Search} 
-            placeholder="Search by name or category..." 
+            placeholder="Search by food name or category..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
+        <div className="overflow-x-auto custom-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
+          <table className="w-full min-w-[640px] text-left text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-white/10 text-slate-400 text-sm">
-                <th className="pb-3 px-4 font-medium">Food Name</th>
-                <th className="pb-3 px-4 font-medium">Category</th>
-                <th className="pb-3 px-4 font-medium">Diet Type</th>
-                <th className="pb-3 px-4 font-medium text-right">Calories</th>
-                <th className="pb-3 px-4 font-medium text-right">Actions</th>
+              <tr className="bg-slate-50 text-slate-600 font-black uppercase text-[11px] tracking-wider border-b border-slate-200">
+                <th className="py-3 px-4 rounded-l-xl">Food Name</th>
+                <th className="py-3 px-4">Category</th>
+                <th className="py-3 px-4">Diet Type</th>
+                <th className="py-3 px-4 text-right">Calories</th>
+                <th className="py-3 px-4 text-right rounded-r-xl">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {filteredFoods.slice(0, 50).map((food) => (
-                <tr key={food.id} className="hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-white font-medium">{food.food_name}</td>
-                  <td className="py-4 px-4 text-slate-400 text-sm">{food.category || 'N/A'}</td>
-                  <td className="py-4 px-4 text-slate-400 text-sm">{food.diet_type || 'N/A'}</td>
-                  <td className="py-4 px-4 text-slate-300 text-right">{food.energy_kcal?.toFixed(1)} kcal</td>
+                <tr key={food.id} className="hover:bg-sky-50/50 transition-colors">
+                  <td className="py-4 px-4 text-[#0a192f] font-black">{food.food_name}</td>
+                  <td className="py-4 px-4 text-slate-600 font-semibold">{food.category || 'N/A'}</td>
+                  <td className="py-4 px-4 text-slate-600 font-semibold">
+                    <span className="px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-100 text-[#0284c7] font-bold text-xs">
+                      {food.diet_type || 'General'}
+                    </span>
+                  </td>
+                  <td className="py-4 px-4 text-[#0a192f] font-black text-right">{food.energy_kcal?.toFixed(1)} kcal</td>
                   <td className="py-4 px-4 text-right space-x-2">
                     <Button 
                       variant="outline" 
@@ -115,12 +124,12 @@ export default function AdminFoodDatabase() {
               ))}
               {filteredFoods.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="py-8 text-center text-slate-500">No foods found.</td>
+                  <td colSpan="5" className="py-8 text-center text-slate-500 font-semibold">No food items found matching filter.</td>
                 </tr>
               )}
             </tbody>
           </table>
-          <p className="text-center text-xs text-slate-500 mt-4">Showing top 50 results.</p>
+          <p className="text-center text-xs text-slate-500 font-semibold mt-4">Showing top 50 results.</p>
         </div>
       </motion.div>
     </div>

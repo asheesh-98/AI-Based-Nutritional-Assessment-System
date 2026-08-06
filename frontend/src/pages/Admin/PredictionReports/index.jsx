@@ -6,7 +6,7 @@ import {
 } from 'recharts';
 import {
   Activity, Target, Sparkles, Cpu, ShieldCheck, AlertCircle,
-  RefreshCw, FileSpreadsheet, CheckCircle2, TrendingUp, Layers
+  RefreshCw, Layers
 } from 'lucide-react';
 import adminService from '../../../services/adminService';
 import { PageLoader } from '../../../components/common/Loader';
@@ -15,7 +15,7 @@ import Alert from '../../../components/common/Alert';
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 
-const COLORS = ['#f43f5e', '#06b6d4', '#a855f7', '#f59e0b', '#10b981', '#3b82f6'];
+const COLORS = ['#f43f5e', '#0284c7', '#8b5cf6', '#f59e0b', '#10b981', '#6366f1'];
 
 const severityBreakdown = [
   { nutrient: 'Iron', HighRisk: 42, ModerateRisk: 35, Optimal: 23 },
@@ -67,33 +67,33 @@ export default function AdminPredictionReports() {
   const avgConfidencePct = data?.average_confidence ? Math.round(data.average_confidence * 100) : 94;
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full pb-12 overflow-x-hidden">
+    <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full pb-12 overflow-x-hidden text-[#0a192f]">
       
       {/* 🌟 Hero Diagnostics Header Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden gradient-border shadow-[0_12px_40px_rgba(0,0,0,0.5)] rounded-3xl"
+        className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden shadow-md rounded-3xl bg-white/95 border border-sky-200/90"
       >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-rose-500/20 via-amber-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/40 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass border border-white/10 text-xs font-semibold text-cyan-400">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-xs font-black text-[#0284c7]">
                 <Cpu className="w-3.5 h-3.5" /> XGBoost & Random Forest Model Telemetry
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-xs font-bold text-purple-300">
-                <ShieldCheck className="w-3 h-3 text-purple-400" /> Avg Confidence: {avgConfidencePct}%
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 border border-purple-200 text-xs font-black text-purple-600">
+                <ShieldCheck className="w-3.5 h-3.5 text-purple-600" /> Avg Confidence: {avgConfidencePct}%
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
-              ML Prediction <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-rose-400 bg-clip-text text-transparent">Diagnostic Reports</span>
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0a192f] tracking-tight mb-3">
+              ML Prediction <span className="bg-gradient-to-r from-[#0284c7] via-indigo-600 to-rose-600 bg-clip-text text-transparent">Diagnostic Reports</span>
             </h1>
-            <p className="text-slate-300 text-xs sm:text-base font-medium leading-relaxed">
+            <p className="text-slate-600 text-xs sm:text-base font-semibold leading-relaxed">
               Clinical diagnostic output statistics, micronutrient deficiency severity heatmaps, and machine learning model validation metrics.
             </p>
           </div>
@@ -101,9 +101,9 @@ export default function AdminPredictionReports() {
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
             <button
               onClick={fetchPredictions}
-              className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white glass border border-white/10 hover:bg-white/10 active:scale-95 transition-all"
+              className="flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 active:scale-95 transition-all shadow-xs cursor-pointer"
             >
-              <RefreshCw className="w-4 h-4 text-cyan-400" /> Refresh Telemetry
+              <RefreshCw className="w-4 h-4 text-[#0284c7]" /> Refresh Telemetry
             </button>
           </div>
         </div>
@@ -119,70 +119,70 @@ export default function AdminPredictionReports() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
       >
         {/* Total Predictions */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-cyan-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-sky-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7]">
               <Activity className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
               Inferences Run
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">{data?.total_predictions || 142}</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Total Predictions Executed</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">All clinical scan sessions</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{data?.total_predictions || 142}</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Total Predictions Executed</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">All clinical scan sessions</p>
           </div>
         </motion.div>
 
         {/* Avg Model Confidence */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-purple-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-purple-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center text-purple-400">
+            <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
               <Target className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded-full border border-purple-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full border border-purple-100">
               High Accuracy
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">{avgConfidencePct}%</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Avg Model Confidence</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Probability score index</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{avgConfidencePct}%</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Avg Model Confidence</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Probability score index</p>
           </div>
         </motion.div>
 
         {/* High-Risk Detection Rate */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-rose-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-rose-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-400">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded-full border border-rose-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
               Early Detection
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">38.4%</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">High-Risk Detection Rate</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Flagged for meal intervention</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">38.4%</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">High-Risk Detection Rate</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Flagged for meal intervention</p>
           </div>
         </motion.div>
 
         {/* Biomarkers Coverage */}
-        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-emerald-500/20 shadow-lg">
+        <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-emerald-200 bg-white shadow-xs">
           <div className="flex items-center justify-between mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
               Biomarkers
             </span>
           </div>
           <div>
-            <p className="text-3xl sm:text-4xl font-black text-white">6 Key Nutrients</p>
-            <p className="text-xs sm:text-sm text-slate-300 font-semibold mt-1">Clinical Coverage</p>
-            <p className="text-[11px] text-slate-400 mt-0.5 font-medium">Iron, Vit D, Calcium, B12, Mg, K</p>
+            <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">6 Key Nutrients</p>
+            <p className="text-xs sm:text-sm text-slate-700 font-bold mt-1">Clinical Coverage</p>
+            <p className="text-[11px] text-slate-500 mt-0.5 font-semibold">Iron, Vit D, Calcium, B12, Mg, K</p>
           </div>
         </motion.div>
       </motion.div>
@@ -194,14 +194,14 @@ export default function AdminPredictionReports() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-white/10 flex flex-col justify-between"
+          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs flex flex-col justify-between"
         >
           <div className="mb-4">
-            <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#0284c7]" />
               Identified Deficiencies Distribution
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">Frequency share across all diagnostic scans</p>
+            <p className="text-xs text-slate-500 font-semibold mt-0.5">Frequency share across all diagnostic scans</p>
           </div>
 
           <div className="h-[280px] w-full flex items-center justify-center">
@@ -222,13 +222,16 @@ export default function AdminPredictionReports() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#cbd5e1',
                     borderRadius: '14px',
-                    fontSize: '12px'
+                    color: '#0a192f',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.08)'
                   }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px', fontWeight: 'bold' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -239,31 +242,34 @@ export default function AdminPredictionReports() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-white/10 flex flex-col justify-between"
+          className="glass-card p-5 sm:p-8 rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs flex flex-col justify-between"
         >
           <div className="mb-4">
-            <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <Layers className="w-5 h-5 text-purple-400" />
+            <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight flex items-center gap-2">
+              <Layers className="w-5 h-5 text-purple-600" />
               Nutrient Severity Risk Breakdown
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">High vs. Moderate vs. Optimal Risk Classification (%)</p>
+            <p className="text-xs text-slate-500 font-semibold mt-0.5">High vs. Moderate vs. Optimal Risk Classification (%)</p>
           </div>
 
           <div className="h-[280px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={severityBreakdown} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="nutrient" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} unit="%" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis dataKey="nutrient" stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} unit="%" />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#cbd5e1',
                     borderRadius: '14px',
-                    fontSize: '12px'
+                    color: '#0a192f',
+                    fontSize: '12px',
+                    fontWeight: 'bold',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.08)'
                   }}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
+                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px', fontWeight: 'bold' }} />
                 <Bar dataKey="HighRisk" name="High Risk" stackId="a" fill="#f43f5e" />
                 <Bar dataKey="ModerateRisk" name="Moderate Risk" stackId="a" fill="#f59e0b" />
                 <Bar dataKey="Optimal" name="Optimal" stackId="a" fill="#10b981" />

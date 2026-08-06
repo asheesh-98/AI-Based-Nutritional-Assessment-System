@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trash2, Shield, User, ShieldAlert } from 'lucide-react';
+import { Trash2, Shield, User, ShieldAlert, Users as UsersIcon } from 'lucide-react';
 import adminService from '../../../services/adminService';
 import { PageLoader } from '../../../components/common/Loader';
 import Button from '../../../components/common/Button';
@@ -54,10 +54,17 @@ export default function AdminUsers() {
   if (loading) return <PageLoader />;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight mb-2">User Management</h1>
-        <p className="text-slate-400">Manage user accounts and roles.</p>
+    <div className="space-y-6 max-w-7xl mx-auto w-full text-[#0a192f]">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl bg-white/95 border border-sky-200/90 shadow-md">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7]">
+            <UsersIcon className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-2xl sm:text-4xl font-black text-[#0a192f] tracking-tight">User Management</h1>
+            <p className="text-slate-600 text-sm font-semibold mt-0.5">Manage user accounts, administrative privileges, and security roles.</p>
+          </div>
+        </div>
       </div>
 
       <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
@@ -66,46 +73,46 @@ export default function AdminUsers() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-6 rounded-2xl"
+        className="glass-card p-6 sm:p-8 rounded-3xl bg-white/95 border border-slate-200 shadow-md overflow-hidden"
       >
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
+        <div className="overflow-x-auto custom-scrollbar -mx-6 px-6 sm:mx-0 sm:px-0">
+          <table className="w-full min-w-[640px] text-left text-xs sm:text-sm">
             <thead>
-              <tr className="border-b border-white/10 text-slate-400 text-sm">
-                <th className="pb-3 px-4 font-medium">ID</th>
-                <th className="pb-3 px-4 font-medium">User Details</th>
-                <th className="pb-3 px-4 font-medium">Role</th>
-                <th className="pb-3 px-4 font-medium">Joined</th>
-                <th className="pb-3 px-4 font-medium text-right">Actions</th>
+              <tr className="bg-slate-50 text-slate-600 font-black uppercase text-[11px] tracking-wider border-b border-slate-200">
+                <th className="py-3 px-4 rounded-l-xl">ID</th>
+                <th className="py-3 px-4">User Details</th>
+                <th className="py-3 px-4">Role</th>
+                <th className="py-3 px-4">Joined Date</th>
+                <th className="py-3 px-4 text-right rounded-r-xl">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {users.map((user) => (
-                <tr key={user.id} className="hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-slate-400 text-sm">#{user.id}</td>
+                <tr key={user.id} className="hover:bg-sky-50/50 transition-colors">
+                  <td className="py-4 px-4 text-slate-500 font-bold">#{user.id}</td>
                   <td className="py-4 px-4">
-                    <p className="text-white font-medium">{user.full_name}</p>
-                    <p className="text-slate-400 text-sm">{user.email}</p>
+                    <p className="text-[#0a192f] font-black">{user.full_name || 'Anonymous User'}</p>
+                    <p className="text-slate-600 font-medium text-xs">{user.email}</p>
                   </td>
                   <td className="py-4 px-4">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black ${
                       user.role === 'ADMIN' 
-                        ? 'bg-purple-500/20 text-purple-400 border border-purple-500/20' 
-                        : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                        ? 'bg-purple-50 text-purple-600 border border-purple-200' 
+                        : 'bg-sky-50 text-[#0284c7] border border-sky-200'
                     }`}>
-                      {user.role === 'ADMIN' ? <Shield className="w-3 h-3" /> : <User className="w-3 h-3" />}
+                      {user.role === 'ADMIN' ? <Shield className="w-3.5 h-3.5" /> : <User className="w-3.5 h-3.5" />}
                       {user.role}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-slate-400 text-sm">
-                    {new Date(user.created_at).toLocaleDateString()}
+                  <td className="py-4 px-4 text-slate-600 font-medium text-xs whitespace-nowrap">
+                    {new Date(user.created_at).toLocaleDateString([], { year: 'numeric', month: 'short', day: 'numeric' })}
                   </td>
                   <td className="py-4 px-4 text-right space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm"
                       onClick={() => handleToggleRole(user)}
-                      title="Toggle Role"
+                      title="Toggle Admin/User Role"
                       className="!px-3"
                     >
                       <ShieldAlert className="w-4 h-4" />
@@ -123,7 +130,7 @@ export default function AdminUsers() {
               ))}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="py-8 text-center text-slate-500">No users found.</td>
+                  <td colSpan="5" className="py-8 text-center text-slate-500 font-semibold">No users found.</td>
                 </tr>
               )}
             </tbody>
