@@ -106,20 +106,20 @@ export default function Reports() {
       const status = getRiskStatus(val);
       return `
         <tr style="border-bottom: 1px solid #e2e8f0;">
-          <td style="padding: 10px 12px; font-weight: bold; color: #0a192f; font-size: 12px;">${info.label}</td>
-          <td style="padding: 10px 12px; font-weight: bold; color: #0284c7; font-size: 12px;">${pct}%</td>
-          <td style="padding: 10px 12px;"><span style="background: ${val > 0.6 ? '#ffe4e6' : val > 0.3 ? '#fef3c7' : '#d1fae5'}; color: ${val > 0.6 ? '#e11d48' : val > 0.3 ? '#d97706' : '#059669'}; font-weight: 800; padding: 3px 10px; border-radius: 9999px; font-size: 10px; text-transform: uppercase;">${status.label}</span></td>
-          <td style="padding: 10px 12px; color: #475569; font-size: 11px; font-weight: 600;">${info.foods.join(', ')}</td>
+          <td style="padding: 10px 12px; font-weight: bold; color: #0a192f; font-size: 12px; vertical-align: middle;">${info.label}</td>
+          <td style="padding: 10px 12px; font-weight: bold; color: #0284c7; font-size: 12px; vertical-align: middle;">${pct}%</td>
+          <td style="padding: 10px 12px; vertical-align: middle;"><span style="display: inline-block; white-space: nowrap; background: ${val > 0.6 ? '#ffe4e6' : val > 0.3 ? '#fef3c7' : '#d1fae5'}; color: ${val > 0.6 ? '#e11d48' : val > 0.3 ? '#d97706' : '#059669'}; font-weight: 800; padding: 4px 10px; border-radius: 9999px; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.3px;">${status.label}</span></td>
+          <td style="padding: 10px 12px; color: #475569; font-size: 11px; font-weight: 600; vertical-align: middle;">${info.foods.join(', ')}</td>
         </tr>
       `;
     }).join('');
 
     const element = document.createElement('div');
-    element.style.padding = '25px';
+    element.style.padding = '30px';
     element.style.fontFamily = "'Segoe UI', Roboto, Helvetica, sans-serif";
     element.style.color = '#0a192f';
     element.style.background = '#ffffff';
-    element.style.width = '750px';
+    element.style.width = '800px';
 
     element.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px;">
@@ -147,10 +147,10 @@ export default function Reports() {
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: left;">
         <thead>
           <tr style="background: #0a192f; color: #ffffff;">
-            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Biomarker / Nutrient</th>
-            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Predicted Risk</th>
-            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Classification</th>
-            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Clinical Dietary Countermeasures</th>
+            <th style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; width: 24%;">Biomarker / Nutrient</th>
+            <th style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; width: 14%;">Predicted Risk</th>
+            <th style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; width: 24%;">Classification</th>
+            <th style="padding: 10px 12px; font-size: 11px; text-transform: uppercase; width: 38%;">Clinical Dietary Countermeasures</th>
           </tr>
         </thead>
         <tbody>
