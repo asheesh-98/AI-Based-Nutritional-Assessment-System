@@ -13,8 +13,8 @@ import assessmentService from '../../services/assessmentService';
 import { useLanguage } from '../../context/LanguageContext';
 
 const severityColors = [
-  'text-gray-500', 'text-emerald-400', 'text-emerald-400',
-  'text-amber-400', 'text-rose-400', 'text-rose-400'
+  'text-slate-400', 'text-emerald-600', 'text-emerald-600',
+  'text-amber-600', 'text-rose-600', 'text-rose-600'
 ];
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.03 } } };
@@ -61,7 +61,6 @@ export default function Symptoms() {
       try {
         const history = await assessmentService.getSymptomHistory();
         if (history && history.length > 0) {
-          // Backend sorts recorded_at desc, so history[0] is the newest submission
           const last = history[0];
           const data = last.symptoms || last;
           setSymptoms(prev => {
@@ -108,24 +107,24 @@ export default function Symptoms() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mt-4 text-[#0a192f]"
       >
         {symptomsList.map((symptom) => {
           const val = symptoms[symptom.key] || 0;
           const Icon = symptom.icon;
           return (
-            <motion.div key={symptom.key} variants={item} className="glass-card p-5 group">
+            <motion.div key={symptom.key} variants={item} className="glass-card p-5 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-xs group">
               <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2 rounded-lg transition-colors duration-300 ${
-                  val === 0 ? 'bg-white/5' : val <= 2 ? 'bg-emerald-500/10' : val === 3 ? 'bg-amber-500/10' : 'bg-rose-500/10'
+                <div className={`p-2.5 rounded-2xl transition-colors duration-300 ${
+                  val === 0 ? 'bg-slate-100' : val <= 2 ? 'bg-emerald-50 border border-emerald-100' : val === 3 ? 'bg-amber-50 border border-amber-100' : 'bg-rose-50 border border-rose-100'
                 }`}>
                   <Icon className={`w-5 h-5 ${severityColors[val]}`} />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">{symptom.label}</p>
-                  <p className={`text-xs ${severityColors[val]}`}>{severityLabels[val]}</p>
+                  <p className="text-sm font-black text-[#0a192f]">{symptom.label}</p>
+                  <p className={`text-xs font-bold ${severityColors[val]}`}>{severityLabels[val]}</p>
                 </div>
-                <span className={`ml-auto text-lg font-bold ${severityColors[val]}`}>{val}</span>
+                <span className={`ml-auto text-lg font-black ${severityColors[val]}`}>{val}</span>
               </div>
               <input
                 type="range"
@@ -133,22 +132,28 @@ export default function Symptoms() {
                 max="5"
                 value={val}
                 onChange={(e) => handleSlider(symptom.key, e.target.value)}
-                className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+                className="w-full h-2 rounded-full appearance-none cursor-pointer"
                 style={{
-                  background: `linear-gradient(to right, ${val === 0 ? '#374151' : val <= 2 ? '#10b981' : val <= 3 ? '#f59e0b' : '#f43f5e'} ${val * 20}%, rgba(255,255,255,0.1) ${val * 20}%)`,
+                  background: `linear-gradient(to right, ${val === 0 ? '#cbd5e1' : val <= 2 ? '#10b981' : val <= 3 ? '#f59e0b' : '#f43f5e'} ${val * 20}%, #e2e8f0 ${val * 20}%)`,
                 }}
               />
-              <div className="flex justify-between mt-1.5">
-                <span className="text-[10px] text-gray-600">0</span>
-                <span className="text-[10px] text-gray-600">5</span>
+              <div className="flex justify-between mt-2">
+                <span className="text-[10px] font-bold text-slate-400">0</span>
+                <span className="text-[10px] font-bold text-slate-400">5</span>
               </div>
             </motion.div>
           );
         })}
       </motion.div>
 
-      <div className="mt-8">
-        <Button onClick={handleSubmit} loading={submitting} icon={Send} size="lg" className="w-full sm:w-auto">
+      <div className="mt-8 flex justify-end">
+        <Button
+          onClick={handleSubmit}
+          loading={submitting}
+          icon={Send}
+          size="lg"
+          className="bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md rounded-xl"
+        >
           {t('symptoms_submit_btn')}
         </Button>
       </div>

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity, Sparkles, ArrowRight, ChevronDown, ChevronUp,
-  Stethoscope, TestTube2, Utensils, Info, Clock, Bot, FileText,
-  ShieldCheck, Cpu, Zap, CheckCircle2, AlertTriangle
+  Stethoscope, TestTube2, Utensils, Info, Clock, Bot,
+  ShieldCheck, Cpu, AlertTriangle
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -13,10 +13,6 @@ import Loader from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
 import api from '../../services/api';
 import { useLanguage } from '../../context/LanguageContext';
-
-function CircularProgressRiskLabel({ t }) {
-  return <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t('prediction_risk_label')}</span>;
-}
 
 function CircularProgress({ percentage, size = 110, strokeWidth = 7, getRiskInfo, t }) {
   const radius = (size - strokeWidth) / 2;
@@ -29,7 +25,7 @@ function CircularProgress({ percentage, size = 110, strokeWidth = 7, getRiskInfo
       <svg width={size} height={size} className="transform -rotate-90">
         <circle
           cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={strokeWidth}
+          fill="none" stroke="#e2e8f0" strokeWidth={strokeWidth}
         />
         <motion.circle
           cx={size / 2} cy={size / 2} r={radius}
@@ -42,8 +38,8 @@ function CircularProgress({ percentage, size = 110, strokeWidth = 7, getRiskInfo
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-xl font-black text-white">{Math.round(percentage)}%</span>
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t('prediction_risk_label')}</span>
+        <span className="text-xl font-black text-[#0a192f]">{Math.round(percentage)}%</span>
+        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{t('prediction_risk_label')}</span>
       </div>
     </div>
   );
@@ -71,9 +67,9 @@ export default function Prediction() {
   }
 
   function getRiskInfo(pct) {
-    if (pct > 60) return { label: t('prediction_high_risk'), color: '#f43f5e', bg: 'bg-rose-500/15', text: 'text-rose-400', border: 'border-rose-500/30', bar: 'bg-rose-500' };
-    if (pct > 30) return { label: t('prediction_moderate_risk'), color: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', border: 'border-amber-500/30', bar: 'bg-amber-400' };
-    return { label: t('prediction_low_risk'), color: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', border: 'border-emerald-500/30', bar: 'bg-emerald-400' };
+    if (pct > 60) return { label: t('prediction_high_risk'), color: '#f43f5e', bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-200', bar: 'bg-rose-500' };
+    if (pct > 30) return { label: t('prediction_moderate_risk'), color: '#f59e0b', bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200', bar: 'bg-amber-400' };
+    return { label: t('prediction_low_risk'), color: '#10b981', bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200', bar: 'bg-emerald-400' };
   }
 
   const [results, setResults] = useState(null);
@@ -186,44 +182,44 @@ export default function Prediction() {
     <DashboardLayout title={t('prediction_title')} subtitle={t('prediction_subtitle')}>
       {alert.show && <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />}
 
-      <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full overflow-x-hidden pb-12">
+      <div className="flex flex-col gap-6 sm:gap-8 max-w-7xl mx-auto w-full overflow-x-hidden pb-12 text-[#0a192f]">
 
         {/* 🌟 Hero Header Card */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden gradient-border shadow-[0_12px_40px_rgba(0,0,0,0.5)] rounded-3xl"
+          className="glass-card p-6 sm:p-8 lg:p-10 relative overflow-hidden rounded-3xl bg-white/95 border border-sky-200/90 shadow-md"
         >
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 via-purple-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-emerald-500/20 via-rose-500/10 to-transparent rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-sky-200/40 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100/50 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1.5 rounded-full glass border border-white/10 text-xs font-semibold text-cyan-400">
+              <div className="inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-200 text-xs font-black text-[#0284c7]">
                 <Cpu className="w-3.5 h-3.5" />
                 {t('prediction_hero_badge')}
               </div>
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight mb-3">
-                {t('prediction_hero_title1')} <span className="bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400 bg-clip-text text-transparent">{t('prediction_hero_title2')}</span>
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#0a192f] tracking-tight mb-3">
+                {t('prediction_hero_title1')} <span className="bg-gradient-to-r from-[#0284c7] via-indigo-600 to-emerald-600 bg-clip-text text-transparent">{t('prediction_hero_title2')}</span>
               </h2>
-              <p className="text-slate-300 text-xs sm:text-base font-medium leading-relaxed">
+              <p className="text-slate-600 text-xs sm:text-base font-semibold leading-relaxed">
                 {t('prediction_hero_subtitle')}
               </p>
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-              <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg" className="w-full sm:w-auto shadow-lg shadow-cyan-500/25">
+              <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg" className="w-full sm:w-auto bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
                 {predicting ? t('prediction_btn_running') : t('prediction_btn_run')}
               </Button>
               <div className="flex gap-2 w-full sm:w-auto">
                 <Link to="/symptoms" className="flex-1 sm:flex-none">
-                  <Button variant="secondary" icon={Stethoscope} size="sm" className="w-full">
+                  <Button variant="secondary" icon={Stethoscope} size="sm" className="w-full bg-white border border-slate-200 text-slate-800 font-bold hover:bg-slate-50">
                     {t('prediction_btn_symptoms')}
                   </Button>
                 </Link>
                 <Link to="/blood-report" className="flex-1 sm:flex-none">
-                  <Button variant="secondary" icon={TestTube2} size="sm" className="w-full">
+                  <Button variant="secondary" icon={TestTube2} size="sm" className="w-full bg-white border border-slate-200 text-slate-800 font-bold hover:bg-slate-50">
                     {t('prediction_btn_blood')}
                   </Button>
                 </Link>
@@ -233,12 +229,12 @@ export default function Prediction() {
         </motion.div>
 
         {/* ℹ️ Data Status Guidance Banner */}
-        <div className="glass-card p-4 sm:p-5 rounded-2xl flex items-start gap-3.5 border border-cyan-500/20 bg-cyan-500/5">
-          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 shrink-0 mt-0.5">
+        <div className="glass-card p-4 sm:p-5 rounded-2xl flex items-start gap-3.5 border border-sky-200 bg-sky-50/50 shadow-xs">
+          <div className="p-2 rounded-xl bg-sky-100 text-[#0284c7] shrink-0 mt-0.5">
             <Info className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
-          <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-            <span className="font-bold text-white">{t('prediction_tip_title')}</span> {t('prediction_tip_part1')}<Link to="/symptoms" className="text-cyan-400 underline font-semibold">{t('prediction_tip_link_symptoms')}</Link>{t('prediction_tip_and')}<Link to="/blood-report" className="text-cyan-400 underline font-semibold">{t('prediction_tip_link_blood')}</Link>{t('prediction_tip_part2')}
+          <div className="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+            <span className="font-bold text-[#0a192f]">{t('prediction_tip_title')}</span> {t('prediction_tip_part1')}<Link to="/symptoms" className="text-[#0284c7] underline font-bold">{t('prediction_tip_link_symptoms')}</Link>{t('prediction_tip_and')}<Link to="/blood-report" className="text-[#0284c7] underline font-bold">{t('prediction_tip_link_blood')}</Link>{t('prediction_tip_part2')}
           </div>
         </div>
 
@@ -247,30 +243,28 @@ export default function Prediction() {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-card p-10 sm:p-14 text-center rounded-3xl relative overflow-hidden border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)]"
+            className="glass-card p-10 sm:p-14 text-center rounded-3xl relative overflow-hidden bg-white border border-sky-200 shadow-md"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-transparent pointer-events-none" />
-            
             <div className="relative z-10 flex flex-col items-center max-w-md mx-auto">
               <div className="relative w-24 h-24 mb-6 flex items-center justify-center">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-                  className="absolute inset-0 rounded-full border-4 border-cyan-500/20 border-t-cyan-400 border-r-purple-400"
+                  className="absolute inset-0 rounded-full border-4 border-sky-200 border-t-[#0284c7] border-r-indigo-600"
                 />
-                <Cpu className="w-10 h-10 text-cyan-400 animate-pulse" />
+                <Cpu className="w-10 h-10 text-[#0284c7] animate-pulse" />
               </div>
 
-              <h3 className="text-xl sm:text-2xl font-black text-white mb-2">{t('prediction_scan_title')}</h3>
+              <h3 className="text-xl sm:text-2xl font-black text-[#0a192f] mb-2">{t('prediction_scan_title')}</h3>
               
-              <div className="space-y-2 mt-4 text-xs sm:text-sm text-slate-300 font-medium">
-                <p className={`transition-all ${scanStep >= 1 ? 'text-cyan-400 font-bold' : 'text-slate-500'}`}>
+              <div className="space-y-2 mt-4 text-xs sm:text-sm text-slate-600 font-semibold">
+                <p className={`transition-all ${scanStep >= 1 ? 'text-[#0284c7] font-black' : 'text-slate-400'}`}>
                   {scanStep >= 1 ? '✓' : '○'} {t('prediction_scan_step1')}
                 </p>
-                <p className={`transition-all ${scanStep >= 2 ? 'text-purple-400 font-bold' : 'text-slate-500'}`}>
+                <p className={`transition-all ${scanStep >= 2 ? 'text-indigo-600 font-black' : 'text-slate-400'}`}>
                   {scanStep >= 2 ? '✓' : '○'} {t('prediction_scan_step2')}
                 </p>
-                <p className={`transition-all ${scanStep >= 3 ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
+                <p className={`transition-all ${scanStep >= 3 ? 'text-emerald-600 font-black' : 'text-slate-400'}`}>
                   {scanStep >= 3 ? '✓' : '○'} {t('prediction_scan_step3')}
                 </p>
               </div>
@@ -286,22 +280,22 @@ export default function Prediction() {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="glass-card p-6 sm:p-8 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border border-white/10"
+              className="glass-card p-6 sm:p-8 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border border-slate-200 bg-white shadow-xs"
             >
               <div className="flex-1 w-full">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs sm:text-sm font-extrabold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                  <span className="text-xs sm:text-sm font-black text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-[#0284c7]" />
                     {t('prediction_confidence_label')}
                   </span>
-                  <span className="text-base sm:text-lg font-black text-white">{Math.round(confidence * (confidence <= 1 ? 100 : 1))}%</span>
+                  <span className="text-base sm:text-lg font-black text-[#0a192f]">{Math.round(confidence * (confidence <= 1 ? 100 : 1))}%</span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-white/10 overflow-hidden">
+                <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${confidence * (confidence <= 1 ? 100 : 1)}%` }}
                     transition={{ duration: 1, ease: 'easeOut' }}
-                    className="h-full rounded-full gradient-bg"
+                    className="h-full rounded-full bg-gradient-to-r from-[#0284c7] to-indigo-600"
                   />
                 </div>
               </div>
@@ -312,7 +306,7 @@ export default function Prediction() {
                 icon={Bot}
                 size="md"
                 variant="secondary"
-                className="w-full sm:w-auto whitespace-nowrap shadow-lg"
+                className="w-full sm:w-auto whitespace-nowrap bg-indigo-50 border border-indigo-200 text-indigo-700 font-bold hover:bg-indigo-100 shadow-xs"
               >
                 {t('prediction_generate_summary')}
               </Button>
@@ -323,18 +317,18 @@ export default function Prediction() {
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-6 sm:p-8 rounded-3xl border border-purple-500/30 bg-purple-500/5 shadow-xl"
+                className="glass-card p-6 sm:p-8 rounded-3xl border border-purple-200 bg-purple-50/50 shadow-md"
               >
                 <div className="flex items-center gap-3.5 mb-5">
-                  <div className="p-3 rounded-2xl gradient-bg text-white shadow-md shadow-purple-500/20">
+                  <div className="p-3 rounded-2xl bg-purple-600 text-white shadow-md">
                     <Bot className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg sm:text-xl font-black text-white">{t('prediction_ai_summary_title')}</h3>
-                    <p className="text-xs text-purple-300 font-medium">{t('prediction_ai_summary_subtitle')}</p>
+                    <h3 className="text-lg sm:text-xl font-black text-[#0a192f]">{t('prediction_ai_summary_title')}</h3>
+                    <p className="text-xs text-purple-700 font-bold">{t('prediction_ai_summary_subtitle')}</p>
                   </div>
                 </div>
-                <div className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap glass p-5 rounded-2xl border border-white/10 font-mono">
+                <div className="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap bg-white p-5 rounded-2xl border border-purple-100 font-mono font-medium shadow-xs">
                   {aiSummary}
                 </div>
               </motion.div>
@@ -355,14 +349,14 @@ export default function Prediction() {
                     key={key}
                     variants={item}
                     whileHover={{ y: -4, scale: 1.02 }}
-                    className={`glass-card p-6 rounded-3xl text-center border ${risk.border} transition-all shadow-lg flex flex-col items-center justify-between`}
+                    className={`glass-card p-6 rounded-3xl text-center bg-white border ${risk.border} transition-all shadow-xs flex flex-col items-center justify-between`}
                   >
                     <div className="my-2">
                       <CircularProgress percentage={pct} getRiskInfo={getRiskInfo} t={t} />
                     </div>
                     <div className="mt-2 w-full">
-                      <h4 className="text-base font-extrabold text-white mb-2 leading-tight">{formatDeficiency(key)}</h4>
-                      <span className={`inline-block text-xs px-3 py-1 rounded-full font-bold ${risk.bg} ${risk.text} border ${risk.border}`}>
+                      <h4 className="text-base font-black text-[#0a192f] mb-2 leading-tight">{formatDeficiency(key)}</h4>
+                      <span className={`inline-block text-xs px-3 py-1 rounded-full font-black ${risk.bg} ${risk.text} border ${risk.border}`}>
                         {risk.label}
                       </span>
                     </div>
@@ -376,21 +370,20 @@ export default function Prediction() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-6 sm:p-8 rounded-3xl gradient-border relative overflow-hidden shadow-2xl"
+                className="glass-card p-6 sm:p-8 rounded-3xl bg-white border border-rose-200 shadow-md relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-transparent pointer-events-none" />
                 <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
-                    <div className="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-xs font-bold text-rose-300">
+                    <div className="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200 text-xs font-black text-rose-600">
                       <AlertTriangle className="w-3.5 h-3.5" /> {t('prediction_cta_badge')}
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t('prediction_cta_title')}</h3>
-                    <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl font-medium leading-relaxed">
+                    <h3 className="text-xl sm:text-2xl font-black text-[#0a192f] tracking-tight">{t('prediction_cta_title')}</h3>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl font-semibold leading-relaxed">
                       {t('prediction_cta_desc')}
                     </p>
                   </div>
                   <Link to="/meal-plan" className="w-full md:w-auto">
-                    <Button icon={Utensils} size="lg" className="w-full md:w-auto shadow-lg shadow-cyan-500/25">
+                    <Button icon={Utensils} size="lg" className="w-full md:w-auto bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
                       {t('prediction_cta_btn')}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>
@@ -404,21 +397,21 @@ export default function Prediction() {
 
         {/* 📜 Assessment History Drawer */}
         {predictions.length > 1 && (
-          <div className="glass-card rounded-3xl overflow-hidden border border-white/10">
+          <div className="glass-card rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xs">
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-white/5 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
+                <div className="p-2.5 rounded-xl bg-purple-50 text-purple-600">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-base font-extrabold text-white">{t('prediction_history_title')} ({predictions.length})</h4>
-                  <p className="text-xs text-slate-400 font-medium">{t('prediction_history_subtitle')}</p>
+                  <h4 className="text-base font-black text-[#0a192f]">{t('prediction_history_title')} ({predictions.length})</h4>
+                  <p className="text-xs text-slate-500 font-semibold">{t('prediction_history_subtitle')}</p>
                 </div>
               </div>
-              {showHistory ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
+              {showHistory ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
             </button>
             <AnimatePresence>
               {showHistory && (
@@ -426,7 +419,7 @@ export default function Prediction() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-white/5"
+                  className="border-t border-slate-100"
                 >
                   <div className="p-4 space-y-2.5 max-h-72 overflow-y-auto custom-scrollbar">
                     {predictions.map((pred, idx) => (
@@ -434,14 +427,14 @@ export default function Prediction() {
                         key={idx}
                         onClick={() => setResults(pred)}
                         className={`flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all ${
-                          results === pred ? 'bg-white/15 border border-cyan-500/30 shadow-md' : 'glass hover:bg-white/10'
+                          results === pred ? 'bg-sky-50 border border-sky-200 shadow-xs' : 'hover:bg-slate-50'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <Activity className="w-4 h-4 text-cyan-400" />
-                          <span className="text-sm font-bold text-white">{t('prediction_history_session')}#{predictions.length - idx}</span>
+                          <Activity className="w-4 h-4 text-[#0284c7]" />
+                          <span className="text-sm font-black text-[#0a192f]">{t('prediction_history_session')}#{predictions.length - idx}</span>
                         </div>
-                        <span className="text-xs text-slate-400 font-medium">
+                        <span className="text-xs text-slate-500 font-semibold">
                           {pred.prediction_date ? new Date(pred.prediction_date).toLocaleString() : `${t('prediction_history_result')}#${idx + 1}`}
                         </span>
                       </div>

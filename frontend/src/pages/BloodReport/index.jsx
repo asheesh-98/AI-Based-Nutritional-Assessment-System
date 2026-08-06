@@ -9,8 +9,6 @@ import { PageLoader } from '../../components/common/Loader';
 import assessmentService from '../../services/assessmentService';
 import { useLanguage } from '../../context/LanguageContext';
 
-
-
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.05 } } };
 const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
@@ -42,7 +40,6 @@ export default function BloodReport() {
       try {
         const reports = await assessmentService.getBloodReports();
         if (reports && reports.length > 0) {
-          // Backend sorts uploaded_at desc, so reports[0] is the newest submission
           const last = reports[0];
           setForm(prev => {
             const filled = { ...prev };
@@ -88,16 +85,16 @@ export default function BloodReport() {
     <DashboardLayout title={t('blood_title')} subtitle={t('blood_subtitle')}>
       <Alert type={alert.type} message={alert.message} show={alert.show} onClose={() => setAlert({ ...alert, show: false })} />
 
-      <div className="glass-card p-4 mb-6 mt-2 flex items-start gap-3 border border-cyan-500/20 bg-cyan-500/5">
-        <Info className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-        <p className="text-sm text-gray-300">
+      <div className="glass-card p-4 mb-6 mt-2 flex items-start gap-3 border border-sky-200 bg-sky-50/50 shadow-xs rounded-2xl">
+        <Info className="w-5 h-5 text-[#0284c7] mt-0.5 shrink-0" />
+        <p className="text-sm text-slate-700 font-medium">
           {t('blood_info_notice')}
         </p>
       </div>
 
-      <div className="glass-card p-6 mb-8 text-center border-dashed border-2 border-white/10 hover:border-cyan-500/50 transition-colors">
-        <h3 className="text-lg font-semibold text-white mb-2">{t('blood_autofill_title')}</h3>
-        <p className="text-sm text-gray-400 mb-4">{t('blood_autofill_subtitle')}</p>
+      <div className="glass-card p-6 sm:p-8 mb-8 text-center rounded-3xl border-dashed border-2 border-slate-300 hover:border-[#0284c7] bg-white/95 transition-all shadow-sm">
+        <h3 className="text-lg font-black text-[#0a192f] mb-2">{t('blood_autofill_title')}</h3>
+        <p className="text-sm text-slate-600 font-semibold mb-4">{t('blood_autofill_subtitle')}</p>
         
         <input 
           type="file" 
@@ -119,7 +116,7 @@ export default function BloodReport() {
             }
           }} 
         />
-        <label htmlFor="report-upload" className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyan-500/20 text-cyan-400 font-medium hover:bg-cyan-500/30 transition-colors">
+        <label htmlFor="report-upload" className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-sky-50 border border-sky-200 text-[#0284c7] font-bold hover:bg-sky-100 transition-colors shadow-xs">
           <TestTube2 className="w-5 h-5" />
           {t('blood_select_file')}
         </label>
@@ -129,14 +126,14 @@ export default function BloodReport() {
         variants={container}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl text-[#0a192f]"
       >
         {bloodMarkers.map((marker) => (
-          <motion.div key={marker.key} variants={item} className="glass-card p-5">
+          <motion.div key={marker.key} variants={item} className="glass-card p-5 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-xs">
             <div className="flex items-center gap-2 mb-3">
-              <TestTube2 className="w-4 h-4 text-cyan-400" />
-              <span className="text-sm font-medium text-white">{marker.label}</span>
-              <span className="text-xs text-gray-500 ml-auto">({marker.unit})</span>
+              <TestTube2 className="w-4 h-4 text-[#0284c7]" />
+              <span className="text-sm font-black text-[#0a192f]">{marker.label}</span>
+              <span className="text-xs text-slate-500 font-bold ml-auto">({marker.unit})</span>
             </div>
             <Input
               name={marker.key}
@@ -146,16 +143,22 @@ export default function BloodReport() {
               onChange={handleChange}
               step="0.1"
             />
-            <p className="text-xs text-gray-500 mt-2 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
-              {t('blood_normal_range')} {marker.range}
+            <p className="text-xs text-slate-500 font-semibold mt-2 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+              {t('blood_normal_range')}: {marker.range}
             </p>
           </motion.div>
         ))}
       </motion.div>
 
-      <div className="mt-8">
-        <Button onClick={handleSubmit} loading={submitting} icon={Send} size="lg" className="w-full sm:w-auto">
+      <div className="mt-8 flex justify-end max-w-4xl">
+        <Button
+          onClick={handleSubmit}
+          loading={submitting}
+          icon={Send}
+          size="lg"
+          className="bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md rounded-xl"
+        >
           {t('blood_submit_btn')}
         </Button>
       </div>
