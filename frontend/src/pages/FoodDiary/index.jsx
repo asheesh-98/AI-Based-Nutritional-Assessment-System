@@ -32,26 +32,26 @@ const cardVariants = {
 };
 
 export default function FoodDiary() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Presets mapped with translated labels
-  const popularPresets = [
+  const popularPresets = useMemo(() => [
     { key: 'apple', name: t('food_diary_preset_apple') || 'Apple', queryName: 'Apple', qty: 1, unit: 'pcs', icon: '🍎' },
     { key: 'milk', name: t('food_diary_preset_milk') || 'Whole Milk', queryName: 'Whole Milk', qty: 250, unit: 'ml', icon: '🥛' },
     { key: 'rice', name: t('food_diary_preset_rice') || 'Brown Rice', queryName: 'Brown Rice', qty: 150, unit: 'g', icon: '🍚' },
     { key: 'avocado', name: t('food_diary_preset_avocado') || 'Avocado', queryName: 'Avocado', qty: 1, unit: 'pcs', icon: '🥑' },
     { key: 'almonds', name: t('food_diary_preset_almonds') || 'Almonds', queryName: 'Almonds', qty: 30, unit: 'g', icon: '🥜' },
     { key: 'oatmeal', name: t('food_diary_preset_oatmeal') || 'Oatmeal Porridge', queryName: 'Oatmeal Porridge', qty: 1, unit: 'cups', icon: '🥣' },
-  ];
+  ], [language, t]);
 
-  const mealTypes = [
+  const mealTypes = useMemo(() => [
     { value: 'breakfast', label: t('food_diary_breakfast'), icon: Coffee, color: 'text-amber-400', accentBg: 'bg-amber-500/10 border-amber-500/30 text-amber-300', gradient: 'from-amber-500/15 via-amber-500/5 to-transparent', border: 'border-amber-500/20' },
     { value: 'lunch', label: t('food_diary_lunch'), icon: Sun, color: 'text-cyan-400', accentBg: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300', gradient: 'from-cyan-500/15 via-cyan-500/5 to-transparent', border: 'border-cyan-500/20' },
     { value: 'dinner', label: t('food_diary_dinner'), icon: Moon, color: 'text-purple-400', accentBg: 'bg-purple-500/10 border-purple-500/30 text-purple-300', gradient: 'from-purple-500/15 via-purple-500/5 to-transparent', border: 'border-purple-500/20' },
     { value: 'snack', label: t('food_diary_snack'), icon: Cookie, color: 'text-pink-400', accentBg: 'bg-pink-500/10 border-pink-500/30 text-pink-300', gradient: 'from-pink-500/15 via-pink-500/5 to-transparent', border: 'border-pink-500/20' },
-  ];
+  ], [language, t]);
 
-  const unitOptions = [
+  const unitOptions = useMemo(() => [
     { code: 'servings', label: t('food_diary_unit_serving') || 'Servings' },
     { code: 'pcs', label: t('food_diary_unit_pcs') || 'Pieces (pcs)' },
     { code: 'g', label: t('food_diary_unit_g') || 'Grams (g)' },
@@ -59,7 +59,7 @@ export default function FoodDiary() {
     { code: 'cups', label: t('food_diary_unit_cups') || 'Cups' },
     { code: 'oz', label: t('food_diary_unit_oz') || 'Ounces (oz)' },
     { code: 'tbsp', label: t('food_diary_unit_tbsp') || 'Tablespoon (tbsp)' },
-  ];
+  ], [language, t]);
 
   // Core Page State
   const [selectedMeal, setSelectedMeal] = useState('breakfast');
