@@ -77,38 +77,38 @@ export default function Home() {
   const features = [
     {
       icon: Stethoscope,
-      title: t('feat_deficiency_title'),
-      desc: t('feat_deficiency_desc'),
+      title: t('feat_deficiency_title', 'Deficiency Risk Engine'),
+      desc: t('feat_deficiency_desc', 'Identify potential vitamin, mineral, and micronutrient gaps based on physical symptoms and dietary logs.'),
       color: 'cyan',
     },
     {
       icon: Brain,
-      title: t('feat_ml_title'),
-      desc: t('feat_ml_desc'),
+      title: t('feat_ml_title', 'ML Clinical Predictor'),
+      desc: t('feat_ml_desc', 'Random Forest and XGBoost models trained on clinical datasets to predict deficiency probabilities.'),
       color: 'purple',
     },
     {
       icon: Utensils,
-      title: t('feat_meal_title'),
-      desc: t('feat_meal_desc'),
+      title: t('feat_meal_title', 'Smart Meal Planner'),
+      desc: t('feat_meal_desc', '7-day rotating meal plans customized to your caloric goals, allergies, and deficiency correction targets.'),
       color: 'emerald',
     },
     {
       icon: TestTube2,
-      title: t('feat_blood_title'),
-      desc: t('feat_blood_desc'),
+      title: t('feat_blood_title', 'Blood Lab OCR Analyzer'),
+      desc: t('feat_blood_desc', 'Upload medical PDF blood lab reports to extract biomarkers, hemoglobin, ferritin, and Vitamin D levels.'),
       color: 'rose',
     },
     {
       icon: ScanBarcode,
-      title: t('feat_scanner_title'),
-      desc: t('feat_scanner_desc'),
+      title: t('feat_scanner_title', 'Multi-Modal Food Scanner'),
+      desc: t('feat_scanner_desc', 'Snap meal photos or scan barcodes to instantly estimate calories, macronutrients, and micronutrients.'),
       color: 'amber',
     },
     {
       icon: Bot,
-      title: t('feat_coach_title'),
-      desc: t('feat_coach_desc'),
+      title: t('feat_coach_title', '24/7 Clinical AI Coach'),
+      desc: t('feat_coach_desc', 'Interactive Gemini AI assistant offering instant personalized dietary advice, recipes, and wellness guidance.'),
       color: 'indigo',
     },
   ];
@@ -123,10 +123,10 @@ export default function Home() {
   };
 
   const stats = [
-    { value: '94.2%', label: t('stat_accuracy'), desc: t('stat_accuracy_desc') },
-    { value: '14+', label: t('stat_biomarkers'), desc: t('stat_biomarkers_desc') },
-    { value: '58,000+', label: t('stat_foods'), desc: t('stat_foods_desc') },
-    { value: '7-Day', label: t('stat_plans'), desc: t('stat_plans_desc') },
+    { value: '94.2%', label: t('stat_accuracy', '95% Accuracy'), desc: t('stat_accuracy_desc', 'Machine learning precision') },
+    { value: '14+', label: t('stat_biomarkers', '50+ Nutrients'), desc: t('stat_biomarkers_desc', 'Comprehensive biomarker tracking') },
+    { value: '58,000+', label: t('stat_foods', '58,000+ Foods'), desc: t('stat_foods_desc', 'Curated clinical food database') },
+    { value: '7-Day', label: t('stat_plans', '7-Day Plans'), desc: t('stat_plans_desc', 'Weekly rotating personalized recipes') },
   ];
 
   const faqs = [
