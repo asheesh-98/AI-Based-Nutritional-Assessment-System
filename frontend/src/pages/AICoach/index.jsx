@@ -4,9 +4,12 @@ import {
   Bot, Send, Sparkles, User, AlertCircle,
   Lightbulb, Utensils, Trash2, Zap
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import api from '../../services/api';
 import { useLanguage } from '../../context/LanguageContext';
+
+const CHAT_STORAGE_KEY = 'nutriai_coach_chat_history';
 
 export default function AICoach() {
   const { t } = useLanguage();
@@ -18,16 +21,42 @@ export default function AICoach() {
     { label: t('ai_coach_prompt_tea_label'), prompt: t('ai_coach_prompt_tea'), icon: Lightbulb, color: 'text-purple-600' },
   ];
 
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: t('ai_coach_initial_message'),
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  // Load chat messages from localStorage or initialize with welcome message
+  const [messages, setMessages] = useState(() => {
+    try {
+      const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load chat history:', err);
     }
-  ]);
+    return [
+      {
+        role: 'assistant',
+        content: t('ai_coach_initial_message'),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }
+    ];
+  });
+
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
+
+  // Persist messages to localStorage whenever they update
+  useEffect(() => {
+    if (messages && messages.length > 0) {
+      try {
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages));
+      } catch (err) {
+        console.error('Failed to save chat history:', err);
+      }
+    }
+  }, [messages]);
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -79,6 +108,11 @@ export default function AICoach() {
   };
 
   const handleClearChat = () => {
+    try {
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+    } catch (err) {
+      console.error('Failed to clear storage:', err);
+    }
     setMessages([
       {
         role: 'assistant',
@@ -128,7 +162,7 @@ export default function AICoach() {
                 </div>
               )}
               
-              <div className="flex flex-col max-w-[88%] sm:max-w-[80%]">
+              <div className="flex flex-col max-w-[92%] sm:max-w-[85%]">
                 <div
                   className={`p-4 rounded-3xl text-xs sm:text-sm leading-relaxed shadow-xs ${
                     msg.role === 'user'
@@ -136,7 +170,27 @@ export default function AICoach() {
                       : 'bg-slate-50 border border-slate-200 text-[#0a192f] rounded-bl-none font-semibold'
                   }`}
                 >
-                  <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                  {msg.role === 'assistant' ? (
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-2.5 last:mb-0 leading-relaxed">{children}</p>,
+                        strong: ({ children }) => <strong className="font-black text-[#0a192f]">{children}</strong>,
+                        em: ({ children }) => <em className="italic text-slate-700">{children}</em>,
+                        h1: ({ children }) => <h1 className="text-base sm:text-lg font-black text-[#0a192f] mt-3 mb-2 border-b border-slate-200 pb-1">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-sm sm:text-base font-black text-[#0a192f] mt-3 mb-2">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-xs sm:text-sm font-black text-[#0a192f] mt-3 mb-1.5">{children}</h3>,
+                        ul: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-2.5 ml-1">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-2.5 ml-1">{children}</ol>,
+                        li: ({ children }) => <li className="text-xs sm:text-sm text-slate-800 font-medium">{children}</li>,
+                        hr: () => <hr className="my-3 border-slate-200" />,
+                        code: ({ children }) => <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono text-[#0284c7] font-bold">{children}</code>,
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  ) : (
+                    <div className="whitespace-pre-wrap break-words">{msg.content}</div>
+                  )}
                 </div>
                 <span className={`text-[10px] text-slate-400 mt-1 font-semibold px-2 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
                   {msg.timestamp}
