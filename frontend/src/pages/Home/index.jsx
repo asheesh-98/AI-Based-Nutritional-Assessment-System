@@ -132,18 +132,14 @@ export default function Home() {
   const item = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } } };
 
   return (
-    <div className="min-h-screen bg-[#0b1329] text-slate-100 selection:bg-cyan-500/30 selection:text-white flex flex-col overflow-x-hidden w-full relative">
+    <div className="min-h-screen bg-[#f8f9fa] text-slate-900 selection:bg-blue-500/20 selection:text-[#0077ff] flex flex-col overflow-x-hidden w-full relative">
       <Navbar />
 
-      {/* 🌟 Hero Section with Vibrant Background Texture */}
+      {/* 🌟 Hero Section */}
       <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full overflow-hidden">
-        {/* Background Image Texture & Ambient Glow Orbs */}
-        <div className="absolute inset-0 bg-[url('/assets/nutrition_bg.jpg')] bg-cover bg-center opacity-[0.14] mix-blend-overlay pointer-events-none z-0" />
-        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-cyan-500/20 rounded-full blur-[140px] animate-pulse-glow" />
-          <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-purple-500/20 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
-          <div className="absolute bottom-[-10%] left-[20%] w-[45vw] h-[45vw] bg-emerald-500/18 rounded-full blur-[130px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
-        </div>
+        {/* Soft Ambient Radial Mesh */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
+        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[130px] pointer-events-none z-0" />
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           
@@ -153,9 +149,9 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-white/10 text-xs font-bold text-cyan-400 mb-6 tracking-wider uppercase shadow-lg shadow-cyan-500/10"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-extrabold text-[#0077ff] mb-6 tracking-wider uppercase shadow-xs"
             >
-              <Shield className="w-4 h-4 text-cyan-400 shrink-0" />
+              <Shield className="w-4 h-4 text-[#0077ff] shrink-0" />
               <span>{t('hero_badge')}</span>
             </motion.div>
 
@@ -163,20 +159,20 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 leading-tight text-white"
+              className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 leading-tight text-slate-900"
             >
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#0077ff] via-blue-600 to-indigo-700 bg-clip-text text-transparent">
                 {t('hero_title_1')}
               </span>
               <br />
-              <span className="mt-1 block text-white">{t('hero_title_2')}</span>
+              <span className="mt-1 block text-slate-900">{t('hero_title_2')}</span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-sm sm:text-lg text-slate-300 mb-8 sm:mb-10 leading-relaxed font-medium"
+              className="text-sm sm:text-lg text-slate-600 mb-8 sm:mb-10 leading-relaxed font-medium"
             >
               {t('hero_subtitle')}
             </motion.p>
@@ -189,9 +185,9 @@ export default function Home() {
             >
               <Link to="/register" className="w-full sm:w-auto">
                 <motion.button
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-white gradient-bg rounded-2xl shadow-[0_0_25px_rgba(0,212,255,0.35)] flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full sm:w-auto px-7 py-4 text-sm sm:text-base font-bold text-white bg-[#0077ff] hover:bg-[#0066ff] rounded-2xl shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   <span>{t('start_assessment')}</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />

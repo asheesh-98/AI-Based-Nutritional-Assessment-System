@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 const variants = {
-  primary: 'gradient-bg text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40',
-  secondary: 'bg-white/10 text-white border border-white/10 hover:bg-white/15 hover:border-white/20',
-  outline: 'bg-transparent text-cyan-400 border border-cyan-400/50 hover:bg-cyan-400/10',
-  danger: 'bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:bg-rose-500/30',
-  ghost: 'bg-transparent text-gray-400 hover:text-white hover:bg-white/5',
+  primary: 'bg-[#0077ff] hover:bg-[#0066ff] text-white shadow-md shadow-blue-500/20 active:bg-[#0052cc]',
+  secondary: 'bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200 hover:text-slate-900',
+  outline: 'bg-transparent text-[#0077ff] border border-[#0077ff] hover:bg-blue-50',
+  danger: 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100',
+  ghost: 'bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100',
 };
 
 const sizes = {
@@ -28,11 +28,11 @@ export default function Button({
 }) {
   return (
     <motion.button
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
+      whileHover={{ scale: disabled ? 1 : 1.015 }}
       whileTap={{ scale: disabled ? 1 : 0.98 }}
       className={`
-        inline-flex items-center justify-center font-semibold
-        transition-all duration-300 cursor-pointer
+        inline-flex items-center justify-center font-bold
+        transition-all duration-200 cursor-pointer select-none
         disabled:opacity-50 disabled:cursor-not-allowed
         ${variants[variant]}
         ${!className.includes('px-') && !className.includes('py-') ? sizes[size] : ''}
@@ -42,9 +42,9 @@ export default function Button({
       {...props}
     >
       {loading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
+        <Loader2 className="w-4 h-4 animate-spin shrink-0" />
       ) : Icon ? (
-        <Icon className="w-4 h-4" />
+        <Icon className="w-4 h-4 shrink-0" />
       ) : null}
       {children}
     </motion.button>

@@ -8,8 +8,6 @@ import {
   ChevronLeft, ChevronRight, Stethoscope, ScanBarcode, Bot
 } from 'lucide-react';
 
-
-
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
@@ -53,17 +51,17 @@ export default function Sidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 256 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="hidden lg:flex flex-col h-full flex-shrink-0 glass border-r border-white/5 relative z-10"
+      className="hidden lg:flex flex-col h-full flex-shrink-0 bg-white border-r border-slate-200/80 shadow-sm relative z-10"
     >
       {/* Collapse button */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full gradient-bg flex items-center justify-center text-white shadow-lg z-20 cursor-pointer"
+        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0077ff] flex items-center justify-center text-white shadow-md shadow-blue-500/30 z-20 cursor-pointer hover:bg-[#0066ff] transition-colors"
       >
-        {collapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-3 h-3" />}
+        {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
       </button>
 
-      <div className="flex-1 py-6 px-3 space-y-6 overflow-y-auto">
+      <div className="flex-1 py-6 px-3 space-y-6 overflow-y-auto custom-scrollbar">
         {menuSections.map((section) => (
           <div key={section.title}>
             <AnimatePresence>
@@ -72,13 +70,13 @@ export default function Sidebar() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-gray-500"
+                  className="px-3 mb-2 text-[10px] font-black uppercase tracking-widest text-slate-400"
                 >
                   {section.title}
                 </motion.p>
               )}
             </AnimatePresence>
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {section.items.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
@@ -87,21 +85,15 @@ export default function Sidebar() {
                     to={item.path}
                     title={collapsed ? item.label : ''}
                     className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                      flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm
                       transition-all duration-200 group relative overflow-hidden
                       ${isActive
-                        ? 'bg-white/10 text-white shadow-inner'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                        ? 'bg-[#0077ff] text-white shadow-md shadow-blue-500/20 font-bold'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold'
                       }
                     `}
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="sidebar-active"
-                        className="absolute left-0 top-0 bottom-0 w-1 gradient-bg"
-                      />
-                    )}
-                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-cyan-400' : ''}`} />
+                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`} />
                     <AnimatePresence>
                       {!collapsed && (
                         <motion.span
@@ -123,13 +115,13 @@ export default function Sidebar() {
       </div>
 
       {/* Bottom section */}
-      <div className="p-3 border-t border-white/5 space-y-1">
+      <div className="p-3 border-t border-slate-200 space-y-1 bg-slate-50/50">
         <Link
           to="/profile"
           title={collapsed ? t('sidebar_settings') : ''}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all"
         >
-          <Settings className="w-5 h-5 flex-shrink-0" />
+          <Settings className="w-5 h-5 flex-shrink-0 text-slate-500" />
           {!collapsed && <span>{t('sidebar_settings')}</span>}
         </Link>
       </div>

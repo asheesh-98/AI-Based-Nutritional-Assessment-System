@@ -4,13 +4,11 @@ import Sidebar from './Sidebar';
 
 export default function DashboardLayout({ children, title, subtitle }) {
   return (
-    <div className="h-screen w-full flex flex-col bg-[#0b1329] overflow-hidden selection:bg-cyan-500/30 selection:text-white relative">
+    <div className="h-screen w-full flex flex-col bg-[#f8f9fa] overflow-hidden selection:bg-blue-500/20 selection:text-[#0077ff] relative text-slate-900">
       
-      {/* 🌟 Ambient Vibrant Background Glows & Image Overlay */}
-      <div className="absolute inset-0 bg-[url('/assets/wellness_bg.jpg')] bg-cover bg-center opacity-[0.08] mix-blend-overlay pointer-events-none z-0" />
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="absolute top-1/3 right-10 w-[550px] h-[550px] bg-purple-500/15 rounded-full blur-[150px] pointer-events-none z-0" />
-      <div className="absolute bottom-10 left-10 w-[450px] h-[450px] bg-emerald-500/15 rounded-full blur-[130px] pointer-events-none z-0" />
+      {/* 🌟 Soft Ambient Background Mesh */}
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-500/4 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-emerald-500/4 rounded-full blur-[130px] pointer-events-none z-0" />
 
       <Navbar />
       
@@ -25,13 +23,11 @@ export default function DashboardLayout({ children, title, subtitle }) {
               className="mb-6 sm:mb-8"
             >
               {title && (
-                <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-3">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-cyan-200">
-                    {title}
-                  </span>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                  <span>{title}</span>
                 </h1>
               )}
-              {subtitle && <p className="text-sm sm:text-base text-cyan-300/80 font-medium mt-1">{subtitle}</p>}
+              {subtitle && <p className="text-sm sm:text-base text-slate-600 font-medium mt-1">{subtitle}</p>}
             </motion.div>
           )}
           
