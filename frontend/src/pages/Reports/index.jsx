@@ -586,152 +586,150 @@ export default function Reports() {
 
           </div>
         )}
-        <AnimatePresence>
-          {selectedReport && createPortal(
-            <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-2xl my-auto max-h-[88vh] flex flex-col overflow-hidden text-[#0a192f]"
-              >
-                {/* Sticky Header Bar */}
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 shrink-0">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-[#0a192f] flex items-center justify-center text-white shadow-md shrink-0">
-                      <FileText className="w-5 h-5 text-[#0284c7]" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-black text-[#0a192f] leading-tight">
-                        Detailed Clinical Assessment Report
-                      </h3>
-                      <p className="text-xs text-slate-500 font-semibold">
-                        ID: #{selectedReport.id || 'NUTR-2026'} • {new Date(selectedReport.prediction_date).toLocaleString()}
-                      </p>
-                    </div>
+        {/* 📑 Detailed Clinical Assessment Report Modal */}
+        {selectedReport && createPortal(
+          <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-2xl my-auto max-h-[88vh] flex flex-col overflow-hidden text-[#0a192f]"
+            >
+              {/* Sticky Header Bar */}
+              <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0a192f] flex items-center justify-center text-white shadow-md shrink-0">
+                    <FileText className="w-5 h-5 text-[#0284c7]" />
                   </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-black text-[#0a192f] leading-tight">
+                      Detailed Clinical Assessment Report
+                    </h3>
+                    <p className="text-xs text-slate-500 font-semibold">
+                      ID: #{selectedReport.id || 'NUTR-2026'} • {new Date(selectedReport.prediction_date).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedReport(null)}
+                  className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Scrollable Report Content */}
+              <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-5 custom-scrollbar">
+
+                {/* Patient & Model Telemetry Badge Strip */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Patient</span>
+                    <span className="text-xs sm:text-sm font-black text-[#0a192f]">{user?.full_name || user?.email?.split('@')[0] || 'Patient'}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">AI Model</span>
+                    <span className="text-xs sm:text-sm font-black text-[#0284c7]">Gemini 2.0 Risk Engine</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Confidence</span>
+                    <span className="text-xs sm:text-sm font-black text-emerald-600">{Math.round((selectedReport.confidence_score || 0.85) * 100)}% Verified</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Date & Time</span>
+                    <span className="text-xs font-bold text-slate-700">{new Date(selectedReport.prediction_date).toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                {/* Biomarker Risk Analysis Grid */}
+                <div>
+                  <h4 className="text-sm font-black text-[#0a192f] uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-[#0284c7]" />
+                    Biomarker Deficiency Risk Analysis
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {Object.entries(RISK_LABELS).map(([key, info]) => {
+                      const val = selectedReport[key] || 0;
+                      const pct = Math.round(val * 100);
+                      const status = getRiskStatus(val);
+                      return (
+                        <div key={key} className={`p-4 rounded-2xl bg-white border ${info.border} space-y-2 shadow-xs`}>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-black text-[#0a192f]">{info.label}</span>
+                            <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
+                              {status.label}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between">
+                            <span className="text-xl font-black text-[#0a192f]">{pct}%</span>
+                            <span className="text-[10px] font-bold text-slate-500">Risk Score</span>
+                          </div>
+                          <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+                            <div className={`h-full rounded-full ${status.bar}`} style={{ width: `${pct}%` }} />
+                          </div>
+                          <div className="pt-1.5 border-t border-slate-100 text-[11px] font-semibold text-slate-600">
+                            <strong className="text-[#0284c7]">Target Foods:</strong> {info.foods.slice(0, 3).join(', ')}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Clinical Recommendations & Action Items */}
+                <div className="bg-sky-50/70 p-4 sm:p-5 rounded-2xl border border-sky-200 space-y-3">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-[#0284c7] flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4" />
+                    Targeted Clinical Dietary Recommendations
+                  </h4>
+                  <ul className="space-y-2 text-xs sm:text-sm font-semibold text-slate-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>Increase dietary intake of key micronutrients identified with moderate/high risk scores.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>Maintain consistent daily hydration (2.5L+ target) for optimal metabolic bioavailability.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <span>Schedule periodic blood lab follow-up every 60 to 90 days to monitor biomarker trends.</span>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+
+              {/* Footer Action Buttons */}
+              <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 pt-4 mt-2 border-t border-slate-100 shrink-0">
+                <button
+                  onClick={() => handleDownloadJSON(selectedReport)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Export Raw JSON
+                </button>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <button
                     onClick={() => setSelectedReport(null)}
-                    className="p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0"
+                    className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer flex-1 sm:flex-none"
                   >
-                    <X size={20} />
+                    Close
                   </button>
-                </div>
-
-                {/* Scrollable Report Content */}
-                <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-5 custom-scrollbar">
-
-                  {/* Patient & Model Telemetry Badge Strip */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Patient</span>
-                      <span className="text-xs sm:text-sm font-black text-[#0a192f]">{user?.full_name || user?.email?.split('@')[0] || 'Patient'}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">AI Model</span>
-                      <span className="text-xs sm:text-sm font-black text-[#0284c7]">Gemini 2.0 Risk Engine</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Confidence</span>
-                      <span className="text-xs sm:text-sm font-black text-emerald-600">{Math.round((selectedReport.confidence_score || 0.85) * 100)}% Verified</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Date & Time</span>
-                      <span className="text-xs font-bold text-slate-700">{new Date(selectedReport.prediction_date).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-
-                  {/* Biomarker Risk Analysis Grid */}
-                  <div>
-                    <h4 className="text-sm font-black text-[#0a192f] uppercase tracking-wider mb-3 flex items-center gap-2">
-                      <Activity className="w-4 h-4 text-[#0284c7]" />
-                      Biomarker Deficiency Risk Analysis
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {Object.entries(RISK_LABELS).map(([key, info]) => {
-                        const val = selectedReport[key] || 0;
-                        const pct = Math.round(val * 100);
-                        const status = getRiskStatus(val);
-                        return (
-                          <div key={key} className={`p-4 rounded-2xl bg-white border ${info.border} space-y-2 shadow-xs`}>
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-black text-[#0a192f]">{info.label}</span>
-                              <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
-                                {status.label}
-                              </span>
-                            </div>
-                            <div className="flex items-baseline justify-between">
-                              <span className="text-xl font-black text-[#0a192f]">{pct}%</span>
-                              <span className="text-[10px] font-bold text-slate-500">Risk Score</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-                              <div className={`h-full rounded-full ${status.bar}`} style={{ width: `${pct}%` }} />
-                            </div>
-                            <div className="pt-1.5 border-t border-slate-100 text-[11px] font-semibold text-slate-600">
-                              <strong className="text-[#0284c7]">Target Foods:</strong> {info.foods.slice(0, 3).join(', ')}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Clinical Recommendations & Action Items */}
-                  <div className="bg-sky-50/70 p-4 sm:p-5 rounded-2xl border border-sky-200 space-y-3">
-                    <h4 className="text-xs font-black uppercase tracking-wider text-[#0284c7] flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4" />
-                      Targeted Clinical Dietary Recommendations
-                    </h4>
-                    <ul className="space-y-2 text-xs sm:text-sm font-semibold text-slate-700">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>Increase dietary intake of key micronutrients identified with moderate/high risk scores.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>Maintain consistent daily hydration (2.5L+ target) for optimal metabolic bioavailability.</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>Schedule periodic blood lab follow-up every 60 to 90 days to monitor biomarker trends.</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                </div>
-
-                {/* Footer Action Buttons */}
-                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 pt-4 mt-2 border-t border-slate-100 shrink-0">
                   <button
-                    onClick={() => handleDownloadJSON(selectedReport)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                    onClick={() => handlePrintPDF(selectedReport)}
+                    className="px-5 py-2.5 rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-none"
                   >
-                    <Download className="w-3.5 h-3.5" />
-                    Export Raw JSON
+                    <Printer className="w-4 h-4 text-sky-400" />
+                    Download Official PDF Report
                   </button>
-
-                  <div className="flex items-center gap-2 w-full sm:w-auto">
-                    <button
-                      onClick={() => setSelectedReport(null)}
-                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer flex-1 sm:flex-none"
-                    >
-                      Close
-                    </button>
-                    <button
-                      onClick={() => handlePrintPDF(selectedReport)}
-                      className="px-5 py-2.5 rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-none"
-                    >
-                      <Printer className="w-4 h-4 text-sky-400" />
-                      Download Official PDF Report
-                    </button>
-                  </div>
                 </div>
+              </div>
 
-              </motion.div>
-            </div>,
-            document.body
-          )}
-        </AnimatePresence>
+            </motion.div>
+          </div>,
+          document.body
+        )}
 
       </div>
     </DashboardLayout>

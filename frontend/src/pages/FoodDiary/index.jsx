@@ -708,170 +708,167 @@ export default function FoodDiary() {
       </motion.div>
 
       {/* ✨ Optional Fine-Tuning Review Modal Overlay */}
-      <AnimatePresence>
-        {showDetailModal && createPortal(
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-2xl my-auto max-h-[90vh] overflow-y-auto custom-scrollbar text-slate-900"
-            >
-              <div className="flex items-center justify-between mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#0077ff] flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
-                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
-                      {t('food_diary_modal_title') || 'Review & Fine-Tune AI Food Entry'}
-                    </h3>
-                    <p className="text-[11px] sm:text-xs text-[#0077ff] font-bold">
-                      {t('food_diary_modal_subtitle') || 'Gemini AI Calculated Breakdown'}
-                    </p>
-                  </div>
+      {showDetailModal && createPortal(
+        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl p-5 sm:p-8 shadow-2xl my-auto max-h-[90vh] overflow-y-auto custom-scrollbar text-slate-900"
+          >
+            <div className="flex items-center justify-between mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#0077ff] flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+                  <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setShowDetailModal(false)}
-                  className="text-slate-400 hover:text-slate-800 p-2 rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer shrink-0"
-                >
-                  ✕
-                </button>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
+                    {t('food_diary_modal_title') || 'Review & Fine-Tune AI Food Entry'}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-[#0077ff] font-bold">
+                    {t('food_diary_modal_subtitle') || 'Gemini AI Calculated Breakdown'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDetailModal(false)}
+                className="text-slate-400 hover:text-slate-800 p-2 rounded-full bg-slate-100 hover:bg-slate-200 cursor-pointer shrink-0"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveDetailModal} className="space-y-4">
+              {/* Product Name */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  {t('food_diary_modal_food_name') || 'Food / Dish Name'} *
+                </label>
+                <Input
+                  placeholder="e.g. Masala Dosa, Chicken Curry"
+                  value={detailForm.food_name}
+                  onChange={(e) => setDetailForm({ ...detailForm, food_name: e.target.value })}
+                  required
+                />
               </div>
 
-              <form onSubmit={handleSaveDetailModal} className="space-y-4">
-                {/* Product Name */}
+              {/* Calories & Quantity */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    {t('food_diary_modal_food_name') || 'Food / Dish Name'} *
+                    {t('food_diary_modal_calories') || 'Calories (kcal)'} *
                   </label>
                   <Input
-                    placeholder="e.g. Masala Dosa, Chicken Curry"
-                    value={detailForm.food_name}
-                    onChange={(e) => setDetailForm({ ...detailForm, food_name: e.target.value })}
+                    type="number"
+                    placeholder="150"
+                    value={detailForm.calories}
+                    onChange={(e) => setDetailForm({ ...detailForm, calories: e.target.value })}
                     required
                   />
                 </div>
-
-                {/* Calories & Quantity */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                      {t('food_diary_modal_calories') || 'Calories (kcal)'} *
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="150"
-                      value={detailForm.calories}
-                      onChange={(e) => setDetailForm({ ...detailForm, calories: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                      {t('food_diary_modal_quantity') || 'Quantity'}
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="1"
-                      min="1"
-                      value={detailForm.quantity}
-                      onChange={(e) => setDetailForm({ ...detailForm, quantity: e.target.value })}
-                    />
-                  </div>
-                </div>
-
-                {/* Measurement Unit Selector */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                    {t('food_diary_modal_unit') || 'Measurement Unit'}
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    {t('food_diary_modal_quantity') || 'Quantity'}
                   </label>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {unitOptions.map((unit) => {
-                      const selected = detailForm.unit === unit.code;
-                      return (
-                        <button
-                          key={unit.code}
-                          type="button"
-                          onClick={() => setDetailForm({ ...detailForm, unit: unit.code })}
-                          className={`p-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer ${
-                            selected
-                              ? 'bg-[#0077ff] text-white border-[#0077ff] shadow-md shadow-blue-500/20'
-                              : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200'
-                          }`}
-                        >
-                          {unit.label}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <Input
+                    type="number"
+                    placeholder="1"
+                    min="1"
+                    value={detailForm.quantity}
+                    onChange={(e) => setDetailForm({ ...detailForm, quantity: e.target.value })}
+                  />
                 </div>
+              </div>
 
-                {/* Macros (Protein, Carbs, Fat) */}
-                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
-                  <div>
-                    <label className="block text-[11px] font-black text-blue-600 uppercase mb-1">
-                      {t('food_diary_modal_protein') || 'Protein (g)'}
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      step="0.1"
-                      value={detailForm.protein}
-                      onChange={(e) => setDetailForm({ ...detailForm, protein: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-black text-purple-600 uppercase mb-1">
-                      {t('food_diary_modal_carbs') || 'Carbs (g)'}
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      step="0.1"
-                      value={detailForm.carbs}
-                      onChange={(e) => setDetailForm({ ...detailForm, carbs: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-black text-rose-600 uppercase mb-1">
-                      {t('food_diary_modal_fat') || 'Fat (g)'}
-                    </label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      step="0.1"
-                      value={detailForm.fat}
-                      onChange={(e) => setDetailForm({ ...detailForm, fat: e.target.value })}
-                    />
-                  </div>
+              {/* Measurement Unit Selector */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                  {t('food_diary_modal_unit') || 'Measurement Unit'}
+                </label>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {unitOptions.map((unit) => {
+                    const selected = detailForm.unit === unit.code;
+                    return (
+                      <button
+                        key={unit.code}
+                        type="button"
+                        onClick={() => setDetailForm({ ...detailForm, unit: unit.code })}
+                        className={`p-2 rounded-xl text-xs font-bold transition-all border text-center cursor-pointer ${
+                          selected
+                            ? 'bg-[#0077ff] text-white border-[#0077ff] shadow-md shadow-blue-500/20'
+                            : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border-slate-200'
+                        }`}
+                      >
+                        {unit.label}
+                      </button>
+                    );
+                  })}
                 </div>
+              </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowDetailModal(false)}
-                    className="w-1/3 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-700 cursor-pointer"
-                  >
-                    {t('food_diary_modal_cancel') || 'Cancel'}
-                  </button>
-                  <Button
-                    type="submit"
-                    loading={loggingAI}
-                    size="md"
-                    className="w-2/3 py-3 bg-[#0077ff] hover:bg-[#0066ff] text-white font-bold rounded-xl shadow-md shadow-blue-500/20"
-                  >
-                    {t('food_diary_modal_submit') || 'Log Food to Diary'}
-                  </Button>
+              {/* Macros (Protein, Carbs, Fat) */}
+              <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100">
+                <div>
+                  <label className="block text-[11px] font-black text-blue-600 uppercase mb-1">
+                    {t('food_diary_modal_protein') || 'Protein (g)'}
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    step="0.1"
+                    value={detailForm.protein}
+                    onChange={(e) => setDetailForm({ ...detailForm, protein: e.target.value })}
+                  />
                 </div>
-              </form>
-            </motion.div>
-          </div>,
-          document.body
-        )}
-      </AnimatePresence>
+                <div>
+                  <label className="block text-[11px] font-black text-purple-600 uppercase mb-1">
+                    {t('food_diary_modal_carbs') || 'Carbs (g)'}
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    step="0.1"
+                    value={detailForm.carbs}
+                    onChange={(e) => setDetailForm({ ...detailForm, carbs: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-black text-rose-600 uppercase mb-1">
+                    {t('food_diary_modal_fat') || 'Fat (g)'}
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    step="0.1"
+                    value={detailForm.fat}
+                    onChange={(e) => setDetailForm({ ...detailForm, fat: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowDetailModal(false)}
+                  className="w-1/3 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-xs font-bold text-slate-700 cursor-pointer"
+                >
+                  {t('food_diary_modal_cancel') || 'Cancel'}
+                </button>
+                <Button
+                  type="submit"
+                  loading={loggingAI}
+                  size="md"
+                  className="w-2/3 py-3 bg-[#0077ff] hover:bg-[#0066ff] text-white font-bold rounded-xl shadow-md shadow-blue-500/20"
+                >
+                  {t('food_diary_modal_submit') || 'Log Food to Diary'}
+                </Button>
+              </div>
+            </form>
+          </motion.div>
+        </div>,
+        document.body
+      )}
     </DashboardLayout>
   );
 }
