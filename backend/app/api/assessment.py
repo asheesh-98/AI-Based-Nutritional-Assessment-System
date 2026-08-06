@@ -244,3 +244,15 @@ def get_prediction_history(
             prediction_date=pred.prediction_date,
         ))
     return results
+
+
+@router.delete("/predictions")
+def clear_prediction_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Clear all diagnostic prediction history for the current user."""
+    db.query(Prediction).filter(Prediction.user_id == current_user.id).delete(synchronize_session=False)
+    db.commit()
+    return {"message": "Diagnostic history cleared successfully"}
+

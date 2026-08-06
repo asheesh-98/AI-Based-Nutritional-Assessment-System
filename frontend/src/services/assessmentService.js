@@ -42,6 +42,11 @@ export const assessmentService = {
     const { data } = await api.get('/assessment/predictions');
     return data;
   },
+
+  async clearPredictions() {
+    const { data } = await api.delete('/assessment/predictions');
+    return data;
+  },
 };
 
 export default assessmentService;
