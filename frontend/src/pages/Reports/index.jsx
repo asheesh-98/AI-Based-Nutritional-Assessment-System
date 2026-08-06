@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -585,11 +586,9 @@ export default function Reports() {
 
           </div>
         )}
-
-        {/* 📑 Detailed Clinical Assessment Report Modal */}
         <AnimatePresence>
-          {selectedReport && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
+          {selectedReport && createPortal(
+            <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -729,7 +728,8 @@ export default function Reports() {
                 </div>
 
               </motion.div>
-            </div>
+            </div>,
+            document.body
           )}
         </AnimatePresence>
 

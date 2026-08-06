@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Utensils, RefreshCw, Sun, Coffee, Moon, Cookie,
@@ -338,8 +339,8 @@ export default function MealPlanner() {
 
       {/* Full Recipe Modal */}
       <AnimatePresence>
-        {selectedMeal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
+        {selectedMeal && createPortal(
+          <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -445,7 +446,8 @@ export default function MealPlanner() {
                 )}
               </div>
             </motion.div>
-          </div>
+          </div>,
+          document.body
         )}
       </AnimatePresence>
     </DashboardLayout>
