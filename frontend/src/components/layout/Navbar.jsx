@@ -21,14 +21,7 @@ export default function Navbar() {
   const isAdminRoute = location.pathname.startsWith('/admin');
   const isHomePage = location.pathname === '/';
 
-  // Sleek desktop top navbar links (fits perfectly on laptop/PC viewports)
-  const desktopUserNavLinks = [
-    { path: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
-    { path: '/prediction', label: t('assessment'), icon: Activity },
-    { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
-    { path: '/food-diary', label: t('food_diary'), icon: FileText },
-    { path: '/ai-coach', label: t('ai_coach'), icon: Bot },
-  ];
+
 
   // Full comprehensive navigation links for mobile drawer menu
   const mobileUserNavLinks = [
@@ -79,31 +72,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Center: Desktop Nav (Hidden when in Admin mode because AdminSidebar handles desktop nav) */}
-          {!isAdminRoute && (
-            <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-              {desktopUserNavLinks.map((link) => {
-                const isActive = location.pathname === link.path;
-                return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`
-                      flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs xl:text-sm font-medium
-                      transition-all duration-300 whitespace-nowrap
-                      ${isActive
-                        ? 'bg-white/10 text-white shadow-inner'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                      }
-                    `}
-                  >
-                    <link.icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : ''}`} />
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
