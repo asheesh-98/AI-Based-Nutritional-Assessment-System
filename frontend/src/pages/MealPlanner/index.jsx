@@ -8,6 +8,7 @@ import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import mealService from '../../services/mealService';
+import api from '../../services/api';
 import { saveOfflineMealPlan, getOfflineMealPlan } from '../../utils/offlineStorage';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -338,23 +339,38 @@ export default function MealPlanner() {
       {/* Full Recipe Modal */}
       <AnimatePresence>
         {selectedMeal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-[#0a192f]/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#0a192f]/60 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl my-auto max-h-[90vh] flex flex-col overflow-hidden text-[#0a192f]"
+              className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-2xl my-auto max-h-[85vh] sm:max-h-[88vh] flex flex-col overflow-hidden text-[#0a192f]"
             >
-              <button
-                onClick={() => setSelectedMeal(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 z-20 cursor-pointer shadow-xs"
-              >
-                <X size={20} />
-              </button>
+              {/* Sticky Top Header Bar with Close Button */}
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
+                    {selectedSlot}
+                  </span>
+                  {selectedMeal.recipe_ready_in && (
+                    <span className="text-xs font-bold text-slate-500">
+                      {selectedMeal.recipe_ready_in} {t('common_min')}
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={() => setSelectedMeal(null)}
+                  className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer shrink-0 shadow-xs"
+                  title="Close modal"
+                >
+                  <X size={18} />
+                </button>
+              </div>
 
-              <div className="overflow-y-auto pr-1 space-y-6 custom-scrollbar">
+              {/* Scrollable Content Area */}
+              <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-4 sm:space-y-5 custom-scrollbar">
                 {/* Modal Hero Banner */}
-                <div className="relative rounded-2xl overflow-hidden h-48 sm:h-64 bg-slate-100 border border-slate-200">
+                <div className="relative rounded-2xl overflow-hidden h-40 sm:h-52 bg-slate-100 border border-slate-200 shrink-0">
                   {selectedMeal.recipe_image && !modalImgFailed ? (
                     <img
                       src={selectedMeal.recipe_image}
@@ -364,49 +380,46 @@ export default function MealPlanner() {
                     />
                   ) : (
                     <div className="w-full h-full bg-slate-100 flex items-center justify-center relative overflow-hidden">
-                      <Utensils size={64} className="text-slate-300" />
+                      <Utensils size={48} className="text-slate-300" />
                     </div>
                   )}
 
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f] via-[#0a192f]/40 to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 z-10">
-                    <span className="text-xs font-black uppercase tracking-wider text-[#0284c7] bg-white px-3 py-1 rounded-full border border-slate-200">
-                      {selectedSlot}
-                    </span>
-                    <h3 className="text-xl sm:text-3xl font-black text-white mt-2 leading-tight drop-shadow-md">
+                  <div className="absolute bottom-3 left-4 right-4 z-10">
+                    <h3 className="text-lg sm:text-2xl font-black text-white leading-tight drop-shadow-md">
                       {selectedMeal.recipe_title || selectedMeal.food_name}
                     </h3>
                   </div>
                 </div>
 
                 {/* Macro Nutrients Breakdown */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-                  <div className="text-center">
-                    <span className="text-xs text-slate-500 font-bold block">{t('common_calories')}</span>
-                    <span className="text-xl font-black text-amber-600">{Math.round(selectedMeal.calories || 0)} kcal</span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-center">
+                  <div>
+                    <span className="text-[10px] sm:text-xs text-slate-500 font-bold block">{t('common_calories')}</span>
+                    <span className="text-base sm:text-lg font-black text-amber-600">{Math.round(selectedMeal.calories || 0)} kcal</span>
                   </div>
-                  <div className="text-center">
-                    <span className="text-xs text-slate-500 font-bold block">{t('common_protein')}</span>
-                    <span className="text-xl font-black text-emerald-600">{Math.round(selectedMeal.protein || 0)}g</span>
+                  <div>
+                    <span className="text-[10px] sm:text-xs text-slate-500 font-bold block">{t('common_protein')}</span>
+                    <span className="text-base sm:text-lg font-black text-emerald-600">{Math.round(selectedMeal.protein || 0)}g</span>
                   </div>
-                  <div className="text-center">
-                    <span className="text-xs text-slate-500 font-bold block">{t('common_carbs')}</span>
-                    <span className="text-xl font-black text-[#0284c7]">{Math.round(selectedMeal.carbohydrates || 0)}g</span>
+                  <div>
+                    <span className="text-[10px] sm:text-xs text-slate-500 font-bold block">{t('common_carbs')}</span>
+                    <span className="text-base sm:text-lg font-black text-[#0284c7]">{Math.round(selectedMeal.carbohydrates || 0)}g</span>
                   </div>
-                  <div className="text-center">
-                    <span className="text-xs text-slate-500 font-bold block">{t('common_fat')}</span>
-                    <span className="text-xl font-black text-rose-600">{Math.round(selectedMeal.fat || 0)}g</span>
+                  <div>
+                    <span className="text-[10px] sm:text-xs text-slate-500 font-bold block">{t('common_fat')}</span>
+                    <span className="text-base sm:text-lg font-black text-rose-600">{Math.round(selectedMeal.fat || 0)}g</span>
                   </div>
                 </div>
 
                 {/* Ingredients */}
                 {selectedMeal.recipe_ingredients && selectedMeal.recipe_ingredients.length > 0 && (
                   <div>
-                    <h4 className="text-lg font-black text-[#0a192f] mb-3">{t('meal_ingredients')}</h4>
-                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-700">
+                    <h4 className="text-base font-black text-[#0a192f] mb-2.5">{t('meal_ingredients')}</h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-slate-700">
                       {selectedMeal.recipe_ingredients.map((ing, i) => (
                         <li key={i} className="flex items-center gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200 font-semibold">
-                          <CheckCircle2 size={16} className="text-[#0284c7] shrink-0" />
+                          <CheckCircle2 size={15} className="text-[#0284c7] shrink-0" />
                           <span>{ing}</span>
                         </li>
                       ))}
@@ -417,11 +430,11 @@ export default function MealPlanner() {
                 {/* Instructions */}
                 {selectedMeal.recipe_instructions && selectedMeal.recipe_instructions.length > 0 && (
                   <div>
-                    <h4 className="text-lg font-black text-[#0a192f] mb-3">{t('meal_cooking_instructions')}</h4>
-                    <ol className="space-y-3 text-sm text-slate-700 font-medium">
+                    <h4 className="text-base font-black text-[#0a192f] mb-2.5">{t('meal_cooking_instructions')}</h4>
+                    <ol className="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium">
                       {selectedMeal.recipe_instructions.map((step, i) => (
-                        <li key={i} className="flex gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
-                          <span className="w-6 h-6 rounded-lg bg-[#0a192f] text-white font-black text-xs flex items-center justify-center shrink-0">
+                        <li key={i} className="flex gap-2.5 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                          <span className="w-5 h-5 rounded-lg bg-[#0a192f] text-white font-black text-[11px] flex items-center justify-center shrink-0 mt-0.5">
                             {i + 1}
                           </span>
                           <span className="leading-relaxed font-semibold">{step}</span>
