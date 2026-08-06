@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import html2pdf from 'html2pdf.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -90,13 +91,10 @@ export default function Reports() {
     load();
   }, []);
 
-  // 🖨️ PDF Printable Generator Function
-  const handlePrintPDF = (report) => {
+  // 🖨️ Direct PDF Download Function via html2pdf
+  const handlePrintPDF = async (report) => {
     const targetReport = report || predictions[0];
     if (!targetReport) return;
-
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
 
     const patientName = user?.full_name || user?.name || user?.email?.split('@')[0] || 'Patient';
     const dateStr = new Date(targetReport.prediction_date || Date.now()).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -108,82 +106,87 @@ export default function Reports() {
       const status = getRiskStatus(val);
       return `
         <tr style="border-bottom: 1px solid #e2e8f0;">
-          <td style="padding: 12px; font-weight: bold; color: #0a192f;">${info.label}</td>
-          <td style="padding: 12px; font-weight: bold; color: #0284c7;">${pct}%</td>
-          <td style="padding: 12px;"><span style="background: ${val > 0.6 ? '#ffe4e6' : val > 0.3 ? '#fef3c7' : '#d1fae5'}; color: ${val > 0.6 ? '#e11d48' : val > 0.3 ? '#d97706' : '#059669'}; font-weight: 800; padding: 4px 10px; border-radius: 9999px; font-size: 11px;">${status.label}</span></td>
-          <td style="padding: 12px; color: #475569; font-size: 12px;">${info.foods.join(', ')}</td>
+          <td style="padding: 10px 12px; font-weight: bold; color: #0a192f; font-size: 12px;">${info.label}</td>
+          <td style="padding: 10px 12px; font-weight: bold; color: #0284c7; font-size: 12px;">${pct}%</td>
+          <td style="padding: 10px 12px;"><span style="background: ${val > 0.6 ? '#ffe4e6' : val > 0.3 ? '#fef3c7' : '#d1fae5'}; color: ${val > 0.6 ? '#e11d48' : val > 0.3 ? '#d97706' : '#059669'}; font-weight: 800; padding: 3px 10px; border-radius: 9999px; font-size: 10px; text-transform: uppercase;">${status.label}</span></td>
+          <td style="padding: 10px 12px; color: #475569; font-size: 11px; font-weight: 600;">${info.foods.join(', ')}</td>
         </tr>
       `;
     }).join('');
 
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>NutriAI Clinical Assessment Report - ${patientName}</title>
-          <style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #0a192f; padding: 30px; margin: 0; background: #fff; }
-            .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0284c7; padding-bottom: 20px; margin-bottom: 25px; }
-            .brand { font-size: 26px; font-weight: 900; color: #0a192f; }
-            .brand span { color: #0284c7; }
-            .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #f8fafc; padding: 20px; border-radius: 16px; margin-bottom: 25px; border: 1px solid #e2e8f0; }
-            .meta-item { font-size: 13px; }
-            .meta-item strong { color: #0a192f; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-            th { background: #0a192f; color: #ffffff; text-align: left; padding: 12px; font-size: 12px; text-transform: uppercase; }
-            .section-title { font-size: 18px; font-weight: 900; color: #0a192f; margin-top: 25px; margin-bottom: 12px; border-left: 4px solid #0284c7; padding-left: 10px; }
-            .footer { margin-top: 40px; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center; font-size: 11px; color: #64748b; }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div class="brand">Nutri<span>AI</span> Clinical Health</div>
-            <div style="text-align: right; font-size: 12px; color: #64748b;">
-              <div><strong>Official Diagnostic Report</strong></div>
-              <div>ID: #${targetReport.id || 'NUTR-2026-X'}</div>
-            </div>
-          </div>
+    const element = document.createElement('div');
+    element.style.padding = '25px';
+    element.style.fontFamily = "'Segoe UI', Roboto, Helvetica, sans-serif";
+    element.style.color = '#0a192f';
+    element.style.background = '#ffffff';
+    element.style.width = '750px';
 
-          <div class="meta-grid">
-            <div class="meta-item"><strong>Patient Name:</strong> ${patientName}</div>
-            <div class="meta-item"><strong>Assessment Date:</strong> ${dateStr}</div>
-            <div class="meta-item"><strong>AI Model Telemetry:</strong> Gemini 2.0 Clinical Risk Engine</div>
-            <div class="meta-item"><strong>Confidence Score:</strong> ${confidencePct}% Verified</div>
-          </div>
+    element.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0284c7; padding-bottom: 15px; margin-bottom: 20px;">
+        <div>
+          <div style="font-size: 24px; font-weight: 900; color: #0a192f;">Nutri<span style="color: #0284c7;">AI</span> Clinical Health</div>
+          <div style="font-size: 11px; color: #64748b; font-weight: 700; margin-top: 2px;">Precision Metabolic & Nutritional Assessment System</div>
+        </div>
+        <div style="text-align: right; font-size: 11px; color: #64748b;">
+          <div style="font-weight: 900; color: #0a192f; font-size: 13px;">OFFICIAL DIAGNOSTIC REPORT</div>
+          <div>Report ID: #${targetReport.id || 'NUTR-2026'}</div>
+        </div>
+      </div>
 
-          <div class="section-title">Micro-Nutrient Risk & Deficiency Assessment</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Biomarker / Nutrient</th>
-                <th>Predicted Risk</th>
-                <th>Classification</th>
-                <th>Clinical Dietary Countermeasures</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f8fafc; padding: 15px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #e2e8f0; font-size: 12px;">
+        <div><strong>Patient Name:</strong> ${patientName}</div>
+        <div><strong>Assessment Date:</strong> ${dateStr}</div>
+        <div><strong>AI Telemetry:</strong> Gemini 2.0 Clinical Risk Engine</div>
+        <div><strong>Model Confidence:</strong> <span style="color: #059669; font-weight: 800;">${confidencePct}% Verified</span></div>
+      </div>
 
-          <div class="section-title">Clinical Action Plan & Summary</div>
-          <div style="background: #f0f9ff; padding: 20px; border-radius: 16px; border: 1px solid #bae6fd; font-size: 13px; line-height: 1.6;">
-            <p><strong>Primary Recommendation:</strong> Based on multi-dimensional biomarker risk prediction, prioritize foods rich in targeted micronutrients listed above. Maintain adequate hydration (2.5L+ daily) and schedule routine blood lab screening every 60-90 days.</p>
-          </div>
+      <div style="font-size: 15px; font-weight: 900; color: #0a192f; margin-bottom: 10px; border-left: 4px solid #0284c7; padding-left: 10px;">
+        Micro-Nutrient Risk & Biomarker Assessment
+      </div>
 
-          <div class="footer">
-            Report generated automatically by NutriAI Predictive Engine • Medical Disclaimer: For clinical decision support only. Consult a registered physician or dietitian.
-          </div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: left;">
+        <thead>
+          <tr style="background: #0a192f; color: #ffffff;">
+            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Biomarker / Nutrient</th>
+            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Predicted Risk</th>
+            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Classification</th>
+            <th style="padding: 10px; font-size: 11px; text-transform: uppercase;">Clinical Dietary Countermeasures</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
 
-          <script>
-            window.onload = function() {
-              window.print();
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+      <div style="font-size: 15px; font-weight: 900; color: #0a192f; margin-bottom: 10px; border-left: 4px solid #0284c7; padding-left: 10px;">
+        Clinical Action Plan & Recommendations
+      </div>
+
+      <div style="background: #f0f9ff; padding: 15px; border-radius: 14px; border: 1px solid #bae6fd; font-size: 12px; line-height: 1.6; color: #0369a1;">
+        <p style="margin: 0; font-weight: 700;">
+          <strong>Targeted Countermeasures:</strong> Increase dietary consumption of foods highlighted above for moderate and high risk biomarkers. Maintain daily hydration target of 2.5L+ to optimize nutrient bioavailability, and schedule a routine blood screening panel every 60-90 days.
+        </p>
+      </div>
+
+      <div style="margin-top: 30px; border-top: 1px solid #e2e8f0; padding-top: 12px; text-align: center; font-size: 10px; color: #94a3b8; font-weight: 600;">
+        NutriAI Health Systems • Certified Clinical Decision Support • Confidential Medical Record
+      </div>
+    `;
+
+    const sanitizeFilename = patientName.replace(/[^a-zA-Z0-9]/g, '_');
+    const opt = {
+      margin: 8,
+      filename: `NutriAI_Clinical_Report_${sanitizeFilename}_${new Date().toISOString().split('T')[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    try {
+      await html2pdf().set(opt).from(element).save();
+    } catch (err) {
+      console.error('PDF export failed:', err);
+    }
   };
 
   // 📊 CSV Export Function
