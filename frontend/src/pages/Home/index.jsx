@@ -132,15 +132,17 @@ export default function Home() {
   const item = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100, damping: 20 } } };
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-slate-100 selection:bg-cyan-500/30 selection:text-white flex flex-col overflow-x-hidden w-full">
+    <div className="min-h-screen bg-[#0b1329] text-slate-100 selection:bg-cyan-500/30 selection:text-white flex flex-col overflow-x-hidden w-full relative">
       <Navbar />
 
-      {/* 🌟 Hero Section */}
-      <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full">
-        {/* Ambient Glow Orbs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-cyan-500/10 rounded-full blur-[140px] animate-pulse-glow" />
-          <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-purple-500/10 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+      {/* 🌟 Hero Section with Vibrant Background Texture */}
+      <section className="relative pt-24 sm:pt-36 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center min-h-[85vh] w-full overflow-hidden">
+        {/* Background Image Texture & Ambient Glow Orbs */}
+        <div className="absolute inset-0 bg-[url('/assets/nutrition_bg.jpg')] bg-cover bg-center opacity-[0.14] mix-blend-overlay pointer-events-none z-0" />
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] bg-cyan-500/20 rounded-full blur-[140px] animate-pulse-glow" />
+          <div className="absolute top-[20%] right-[-10%] w-[50vw] h-[50vw] bg-purple-500/20 rounded-full blur-[150px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-[-10%] left-[20%] w-[45vw] h-[45vw] bg-emerald-500/18 rounded-full blur-[130px] animate-pulse-glow" style={{ animationDelay: '4s' }} />
         </div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
