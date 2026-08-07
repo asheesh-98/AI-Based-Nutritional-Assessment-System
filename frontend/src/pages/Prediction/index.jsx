@@ -210,7 +210,7 @@ export default function Prediction() {
             </div>
 
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-              <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg" className="w-full sm:w-auto bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
+              <Button onClick={runAssessment} loading={predicting} icon={Sparkles} size="lg" className="w-full sm:w-auto">
                 {predicting ? t('prediction_btn_running') : t('prediction_btn_run')}
               </Button>
               <div className="flex gap-2 w-full sm:w-auto">
@@ -409,7 +409,7 @@ export default function Prediction() {
                     </p>
                   </div>
                   <Link to="/meal-plan" className="w-full md:w-auto">
-                    <Button icon={Utensils} size="lg" className="w-full md:w-auto bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
+                    <Button icon={Utensils} size="lg" className="w-full md:w-auto">
                       {t('prediction_cta_btn')}
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Button>

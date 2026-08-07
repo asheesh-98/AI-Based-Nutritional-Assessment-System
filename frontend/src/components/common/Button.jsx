@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
 
 const variants = {
-  primary: 'bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md shadow-sky-950/20 active:scale-95 transition-colors',
+  primary: 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold shadow-md shadow-purple-500/25 active:scale-95 transition-all border-0',
   secondary: 'bg-white text-slate-800 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-xs font-bold',
   outline: 'bg-transparent text-[#0284c7] border border-[#0284c7] hover:bg-sky-50 font-bold',
   danger: 'bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 font-bold',

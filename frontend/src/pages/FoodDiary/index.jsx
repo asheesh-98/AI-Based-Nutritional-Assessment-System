@@ -480,7 +480,7 @@ export default function FoodDiary() {
                     {active && (
                       <motion.div
                         layoutId="activeMealTab"
-                        className="absolute inset-0 bg-[#0077ff] rounded-xl shadow-md shadow-blue-500/25"
+                        className="absolute inset-0 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 rounded-xl shadow-md shadow-purple-500/25"
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
@@ -514,8 +514,8 @@ export default function FoodDiary() {
               <button
                 type="button"
                 onClick={() => {
-                  const curr = Number(inputQuantity) || 1;
-                  setInputQuantity(String(Math.max(1, curr - 1)));
+                  const curr = Number(inputQuantity) || 0;
+                  if (curr > 0.5) setInputQuantity(String(curr - 0.5));
                 }}
                 className="w-8 h-9 sm:w-9 sm:h-9 rounded-lg bg-white hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none shrink-0 shadow-xs border border-slate-200"
               >
@@ -523,7 +523,8 @@ export default function FoodDiary() {
               </button>
               <input
                 type="number"
-                min="1"
+                step="0.5"
+                min="0.1"
                 value={inputQuantity}
                 onChange={(e) => {
                   const val = e.target.value;
@@ -538,7 +539,7 @@ export default function FoodDiary() {
                 type="button"
                 onClick={() => {
                   const curr = Number(inputQuantity) || 0;
-                  setInputQuantity(String(curr + 1));
+                  setInputQuantity(String(curr + 0.5));
                 }}
                 className="w-8 h-9 sm:w-9 sm:h-9 rounded-lg bg-white hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center cursor-pointer transition-colors active:scale-95 select-none shrink-0 shadow-xs border border-slate-200"
               >
@@ -566,7 +567,7 @@ export default function FoodDiary() {
               onClick={() => handleDirectAILog()}
               loading={loggingAI}
               size="md"
-              className="bg-[#0077ff] hover:bg-[#0066ff] text-white font-bold shadow-md shadow-blue-500/20 whitespace-nowrap px-5 sm:px-6 h-11 rounded-xl flex-1 lg:flex-none cursor-pointer text-xs sm:text-sm"
+              className="bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold shadow-md shadow-purple-500/25 whitespace-nowrap px-5 sm:px-6 h-11 rounded-xl flex-1 lg:flex-none cursor-pointer text-xs sm:text-sm border-0"
             >
               <Sparkles className="w-4 h-4 text-white mr-1.5 shrink-0" />
               <span>{t('food_diary_btn_calculate_log') || 'Calculate & Log'}</span>

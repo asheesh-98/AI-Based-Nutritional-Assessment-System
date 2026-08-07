@@ -270,7 +270,7 @@ export default function MealPlanner() {
             loading={regenerating}
             icon={RefreshCw}
             size="md"
-            className="w-full sm:w-auto justify-center text-xs sm:text-sm py-2.5 px-4 bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold rounded-2xl shadow-md border-0 cursor-pointer"
+            className="w-full sm:w-auto justify-center text-xs sm:text-sm py-2.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold rounded-2xl shadow-md shadow-purple-500/25 border-0 cursor-pointer"
           >
             {t('meal_regenerate_btn')}
           </Button>
@@ -334,7 +334,7 @@ export default function MealPlanner() {
               onClick={() => setSelectedDayIndex(idx)}
               className={`flex flex-col items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl border transition-all cursor-pointer shrink-0 min-w-[70px] sm:min-w-[90px] ${
                 isSelected
-                  ? 'bg-[#0a192f] border-[#0a192f] text-white shadow-md scale-105'
+                  ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 border-transparent text-white shadow-md shadow-purple-500/25 scale-105'
                   : 'bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               }`}
             >
