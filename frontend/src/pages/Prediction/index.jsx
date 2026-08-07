@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import {
   Activity, Sparkles, ArrowRight, ChevronDown, ChevronUp,
   Stethoscope, TestTube2, Utensils, Info, Clock, Bot,
-  ShieldCheck, Cpu, AlertTriangle
+  ShieldCheck, Cpu, AlertTriangle, X
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -317,19 +318,44 @@ export default function Prediction() {
               <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card p-6 sm:p-8 rounded-3xl border border-purple-200 bg-purple-50/50 shadow-md"
+                className="glass-card p-6 sm:p-8 rounded-3xl border border-purple-200 bg-purple-50/50 shadow-md relative"
               >
-                <div className="flex items-center gap-3.5 mb-5">
-                  <div className="p-3 rounded-2xl bg-purple-600 text-white shadow-md">
-                    <Bot className="w-6 h-6" />
+                <div className="flex items-center justify-between gap-4 mb-5 pb-4 border-b border-purple-200/60">
+                  <div className="flex items-center gap-3.5">
+                    <div className="p-3 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-500/20 shrink-0">
+                      <Bot className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-black text-[#0a192f] leading-tight">{t('prediction_ai_summary_title')}</h3>
+                      <p className="text-xs text-purple-700 font-bold">{t('prediction_ai_summary_subtitle')}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg sm:text-xl font-black text-[#0a192f]">{t('prediction_ai_summary_title')}</h3>
-                    <p className="text-xs text-purple-700 font-bold">{t('prediction_ai_summary_subtitle')}</p>
-                  </div>
+
+                  {/* ✕ Close Button */}
+                  <button
+                    onClick={() => setAiSummary(null)}
+                    className="p-2 sm:p-2.5 rounded-full bg-white hover:bg-slate-100 border border-purple-200 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer shrink-0"
+                    title="Close Summary"
+                  >
+                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
                 </div>
-                <div className="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap bg-white p-5 rounded-2xl border border-purple-100 font-mono font-medium shadow-xs">
-                  {aiSummary}
+
+                <div className="bg-white p-5 sm:p-7 rounded-2xl border border-purple-100/80 shadow-xs text-xs sm:text-sm text-slate-800 leading-relaxed">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-3.5 leading-relaxed font-semibold text-slate-700">{children}</p>,
+                      h1: ({ children }) => <h3 className="text-base sm:text-lg font-black text-[#0a192f] mt-4 mb-2 pb-1 border-b border-slate-100">{children}</h3>,
+                      h2: ({ children }) => <h3 className="text-base sm:text-lg font-black text-[#0a192f] mt-4 mb-2 pb-1 border-b border-slate-100">{children}</h3>,
+                      h3: ({ children }) => <h4 className="text-sm sm:text-base font-black text-[#0a192f] mt-3 mb-1.5 flex items-center gap-2"><span className="w-1.5 h-4 rounded-full bg-purple-600 inline-block"></span>{children}</h4>,
+                      ul: ({ children }) => <ul className="list-disc pl-5 mb-3.5 space-y-1.5 font-semibold text-slate-700">{children}</ul>,
+                      ol: ({ children }) => <ol className="list-decimal pl-5 mb-3.5 space-y-1.5 font-semibold text-slate-700">{children}</ol>,
+                      li: ({ children }) => <li className="pl-1">{children}</li>,
+                      strong: ({ children }) => <strong className="font-black text-purple-900 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/60">{children}</strong>,
+                    }}
+                  >
+                    {aiSummary}
+                  </ReactMarkdown>
                 </div>
               </motion.div>
             )}
