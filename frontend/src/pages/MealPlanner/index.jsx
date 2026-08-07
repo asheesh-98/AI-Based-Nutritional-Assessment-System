@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 import {
   Utensils, RefreshCw, Sun, Coffee, Moon, Cookie,
-  Leaf, Beef, Vegan, X, CheckCircle2, Bot, Clock
+  Leaf, Beef, Vegan, X, CheckCircle2, Bot, Clock, Sparkles
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -250,11 +251,23 @@ export default function MealPlanner() {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full xl:w-auto">
-          <Button onClick={handleGenerateAiRecipes} loading={recipesLoading} icon={Bot} variant="secondary" size="md" className="w-full justify-center text-xs sm:text-sm py-2.5 bg-white border border-slate-200 text-slate-800 font-bold hover:bg-slate-50">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full xl:w-auto">
+          <Button
+            onClick={handleGenerateAiRecipes}
+            loading={recipesLoading}
+            icon={Bot}
+            size="md"
+            className="w-full sm:w-auto justify-center text-xs sm:text-sm py-2.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold rounded-2xl shadow-md shadow-purple-500/20 border-0 cursor-pointer"
+          >
             {t('meal_generate_ai_btn')}
           </Button>
-          <Button onClick={handleRegenerate} loading={regenerating} icon={RefreshCw} size="md" className="w-full justify-center text-xs sm:text-sm py-2.5 bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
+          <Button
+            onClick={handleRegenerate}
+            loading={regenerating}
+            icon={RefreshCw}
+            size="md"
+            className="w-full sm:w-auto justify-center text-xs sm:text-sm py-2.5 px-4 bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold rounded-2xl shadow-md border-0 cursor-pointer"
+          >
             {t('meal_regenerate_btn')}
           </Button>
         </div>
@@ -262,19 +275,47 @@ export default function MealPlanner() {
 
       {/* Gemini Generative Recipes Section */}
       {aiRecipes && (
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-4 sm:p-6 mb-6 sm:mb-8 border border-purple-200 bg-purple-50/50 rounded-3xl relative text-[#0a192f]">
-          <button onClick={() => setAiRecipes(null)} className="absolute right-4 top-4 text-slate-400 hover:text-slate-700 cursor-pointer">
-            <X size={20} />
-          </button>
-          <div className="flex items-center gap-3 mb-4 pr-6">
-            <div className="p-2 rounded-xl bg-purple-600 text-white shrink-0"><Bot size={20} /></div>
-            <div>
-              <h3 className="text-base sm:text-lg font-black text-[#0a192f]">{t('meal_ai_recipes_title')}</h3>
-              <p className="text-xs text-purple-700 font-bold">{t('meal_ai_recipes_subtitle')}</p>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card p-5 sm:p-8 mb-6 sm:mb-8 border border-purple-200 bg-purple-50/50 rounded-3xl relative text-[#0a192f] shadow-md"
+        >
+          <div className="flex items-center justify-between gap-4 mb-5 pb-4 border-b border-purple-200/60">
+            <div className="flex items-center gap-3.5">
+              <div className="p-3 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-500/20 shrink-0">
+                <Bot className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-xl font-black text-[#0a192f] leading-tight">{t('meal_ai_recipes_title')}</h3>
+                <p className="text-xs text-purple-700 font-bold">{t('meal_ai_recipes_subtitle')}</p>
+              </div>
             </div>
+
+            <button
+              onClick={() => setAiRecipes(null)}
+              className="p-2 rounded-full bg-white hover:bg-slate-100 border border-purple-200 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer shrink-0"
+              title="Close Recipes"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-          <div className="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap bg-white p-4 sm:p-6 rounded-2xl border border-purple-100 font-sans font-medium break-words shadow-xs">
-            {aiRecipes}
+
+          <div className="bg-white p-5 sm:p-7 rounded-2xl border border-purple-100/80 shadow-xs text-xs sm:text-sm text-slate-800 leading-relaxed">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-3.5 leading-relaxed font-semibold text-slate-700">{children}</p>,
+                h1: ({ children }) => <h3 className="text-base sm:text-lg font-black text-[#0a192f] mt-4 mb-2 pb-1 border-b border-purple-100 flex items-center gap-2">{children}</h3>,
+                h2: ({ children }) => <h3 className="text-base sm:text-lg font-black text-[#0a192f] mt-4 mb-2 pb-1 border-b border-purple-100 flex items-center gap-2">{children}</h3>,
+                h3: ({ children }) => <h4 className="text-sm sm:text-base font-black text-purple-900 mt-4 mb-2 flex items-center gap-2 bg-purple-50 p-3 rounded-xl border border-purple-200/60"><Sparkles className="w-4 h-4 text-purple-600 shrink-0" />{children}</h4>,
+                hr: () => <hr className="my-4 border-purple-100" />,
+                ul: ({ children }) => <ul className="list-disc pl-5 mb-3.5 space-y-1.5 font-semibold text-slate-700">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal pl-5 mb-3.5 space-y-1.5 font-semibold text-slate-700">{children}</ol>,
+                li: ({ children }) => <li className="pl-1">{children}</li>,
+                strong: ({ children }) => <strong className="font-black text-purple-950 bg-purple-50/80 px-1.5 py-0.5 rounded border border-purple-200/50">{children}</strong>,
+              }}
+            >
+              {aiRecipes}
+            </ReactMarkdown>
           </div>
         </motion.div>
       )}
