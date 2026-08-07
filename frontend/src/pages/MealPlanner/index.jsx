@@ -163,19 +163,23 @@ export default function MealPlanner() {
   }, []);
 
   const loadWeeklyPlan = async (diet) => {
-    setLoading(true);
+    // 1. Instantly restore cached plan from localStorage if present so user sees their saved plan with ZERO skeleton/regeneration delay!
+    const cached = getOfflineMealPlan();
+    if (cached && (cached.diet_preference === diet || cached.diet_type === diet)) {
+      setWeeklyPlan(cached);
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+
     try {
       const data = await mealService.getWeeklyMealPlan(diet);
       setWeeklyPlan(data);
       saveOfflineMealPlan(data);
     } catch (err) {
       console.error('Failed to load meal plan', err);
-      const cached = getOfflineMealPlan();
-      if (cached) {
+      if (!weeklyPlan && cached) {
         setWeeklyPlan(cached);
-        setAlert({ show: true, type: 'info', message: t('meal_loaded_cached') });
-      } else {
-        setAlert({ show: true, type: 'error', message: t('meal_load_error') });
       }
     } finally {
       setLoading(false);

@@ -119,23 +119,16 @@ def get_weekly_meal_plan(
     )
     deficiencies = _detected_deficiencies(latest_pred)
 
-    # Generate candidate plan
-    plan_dict = generate_weekly_meal_plan(
-        diet_preference=diet_pref,
-        deficiencies=deficiencies,
-        gender=gender,
-        age=age,
-    )
+    # Check if we already saved a plan for this week first
+    today = datetime.utcnow().date()
+    iso_year, iso_week, _ = today.isocalendar()
 
-    # Check if we already saved a plan for this week
-    wn = plan_dict["week_number"]
-    yr = plan_dict["year"]
     existing = (
         db.query(MealPlan)
         .filter(
             MealPlan.user_id == current_user.id,
-            MealPlan.week_number == wn,
-            MealPlan.year == yr,
+            MealPlan.week_number == iso_week,
+            MealPlan.year == iso_year,
         )
         .first()
     )
@@ -143,17 +136,27 @@ def get_weekly_meal_plan(
     if existing:
         try:
             saved = json.loads(existing.plan_data)
+            # If existing cached plan matches preference and has no diet violations, return immediately!
+            if not _plan_has_diet_violations(saved, diet_pref):
+                return _build_response(saved, plan_id=existing.id, created_at=existing.created_at)
+            else:
+                logger.info("Purging non-compliant cached plan ID %s for user %s and re-generating clean plan...", existing.id, current_user.id)
+                db.delete(existing)
+                db.commit()
+                existing = None
         except (json.JSONDecodeError, TypeError):
-            saved = plan_dict
-
-        # Sanitize check: If existing cached plan has diet violations or different preference, purge it!
-        if _plan_has_diet_violations(saved, diet_pref):
-            logger.info("Purging non-compliant cached plan ID %s for user %s and re-generating clean plan...", existing.id, current_user.id)
-            db.delete(existing)
-            db.commit()
             existing = None
-        else:
-            return _build_response(saved, plan_id=existing.id, created_at=existing.created_at)
+
+    # Generate new candidate plan if no valid cached plan exists
+    plan_dict = generate_weekly_meal_plan(
+        diet_preference=diet_pref,
+        deficiencies=deficiencies,
+        gender=gender,
+        age=age,
+    )
+
+    wn = plan_dict["week_number"]
+    yr = plan_dict["year"]
 
     # Save new verified plan
     meal = MealPlan(
