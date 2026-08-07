@@ -74,7 +74,7 @@ export default function Register() {
           <h2 className="text-2xl sm:text-3xl font-black text-[#0a192f] mb-2 tracking-tight">{t('auth_register_title')}</h2>
           <p className="text-slate-600 text-xs sm:text-sm font-semibold mb-6 sm:mb-8">{t('auth_register_subtitle')}</p>
 
-          <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />
+          <Alert type="error" message={error} show={!!error} onClose={() => setError('')} floating={false} />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5 mt-2">
             <Input
