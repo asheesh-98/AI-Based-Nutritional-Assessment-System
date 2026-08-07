@@ -301,9 +301,9 @@ export default function Reports() {
                 <>
                   <button
                     onClick={() => handlePrintPDF(latest)}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] shadow-md transition-all cursor-pointer"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 shadow-md shadow-purple-500/25 transition-all cursor-pointer border-0"
                   >
-                    <Printer className="w-4 h-4 text-sky-400" />
+                    <Printer className="w-4 h-4 text-white" />
                     Download PDF Report
                   </button>
 
@@ -414,7 +414,7 @@ export default function Reports() {
                   <button
                     onClick={() => setSelectedView('chart')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      selectedView === 'chart' ? 'bg-[#0a192f] text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      selectedView === 'chart' ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     {t('reports_chart_btn_area')}
@@ -422,7 +422,7 @@ export default function Reports() {
                   <button
                     onClick={() => setSelectedView('cards')}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      selectedView === 'cards' ? 'bg-[#0a192f] text-white shadow-md' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      selectedView === 'cards' ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     {t('reports_chart_btn_cards')}

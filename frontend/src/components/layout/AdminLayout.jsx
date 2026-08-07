@@ -43,7 +43,7 @@ function AdminSidebar() {
     >
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#0a192f] flex items-center justify-center text-white shadow-md z-20 cursor-pointer hover:bg-[#0284c7] transition-colors"
+        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 flex items-center justify-center text-white shadow-md shadow-purple-500/30 z-20 cursor-pointer hover:scale-110 transition-transform"
       >
         {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
       </button>
@@ -75,12 +75,12 @@ function AdminSidebar() {
                       flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm
                       transition-all duration-200 group relative overflow-hidden
                       ${isActive
-                        ? 'bg-[#0a192f] text-white shadow-md shadow-sky-950/20 font-bold'
+                        ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25 font-bold'
                         : 'text-slate-700 hover:text-slate-900 hover:bg-sky-50 font-semibold'
                       }
                     `}
                   >
-                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-sky-400' : 'text-slate-500 group-hover:text-sky-600'}`} />
+                    <item.icon className={`w-5 h-5 flex-shrink-0 relative z-10 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-sky-600'}`} />
                     <AnimatePresence>
                       {!collapsed && (
                         <motion.span

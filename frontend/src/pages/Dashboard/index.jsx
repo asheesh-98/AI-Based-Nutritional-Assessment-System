@@ -110,9 +110,9 @@ export default function Dashboard() {
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
               <Link
                 to="/prediction"
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] shadow-md transition-all cursor-pointer"
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 shadow-md shadow-purple-500/25 transition-all cursor-pointer border-0"
               >
-                <Activity className="w-4 h-4 text-sky-400" />
+                <Activity className="w-4 h-4 text-white" />
                 {t('dashboard_btn_run_ai')}
               </Link>
               <Link
