@@ -7,6 +7,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import Logo from '../../components/common/Logo';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -56,14 +57,7 @@ export default function Login() {
         >
           {/* Header: Logo + Back to Home */}
           <div className="flex items-center justify-between gap-4 mb-8 sm:mb-10 w-full">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-[#0a192f] flex items-center justify-center shadow-md shrink-0">
-                <Utensils className="w-5 h-5 text-sky-400" />
-              </div>
-              <span className="text-xl font-black text-[#0a192f]">
-                NutriAI
-              </span>
-            </Link>
+            <Logo size="lg" />
 
             <Link to="/" className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-[#0284c7] transition-colors shrink-0">
               <ArrowLeft className="w-4 h-4" />

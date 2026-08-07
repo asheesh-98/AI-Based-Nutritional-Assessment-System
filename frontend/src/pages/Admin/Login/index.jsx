@@ -6,6 +6,7 @@ import { useAuth } from '../../../context/AuthContext';
 import Input from '../../../components/common/Input';
 import Button from '../../../components/common/Button';
 import Alert from '../../../components/common/Alert';
+import Logo from '../../../components/common/Logo';
 
 export default function AdminLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -61,14 +62,7 @@ export default function AdminLogin() {
           className="w-full max-w-md mx-auto"
         >
           {/* Logo */}
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-xl bg-[#0a192f] flex items-center justify-center shadow-md">
-              <ShieldCheck className="w-6 h-6 text-sky-400" />
-            </div>
-            <span className="text-2xl font-black text-[#0a192f]">
-              NutriAI Admin
-            </span>
-          </div>
+          <Logo size="lg" isAdmin={true} className="mb-10" />
 
           <h2 className="text-3xl font-black text-[#0a192f] mb-2 tracking-tight">Admin Portal</h2>
           <p className="text-slate-600 text-sm mb-8 font-semibold">Sign in with administrator credentials.</p>

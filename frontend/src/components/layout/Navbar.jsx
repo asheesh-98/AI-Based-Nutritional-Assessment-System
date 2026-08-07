@@ -9,6 +9,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import LanguageSelector from '../common/LanguageSelector';
+import Logo from '../common/Logo';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -53,19 +54,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 gap-2">
           
           {/* Left: Brand Logo */}
-          <Link to={isAdminRoute ? '/admin/dashboard' : '/'} className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-[#0a192f] flex items-center justify-center shadow-md shadow-sky-950/20">
-              <Utensils className="w-4 h-4 text-sky-400" />
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-lg font-black text-[#0a192f] tracking-tight">NutriAI</span>
-              {isAdminRoute && (
-                <span className="px-2 py-0.5 rounded-md bg-sky-50 border border-sky-200 text-[#0284c7] text-[10px] font-black uppercase tracking-wider">
-                  Admin
-                </span>
-              )}
-            </div>
-          </Link>
+          <Logo size="md" isAdmin={isAdminRoute} />
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">

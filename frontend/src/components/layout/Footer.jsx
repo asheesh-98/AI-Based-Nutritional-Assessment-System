@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Utensils, Github, Twitter, Mail } from 'lucide-react';
+import { Github, Twitter, Mail } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import Logo from '../common/Logo';
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -10,12 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
-                <Utensils className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-lg font-bold gradient-text">NutriAI</span>
-            </Link>
+            <Logo size="md" darkText={true} className="mb-4" />
             <p className="text-sm text-gray-500 max-w-sm">
               {t('footer_brand_desc')}
             </p>
