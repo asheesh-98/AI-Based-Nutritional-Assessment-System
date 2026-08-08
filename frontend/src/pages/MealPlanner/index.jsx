@@ -233,7 +233,7 @@ export default function MealPlanner() {
       {/* Controls Bar */}
       <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 mb-6 sm:mb-8 w-full max-w-full overflow-x-hidden text-[#0a192f]">
         {/* Diet Selector Pills */}
-        <div className="grid grid-cols-3 gap-1 p-1 bg-[#0a192f] rounded-2xl w-full xl:w-auto shadow-md">
+        <div className="grid grid-cols-3 gap-1 p-1.5 bg-slate-900/90 backdrop-blur-md rounded-2xl w-full xl:w-auto shadow-md border border-slate-800">
           {dietOptions.map((opt) => {
             const Icon = opt.icon;
             const isSelected = selectedDiet === opt.value;
@@ -243,7 +243,7 @@ export default function MealPlanner() {
                 onClick={() => handleDietChange(opt.value)}
                 className={`flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer truncate ${
                   isSelected
-                    ? 'bg-[#0284c7] text-white shadow-sm'
+                    ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25'
                     : 'text-slate-300 hover:text-white hover:bg-white/10'
                 }`}
               >

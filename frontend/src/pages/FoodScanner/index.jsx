@@ -103,23 +103,23 @@ export default function FoodScanner() {
       <div className="max-w-5xl mx-auto space-y-6 text-[#0a192f]">
 
         {/* 🌟 Tab Switcher */}
-        <div className="flex gap-2 p-1.5 bg-[#0a192f] rounded-2xl max-w-lg mx-auto shadow-md">
+        <div className="flex gap-2 p-1.5 bg-slate-900/90 backdrop-blur-md rounded-2xl max-w-lg mx-auto shadow-md border border-slate-800">
           <button
             onClick={() => setActiveTab('photo')}
             className={`flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'photo'
-                ? 'bg-[#0284c7] text-white shadow-sm'
+                ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-cyan-300" />
+            <Sparkles className="w-4 h-4 text-white" />
             <span>{t('scanner_tab_vision')}</span>
           </button>
           <button
             onClick={() => setActiveTab('barcode')}
             className={`flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'barcode'
-                ? 'bg-[#0284c7] text-white shadow-sm'
+                ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25'
                 : 'text-slate-300 hover:text-white hover:bg-white/10'
             }`}
           >
