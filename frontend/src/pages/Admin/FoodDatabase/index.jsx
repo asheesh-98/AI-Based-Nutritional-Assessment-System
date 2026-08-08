@@ -60,7 +60,7 @@ export default function AdminFoodDatabase() {
             <p className="text-slate-600 text-sm font-semibold mt-0.5">Manage nutritional datasets, calories, and macronutrient items.</p>
           </div>
         </div>
-        <Button icon={Plus} size="lg" className="bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">Add Food Item</Button>
+        <Button icon={Plus} size="lg">Add Food Item</Button>
       </div>
 
       <Alert type="error" message={error} show={!!error} onClose={() => setError('')} />

@@ -119,7 +119,7 @@ export default function AdminAnalytics() {
                   key={range}
                   onClick={() => setTimeRange(range)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all uppercase cursor-pointer ${
-                    timeRange === range ? 'bg-[#0a192f] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'
+                    timeRange === range ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/25' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {range}

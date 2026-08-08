@@ -102,9 +102,9 @@ export default function AdminDashboard() {
             </button>
             <Link
               to="/admin/foods"
-              className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] shadow-md transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 shadow-md shadow-purple-500/25 transition-all cursor-pointer border-0"
             >
-              <Database className="w-4 h-4" /> Food Database
+              <Database className="w-4 h-4 text-white" /> Food Database
             </Link>
           </div>
         </div>

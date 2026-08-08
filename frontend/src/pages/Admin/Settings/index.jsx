@@ -170,7 +170,7 @@ export default function AdminSettings() {
                   <button
                     type="submit"
                     disabled={savingGemini || !geminiKey.trim()}
-                    className="px-6 py-2.5 bg-[#0a192f] hover:bg-[#0284c7] disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl shadow-md transition-colors flex items-center gap-2 cursor-pointer text-sm"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 disabled:from-slate-200 disabled:to-slate-300 disabled:text-slate-400 text-white font-bold rounded-2xl shadow-md shadow-purple-500/25 transition-all flex items-center gap-2 cursor-pointer text-sm border-0"
                   >
                     {savingGemini ? 'Saving...' : 'Update Gemini Key'}
                   </button>
@@ -222,7 +222,7 @@ export default function AdminSettings() {
                   <button
                     type="submit"
                     disabled={savingSpoon || !spoonacularKey.trim()}
-                    className="px-6 py-2.5 bg-[#0a192f] hover:bg-[#0284c7] disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl shadow-md transition-colors flex items-center gap-2 cursor-pointer text-sm"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 disabled:from-slate-200 disabled:to-slate-300 disabled:text-slate-400 text-white font-bold rounded-2xl shadow-md shadow-purple-500/25 transition-all flex items-center gap-2 cursor-pointer text-sm border-0"
                   >
                     {savingSpoon ? 'Saving...' : 'Update Spoonacular Key'}
                   </button>

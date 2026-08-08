@@ -93,7 +93,7 @@ export default function AdminLogin() {
                 type="submit"
                 loading={loading}
                 icon={LogIn}
-                className="w-full text-base rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md"
+                className="w-full text-base rounded-xl"
                 size="lg"
               >
                 Secure Sign In
