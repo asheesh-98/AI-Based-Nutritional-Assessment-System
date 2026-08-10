@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Headphones, Play, Pause, Volume2, VolumeX, Sparkles,
-  Wind, Clock, HeartHandshake, RefreshCw, Activity, Layers, Sun, Moon
+  Wind, Clock, HeartHandshake, RefreshCw, Activity, Layers, Sun, Moon,
+  Volume1, Mic, MicOff
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import DashboardLayout from '../../components/layout/DashboardLayout';
@@ -22,18 +23,20 @@ export default function MentalWellness() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
   const [volume, setVolume] = useState(0.5);
-  const [audioStream, setAudioStream] = useState(null);
+  const audioStreamRef = useRef(null);
 
   // Session Timer State (Auto-off)
   const [timerMinutes, setTimerMinutes] = useState(10);
   const [timerSecondsLeft, setTimerSecondsLeft] = useState(null);
   const [completedSessions, setCompletedSessions] = useState(2);
+  const timerIntervalRef = useRef(null);
 
-  // Guided Breathing State
+  // Guided Breathing State & Voice Guidance
   const [breathingMode, setBreathingMode] = useState('478'); // '478' or 'box'
   const [breathingActive, setBreathingActive] = useState(false);
   const [breathPhase, setBreathPhase] = useState('inhale'); // inhale, hold, exhale, rest
   const [breathCount, setBreathCount] = useState(4);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
 
   // Mood Check-in State
   const [selectedMood, setSelectedMood] = useState('calm');
@@ -91,30 +94,70 @@ export default function MentalWellness() {
     fetchSoundCatalog();
 
     return () => {
-      audioSynthesizer.stopAll();
-      if (audioStream) audioStream.pause();
+      stopPlayback();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     };
   }, []);
 
-  // Timer Effect
-  useEffect(() => {
-    let interval = null;
-    if (isPlaying && timerSecondsLeft !== null && timerSecondsLeft > 0) {
-      interval = setInterval(() => {
-        setTimerSecondsLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timerSecondsLeft === 0) {
-      stopPlayback();
-      setCompletedSessions((prev) => prev + 1);
-      setTimerSecondsLeft(null);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, timerSecondsLeft]);
+  // Web Speech API Voice Prompt Helper
+  const speakInstruction = (phase) => {
+    if (!voiceEnabled || !('speechSynthesis' in window)) return;
+    
+    window.speechSynthesis.cancel(); // Stop preceding speech
+    
+    let textToSpeak = '';
+    if (phase === 'inhale') textToSpeak = 'Inhale deeply through your nose';
+    else if (phase === 'hold') textToSpeak = 'Hold your breath';
+    else if (phase === 'exhale') textToSpeak = 'Exhale slowly through your mouth';
+    else if (phase === 'rest') textToSpeak = 'Rest and relax';
 
-  // Breathing Loop Effect
+    if (textToSpeak) {
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.rate = 0.85; // Calm, deliberate pace
+      utterance.pitch = 1.0;
+      utterance.volume = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Timer Effect (Robust Ref-Based Decrement)
+  useEffect(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+
+    if (isPlaying && timerSecondsLeft !== null) {
+      timerIntervalRef.current = setInterval(() => {
+        setTimerSecondsLeft((prev) => {
+          if (prev === null) return null;
+          if (prev <= 1) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+            stopPlayback();
+            setCompletedSessions((c) => c + 1);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+    };
+  }, [isPlaying]);
+
+  // Breathing Loop Effect & Voice Prompt Trigger
   useEffect(() => {
     let timer = null;
     if (breathingActive) {
+      // Speak current phase instruction
+      speakInstruction(breathPhase);
+
       if (breathingMode === '478') {
         // 4-7-8 Pranayama: Inhale 4s, Hold 7s, Exhale 8s
         if (breathPhase === 'inhale') {
@@ -157,9 +200,11 @@ export default function MentalWellness() {
           }, 4000);
         }
       }
+    } else {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     }
     return () => clearTimeout(timer);
-  }, [breathingActive, breathPhase, breathingMode]);
+  }, [breathingActive, breathPhase, breathingMode, voiceEnabled]);
 
   const fetchSoundCatalog = async () => {
     try {
@@ -196,7 +241,7 @@ export default function MentalWellness() {
       const audio = new Audio(track.audio_url);
       audio.volume = volume;
       audio.play().catch(() => {});
-      setAudioStream(audio);
+      audioStreamRef.current = audio;
     }
 
     setIsPlaying(true);
@@ -205,9 +250,13 @@ export default function MentalWellness() {
 
   const stopPlayback = () => {
     audioSynthesizer.stopAll();
-    if (audioStream) {
-      audioStream.pause();
-      setAudioStream(null);
+    if (audioStreamRef.current) {
+      audioStreamRef.current.pause();
+      audioStreamRef.current = null;
+    }
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
     }
     setIsPlaying(false);
   };
@@ -215,12 +264,20 @@ export default function MentalWellness() {
   const handleVolumeChange = (newVol) => {
     setVolume(newVol);
     audioSynthesizer.setVolume(newVol);
-    if (audioStream) audioStream.volume = newVol;
+    if (audioStreamRef.current) audioStreamRef.current.volume = newVol;
+  };
+
+  const handleSetTimerMinutes = (mins) => {
+    setTimerMinutes(mins);
+    if (isPlaying) {
+      setTimerSecondsLeft(mins * 60);
+    }
   };
 
   const toggleBreathing = () => {
     if (breathingActive) {
       setBreathingActive(false);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     } else {
       setBreathingActive(true);
       setBreathPhase('inhale');
@@ -267,8 +324,12 @@ export default function MentalWellness() {
                   <Headphones className="w-3.5 h-3.5" /> Sound Therapy Studio
                 </div>
                 {timerSecondsLeft !== null && (
-                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-mono font-bold text-sky-400">
-                    <Clock className="w-3.5 h-3.5" />
+                  <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-mono font-bold transition-all ${
+                    timerSecondsLeft === 0
+                      ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 animate-pulse'
+                      : 'bg-slate-800 border-slate-700 text-sky-400'
+                  }`}>
+                    <Clock className="w-3.5 h-3.5 text-purple-400" />
                     {Math.floor(timerSecondsLeft / 60)}:{String(timerSecondsLeft % 60).padStart(2, '0')}
                   </div>
                 )}
@@ -346,13 +407,10 @@ export default function MentalWellness() {
                 {[5, 10, 15, 30].map((m) => (
                   <button
                     key={m}
-                    onClick={() => {
-                      setTimerMinutes(m);
-                      if (isPlaying) setTimerSecondsLeft(m * 60);
-                    }}
+                    onClick={() => handleSetTimerMinutes(m)}
                     className={`px-2.5 py-1 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                       timerMinutes === m
-                        ? 'bg-purple-600 text-white shadow-sm'
+                        ? 'bg-purple-600 text-white shadow-sm ring-2 ring-purple-400/40'
                         : 'bg-slate-800 text-slate-400 hover:text-white'
                     }`}
                   >
@@ -366,12 +424,29 @@ export default function MentalWellness() {
           {/* Guided Breathing Visualizer Card */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-md flex flex-col justify-between text-center relative overflow-hidden">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider mx-auto">
-                <Wind className="w-3.5 h-3.5" /> Guided Breathing
+              <div className="flex items-center justify-between">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider">
+                  <Wind className="w-3.5 h-3.5" /> Guided Breathing
+                </div>
+
+                {/* Voice Guidance Toggle */}
+                <button
+                  onClick={() => setVoiceEnabled(!voiceEnabled)}
+                  className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    voiceEnabled
+                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                      : 'bg-slate-100 text-slate-500 border border-slate-200'
+                  }`}
+                  title="Toggle Voice Prompts"
+                >
+                  {voiceEnabled ? <Mic className="w-3.5 h-3.5 text-emerald-600" /> : <MicOff className="w-3.5 h-3.5 text-slate-400" />}
+                  <span>{voiceEnabled ? 'Voice ON' : 'Voice OFF'}</span>
+                </button>
               </div>
-              <h3 className="text-xl font-black text-[#0a192f]">{t('breathing_title')}</h3>
-              <p className="text-slate-500 text-xs font-medium">
-                Deep breathing lowers heart rate, balances blood pressure, and reduces cortisol.
+
+              <h3 className="text-xl font-black text-[#0a192f] text-left pt-1">{t('breathing_title')}</h3>
+              <p className="text-slate-500 text-xs font-medium text-left">
+                Deep breathing lowers heart rate, balances blood pressure, and reduces stress cortisol.
               </p>
             </div>
 
@@ -402,8 +477,8 @@ export default function MentalWellness() {
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                     {breathingActive ? breathPhase : 'Ready'}
                   </span>
-                  <span className="text-2xl font-black text-[#0a192f]">
-                    {breathingActive ? t(`breathing_${breathPhase}`) || breathPhase : 'Start'}
+                  <span className="text-xl font-black text-[#0a192f] capitalize">
+                    {breathingActive ? breathPhase : 'Start'}
                   </span>
                 </div>
               </div>
@@ -434,7 +509,7 @@ export default function MentalWellness() {
                 onClick={toggleBreathing}
                 className="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer border-0"
               >
-                {breathingActive ? 'Pause Breathing Guide' : 'Start Guided Breathing'}
+                {breathingActive ? 'Pause Guided Breathing' : 'Start Guided Breathing'}
               </button>
             </div>
           </div>
