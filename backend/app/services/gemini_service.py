@@ -418,3 +418,133 @@ def estimate_food_nutrition(food_name: str, quantity: float = 1.0, unit: str = "
             "fat": 2.0
         }
 
+
+def generate_shopping_list_with_gemini(meal_plan_data: dict, diet_preference: str = "vegetarian") -> dict:
+    """
+    Generate an aggregated 7-day grocery shopping list for a given meal plan using Gemini AI.
+    Categorizes items into: produce, proteins, dairy_eggs, grains_bakery, pantry_spices, health_addons.
+    """
+    system_prompt = (
+        "You are an expert Clinical Nutritionist and Grocery Shopping Specialist AI. "
+        "Analyze the provided 7-day weekly meal plan and generate a comprehensive, aggregated grocery shopping list. "
+        "Consolidate ingredients, sum estimated quantities for the entire week, and categorize them strictly into a JSON object ONLY. "
+        "Do NOT output markdown code blocks (` ```json `), formatting, or explanations. "
+        "The JSON MUST follow this exact schema:\n"
+        "{\n"
+        '  "total_items": 18,\n'
+        '  "diet_preference": "Vegetarian",\n'
+        '  "categories": [\n'
+        '    {\n'
+        '      "name": "Produce (Fruits & Vegetables)",\n'
+        '      "icon": "Leaf",\n'
+        '      "items": [\n'
+        '        {"item": "Spinach", "quantity": "500g", "notes": "Rich in Iron & Folate"},\n'
+        '        {"item": "Tomatoes", "quantity": "1 kg", "notes": "Vitamin C"}\n'
+        '      ]\n'
+        '    },\n'
+        '    {\n'
+        '      "name": "Proteins & Legumes",\n'
+        '      "icon": "Beef",\n'
+        '      "items": [\n'
+        '        {"item": "Paneer / Cottage Cheese", "quantity": "600g", "notes": "Protein & Calcium"}\n'
+        '      ]\n'
+        '    },\n'
+        '    {\n'
+        '      "name": "Dairy & Eggs",\n'
+        '      "icon": "Milk",\n'
+        '      "items": [\n'
+        '        {"item": "Greek Yoghurt", "quantity": "1 kg", "notes": "Probiotics & Protein"}\n'
+        '      ]\n'
+        '    },\n'
+        '    {\n'
+        '      "name": "Grains & Bakery",\n'
+        '      "icon": "Wheat",\n'
+        '      "items": [\n'
+        '        {"item": "Brown Rice", "quantity": "1.5 kg", "notes": "Complex Carbs"}\n'
+        '      ]\n'
+        '    },\n'
+        '    {\n'
+        '      "name": "Pantry, Spices & Oils",\n'
+        '      "icon": "Sparkles",\n'
+        '      "items": [\n'
+        '        {"item": "Extra Virgin Olive Oil", "quantity": "500ml", "notes": "Healthy Fats"},\n'
+        '        {"item": "Turmeric & Black Pepper", "quantity": "100g", "notes": "Anti-inflammatory"}\n'
+        '      ]\n'
+        '    }\n'
+        '  ]\n'
+        "}"
+    )
+
+    dishes = []
+    days = meal_plan_data.get("days", [])
+    for d in days:
+        day_name = d.get("day", "")
+        meals = d.get("meals", {})
+        for slot, item in meals.items():
+            if item:
+                title = item.get("recipe_title") or item.get("food_name") or ""
+                if title:
+                    dishes.append(f"{day_name} {slot}: {title}")
+
+    prompt = f"Dietary Preference: {diet_preference}\nDishes in 7-Day Weekly Meal Plan:\n" + "\n".join(dishes)
+    contents = [{"role": "user", "parts": [{"text": prompt}]}]
+
+    raw = _call_gemini_api(contents, system_instruction=system_prompt)
+    clean_json = raw.strip()
+    if clean_json.startswith("```json"): clean_json = clean_json[7:]
+    if clean_json.startswith("```"): clean_json = clean_json[3:]
+    if clean_json.endswith("```"): clean_json = clean_json[:-3]
+
+    try:
+        return json.loads(clean_json.strip())
+    except Exception as exc:
+        logger.error("Failed to parse Gemini shopping list: %s", exc)
+        return {
+            "total_items": 12,
+            "diet_preference": diet_preference.capitalize(),
+            "categories": [
+                {
+                    "name": "Produce (Fruits & Vegetables)",
+                    "icon": "Leaf",
+                    "items": [
+                        {"item": "Fresh Spinach & Greens", "quantity": "500g", "notes": "Iron & Folate Boost"},
+                        {"item": "Tomatoes & Onions", "quantity": "1 kg", "notes": "Essential Cooking Base"},
+                        {"item": "Apples & Bananas", "quantity": "1 dozen", "notes": "Daily Micronutrient Snacks"},
+                        {"item": "Lemons & Ginger", "quantity": "250g", "notes": "Immunity & Digestives"}
+                    ]
+                },
+                {
+                    "name": "Proteins & Legumes",
+                    "icon": "Beef",
+                    "items": [
+                        {"item": "Lentils (Dal) & Chickpeas", "quantity": "1 kg", "notes": "High Fiber Protein"},
+                        {"item": "Paneer / Tofu", "quantity": "500g", "notes": "Calcium & Amino Acids"}
+                    ]
+                },
+                {
+                    "name": "Dairy & Alternatives",
+                    "icon": "Milk",
+                    "items": [
+                        {"item": "Greek Yoghurt / Curd", "quantity": "1 kg", "notes": "Gut Health Probiotics"},
+                        {"item": "Low Fat Milk / Almond Milk", "quantity": "2 Liters", "notes": "Calcium & Vitamin D"}
+                    ]
+                },
+                {
+                    "name": "Grains & Cereals",
+                    "icon": "Wheat",
+                    "items": [
+                        {"item": "Whole Wheat Atta / Oats", "quantity": "2 kg", "notes": "Complex Carbohydrates"},
+                        {"item": "Brown Rice / Quinoa", "quantity": "1 kg", "notes": "Sustained Energy Grains"}
+                    ]
+                },
+                {
+                    "name": "Pantry & Healthy Fats",
+                    "icon": "Sparkles",
+                    "items": [
+                        {"item": "Almonds & Walnuts", "quantity": "250g", "notes": "Healthy Omega-3 Fats"},
+                        {"item": "Cold Pressed Olive Oil", "quantity": "500ml", "notes": "Heart Healthy Oil"}
+                    ]
+                }
+            ]
+        }
+

@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import {
   Utensils, RefreshCw, Sun, Coffee, Moon, Cookie,
-  Leaf, Beef, Vegan, X, CheckCircle2, Bot, Clock, Sparkles
+  Leaf, Beef, Vegan, X, CheckCircle2, Bot, Clock, Sparkles,
+  ShoppingCart, Download, Copy, Printer
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -158,12 +159,18 @@ export default function MealPlanner() {
   const [aiRecipes, setAiRecipes] = useState(null);
   const [recipesLoading, setRecipesLoading] = useState(false);
 
+  // Shopping List Modal States
+  const [shoppingListModalOpen, setShoppingListModalOpen] = useState(false);
+  const [shoppingListLoading, setShoppingListLoading] = useState(false);
+  const [shoppingListData, setShoppingListData] = useState(null);
+  const [checkedItems, setCheckedItems] = useState({});
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     loadWeeklyPlan(selectedDiet);
   }, []);
 
   const loadWeeklyPlan = async (diet) => {
-    // 1. Instantly restore cached plan from localStorage if present so user sees their saved plan with ZERO skeleton/regeneration delay!
     const cached = getOfflineMealPlan();
     if (cached && (cached.diet_preference === diet || cached.diet_type === diet)) {
       setWeeklyPlan(cached);
@@ -221,6 +228,75 @@ export default function MealPlanner() {
     }
   };
 
+  const handleGenerateShoppingList = async () => {
+    if (!weeklyPlan) return;
+    setShoppingListLoading(true);
+    try {
+      const data = await mealService.generateShoppingList(weeklyPlan);
+      setShoppingListData(data);
+      setShoppingListModalOpen(true);
+    } catch (err) {
+      console.error('Failed to generate shopping list', err);
+      setAlert({ show: true, type: 'error', message: 'Failed to generate shopping list. Please try again.' });
+    } finally {
+      setShoppingListLoading(false);
+    }
+  };
+
+  const toggleCheckItem = (key) => {
+    setCheckedItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleDownloadTxt = () => {
+    if (!shoppingListData) return;
+    let txt = `=================================================\n`;
+    txt += `  NUTRI-AI WEEKLY GROCERY SHOPPING LIST\n`;
+    txt += `  Diet Preference: ${shoppingListData.diet_preference || selectedDiet}\n`;
+    txt += `  Generated via Google Gemini AI\n`;
+    txt += `=================================================\n\n`;
+
+    shoppingListData.categories?.forEach((cat) => {
+      txt += `[ ${cat.name.toUpperCase()} ]\n`;
+      cat.items?.forEach((item) => {
+        txt += `  • ${item.item} (${item.quantity})${item.notes ? ` - ${item.notes}` : ''}\n`;
+      });
+      txt += `\n`;
+    });
+
+    txt += `-------------------------------------------------\n`;
+    txt += `Generated on ${new Date().toLocaleDateString()} | NutriAI Clinical Nutrition System\n`;
+
+    const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `NutriAI_Shopping_List_${selectedDiet}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyClipboard = () => {
+    if (!shoppingListData) return;
+    let text = `🛒 NutriAI Grocery Shopping List (${shoppingListData.diet_preference || selectedDiet})\n\n`;
+    shoppingListData.categories?.forEach((cat) => {
+      text += `📌 ${cat.name}:\n`;
+      cat.items?.forEach((item) => {
+        text += `  • ${item.item}: ${item.quantity}${item.notes ? ` (${item.notes})` : ''}\n`;
+      });
+      text += `\n`;
+    });
+
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handlePrintList = () => {
+    window.print();
+  };
+
   const currentDayData = weeklyPlan?.days?.[selectedDayIndex];
   const currentMeals = currentDayData?.meals || {};
 
@@ -256,6 +332,15 @@ export default function MealPlanner() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full xl:w-auto">
+          <Button
+            onClick={handleGenerateShoppingList}
+            loading={shoppingListLoading}
+            icon={ShoppingCart}
+            size="md"
+            className="w-full sm:w-auto justify-center text-xs sm:text-sm py-2.5 px-4 bg-gradient-to-r from-emerald-600 via-teal-600 to-sky-600 hover:from-emerald-700 hover:to-sky-700 text-white font-bold rounded-2xl shadow-md shadow-emerald-500/20 border-0 cursor-pointer"
+          >
+            {t('meal_shopping_list_btn')}
+          </Button>
           <Button
             onClick={handleGenerateAiRecipes}
             loading={recipesLoading}
@@ -487,6 +572,121 @@ export default function MealPlanner() {
                   </ol>
                 </div>
               )}
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
+
+      {/* AI Shopping List Modal */}
+      {shoppingListModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto custom-scrollbar">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden my-auto max-h-[90vh] flex flex-col text-[#0a192f]"
+          >
+            {/* Top Modal Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
+                  <ShoppingCart className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-2xl font-black text-[#0a192f] leading-tight">
+                    {t('meal_shopping_list_modal_title')}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    {t('meal_shopping_list_subtitle')}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShoppingListModalOpen(false)}
+                className="p-2 rounded-full hover:bg-slate-100 border border-slate-200 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Scrollable Shopping Categories */}
+            <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-5 custom-scrollbar mb-5">
+              {shoppingListData?.categories?.map((cat, catIdx) => (
+                <div key={catIdx} className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200/60">
+                    <h4 className="text-xs sm:text-sm font-black text-[#0a192f] uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {cat.name}
+                    </h4>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      {cat.items?.length || 0} {t('common_items')}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    {cat.items?.map((item, itemIdx) => {
+                      const itemKey = `${catIdx}-${itemIdx}`;
+                      const isChecked = checkedItems[itemKey];
+                      return (
+                        <div
+                          key={itemIdx}
+                          onClick={() => toggleCheckItem(itemKey)}
+                          className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${
+                            isChecked
+                              ? 'bg-emerald-50/60 border-emerald-200 text-slate-400 line-through'
+                              : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-300 shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-colors ${
+                              isChecked ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 bg-white'
+                            }`}>
+                              {isChecked && <CheckCircle2 className="w-3.5 h-3.5" />}
+                            </div>
+                            <span className="text-xs sm:text-sm font-bold">{item.item}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-right shrink-0">
+                            <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                              {item.quantity}
+                            </span>
+                            {item.notes && (
+                              <span className="text-[10px] text-slate-400 italic hidden sm:inline">
+                                ({item.notes})
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Modal Actions */}
+            <div className="flex flex-wrap items-center justify-end gap-2.5 pt-4 border-t border-slate-100 shrink-0">
+              <button
+                onClick={handleCopyClipboard}
+                className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
+              >
+                <Copy className="w-4 h-4 text-slate-500" />
+                <span>{copied ? t('meal_shopping_list_copied') : t('meal_shopping_list_copy_clipboard')}</span>
+              </button>
+              <button
+                onClick={handlePrintList}
+                className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
+              >
+                <Printer className="w-4 h-4 text-slate-500" />
+                <span>{t('meal_shopping_list_print')}</span>
+              </button>
+              <button
+                onClick={handleDownloadTxt}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+                <span>{t('meal_shopping_list_download_txt')}</span>
+              </button>
             </div>
           </motion.div>
         </div>,

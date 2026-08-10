@@ -746,7 +746,15 @@ export const TRANSLATIONS = {
     "timer_15min": "15 Minutes",
     "timer_30min": "30 Minutes",
     "admin_sounds_title": "Sound & Music Category Manager",
-    "admin_sounds_subtitle": "Add, edit, or categorize relaxation audio streams, Binaural frequency presets, and patient soundscapes."
+    "admin_sounds_subtitle": "Add, edit, or categorize relaxation audio streams, Binaural frequency presets, and patient soundscapes.",
+    "meal_shopping_list_btn": "Generate AI Shopping List",
+    "meal_shopping_list_modal_title": "AI Grocery Shopping List",
+    "meal_shopping_list_subtitle": "Aggregated 7-day grocery ingredients for your weekly meal plan",
+    "meal_shopping_list_download_txt": "Download (.txt)",
+    "meal_shopping_list_copy_clipboard": "Copy to Clipboard",
+    "meal_shopping_list_print": "Print List",
+    "meal_shopping_list_loading": "Gemini AI is generating your 7-day grocery list...",
+    "meal_shopping_list_copied": "Copied to clipboard!"
   },
   "hi": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1396,7 +1404,15 @@ export const TRANSLATIONS = {
     "home_mockup_hemoglobin": "हीमोग्लोबिन ब्लड लैब",
     "home_mockup_normal": "सामान्य सीमा",
     "home_mockup_vitamin_meal": "7-दिवसीय विटामिन बी12 भोजन विकल्प",
-    "home_mockup_ready": "तैयार"
+    "home_mockup_ready": "तैयार",
+    "meal_shopping_list_btn": "एआई खरीदारी सूची उत्पन्न करें",
+    "meal_shopping_list_modal_title": "एआई किराना खरीदारी सूची",
+    "meal_shopping_list_subtitle": "आपकी 7-दिवसीय साप्ताहिक भोजन योजना के लिए किराना सामग्री",
+    "meal_shopping_list_download_txt": "डाउनलोड (.txt)",
+    "meal_shopping_list_copy_clipboard": "क्लिपबोर्ड पर कॉपी करें",
+    "meal_shopping_list_print": "प्रिंट सूची",
+    "meal_shopping_list_loading": "जेमिनी एआई आपकी किराना सूची बना रहा है...",
+    "meal_shopping_list_copied": "क्लिपबोर्ड पर कॉपी हो गया!"
   },
   "sa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2047,7 +2063,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "सामान्य-सीमा",
     "home_mockup_vitamin_meal": "सप्तदिनात्मकं विटामिन् B12 भोजनम्",
     "home_mockup_ready": "सज्जम्",
-    "breathing_rest": "विश्रामं करोतु"
+    "breathing_rest": "विश्रामं करोतु",
+    "meal_shopping_list_btn": "ए-आई क्रयणसूचीं रचयतु",
+    "meal_shopping_list_modal_title": "ए-आई आपाणिक-क्रयणसूची",
+    "meal_shopping_list_subtitle": "भवतः सप्तदिनात्मक-आहारयोजनायै आवश्यकवस्तूनि",
+    "meal_shopping_list_download_txt": "अवरोपयतु (.txt)",
+    "meal_shopping_list_copy_clipboard": "प्रतिकृतिं करोतु",
+    "meal_shopping_list_print": "मुद्रणसूची",
+    "meal_shopping_list_loading": "जेमिनि ए-आई क्रयणसूचीं रचयति...",
+    "meal_shopping_list_copied": "प्रतिकृतिः कृता!"
   },
   "as": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -2698,7 +2722,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "স্বাভাবিক পৰিসৰ",
     "home_mockup_vitamin_meal": "৭ দিনৰ ভিটামিন B12 আহাৰৰ বিকল্প",
     "home_mockup_ready": "প্ৰস্তুত",
-    "breathing_rest": "বিশ্ৰাম লওক"
+    "breathing_rest": "বিশ্ৰাম লওক",
+    "meal_shopping_list_btn": "AI বজাৰৰ তালিকা প্ৰস্তুত কৰক",
+    "meal_shopping_list_modal_title": "AI গেলামাল বজাৰৰ তালিকা",
+    "meal_shopping_list_subtitle": "আপোনাৰ ৭ দিনৰ আহাৰ পৰিকল্পনাৰ সামগ্ৰীসমূহ",
+    "meal_shopping_list_download_txt": "ডাউনলোড (.txt)",
+    "meal_shopping_list_copy_clipboard": "কপি কৰক",
+    "meal_shopping_list_print": "প্ৰিন্ট তালিকা",
+    "meal_shopping_list_loading": "জেমিনী AI বজাৰৰ তালিকা প্ৰস্তুত কৰি আছে...",
+    "meal_shopping_list_copied": "কপি কৰা হ’ল!"
   },
   "bn": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -3349,7 +3381,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "স্বাভাবিক পরিসীমা",
     "home_mockup_vitamin_meal": "৭-দিনের ভিটামিন বি১২ মিল অপশন",
     "home_mockup_ready": "প্রস্তুত",
-    "breathing_rest": "বিশ্রাম ও আরাম করুন"
+    "breathing_rest": "বিশ্রাম ও আরাম করুন",
+    "meal_shopping_list_btn": "এআই কেনাকাটার তালিকা তৈরি করুন",
+    "meal_shopping_list_modal_title": "এআই মুদির কেনাকাটার তালিকা",
+    "meal_shopping_list_subtitle": "আপনার ৭ দিনের সাপ্তাহিক খাদ্য পরিকল্পনার কেনাকাটার তালিকা",
+    "meal_shopping_list_download_txt": "ডাউনলোড (.txt)",
+    "meal_shopping_list_copy_clipboard": "ক্লিপবোর্ডে কপি করুন",
+    "meal_shopping_list_print": "প্রিন্ট তালিকা",
+    "meal_shopping_list_loading": "জেমিনি এআই আপনার কেনাকাটার তালিকা তৈরি করছে...",
+    "meal_shopping_list_copied": "ক্লিপবোর্ডে কপি করা হয়েছে!"
   },
   "gu": {
     "select_language": "અપની પસંદીદા ભાષા ચુનેં",
@@ -4000,7 +4040,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "સામાન્ય શ્રેણી",
     "home_mockup_vitamin_meal": "7-દિવસીય વિટામિન B12 આહાર વિકલ્પ",
     "home_mockup_ready": "તૈયાર",
-    "breathing_rest": "વિશ્રામ અને આરામ કરો"
+    "breathing_rest": "વિશ્રામ અને આરામ કરો",
+    "meal_shopping_list_btn": "એઆઈ ખરીદી યાદી બનાવો",
+    "meal_shopping_list_modal_title": "એઆઈ કરિયાણાની ખરીદી યાદી",
+    "meal_shopping_list_subtitle": "તમારી 7-દિવસીય સાપ્તાહિક ભોજન યોજના માટે કરિયાણું",
+    "meal_shopping_list_download_txt": "ડાઉનલોડ (.txt)",
+    "meal_shopping_list_copy_clipboard": "ક્લિપબોર્ડ પર કોપી કરો",
+    "meal_shopping_list_print": "પ્રિન્ટ યાદી",
+    "meal_shopping_list_loading": "જેમિની એઆઈ તમારી ખરીદી યાદી બનાવી રહ્યું છે...",
+    "meal_shopping_list_copied": "ક્લિપબોર્ડ પર કોપી થયું!"
   },
   "kn": {
     "select_language": "ಅಪನೀ ಪಸಂದೀದಾ ಭಾಷಾ ಚುನೇಂ",
@@ -4651,7 +4699,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "ಸಾಮಾನ್ಯ ಶ್ರೇಣಿ",
     "home_mockup_vitamin_meal": "7 ದಿನಗಳ ವಿಟಮಿನ್ B12 ಊಟದ ಆಯ್ಕೆ",
     "home_mockup_ready": "ಸಿದ್ಧವಾಗಿದೆ",
-    "breathing_rest": "ವಿಶ್ರಾಂತಿ ಪಡೆಯಿರಿ"
+    "breathing_rest": "ವಿಶ್ರಾಂತಿ ಪಡೆಯಿರಿ",
+    "meal_shopping_list_btn": "AI ಖರೀದಿ ಪಟ್ಟಿಯನ್ನು ರಚಿಸಿ",
+    "meal_shopping_list_modal_title": "AI ದಿನಸಿ ಖರೀದಿ ಪಟ್ಟಿ",
+    "meal_shopping_list_subtitle": "ನಿಮ್ಮ 7 ದಿನಗಳ ಊಟದ ಯೋಜನೆಗಾಗಿ ದಿನಸಿ ಸಾಮಗ್ರಿಗಳು",
+    "meal_shopping_list_download_txt": "ಡೌನ್‌ಲೋಡ್ (.txt)",
+    "meal_shopping_list_copy_clipboard": "ಕಾಪಿ ಮಾಡಿ",
+    "meal_shopping_list_print": "ಪ್ರಿಂಟ್ ಮಾಡಿ",
+    "meal_shopping_list_loading": "ಜೆಮಿನಿ AI ನಿಮ್ಮ ಖರೀದಿ ಪಟ್ಟಿಯನ್ನು ತಯಾರಿಸುತ್ತಿದೆ...",
+    "meal_shopping_list_copied": "ಕಾಪಿ ಮಾಡಲಾಗಿದೆ!"
   },
   "ks": {
     "select_language": "اھتص ھيےڻصڻو نومو چستِے",
@@ -5296,7 +5352,15 @@ export const TRANSLATIONS = {
     "timer_15min": "15 मिनट",
     "timer_30min": "30 मिनट",
     "admin_sounds_title": "ध्वनि और संगीत श्रेणी प्रबंधक",
-    "admin_sounds_subtitle": "विश्राम ऑडियो स्ट्रीम, बाइन्यूरल फ़्रीक्वेंसी प्रीसेट और रोगी ध्वनि दृश्यों को जोड़ें, संपादित करें या वर्गीकृत करें।"
+    "admin_sounds_subtitle": "विश्राम ऑडियो स्ट्रीम, बाइन्यूरल फ़्रीक्वेंसी प्रीसेट और रोगी ध्वनि दृश्यों को जोड़ें, संपादित करें या वर्गीकृत करें।",
+    "meal_shopping_list_btn": "AI خریدٲری فِہرست بناوِو",
+    "meal_shopping_list_modal_title": "AI سۄدا خریدٲری فِہرست",
+    "meal_shopping_list_subtitle": "تُہنٛدِ ۷ دۄہَن ہُند غُذا مَنصُوبہٕ باپَتھ سۄدا",
+    "meal_shopping_list_download_txt": "ڈاوُنلوڈ (.txt)",
+    "meal_shopping_list_copy_clipboard": "کاپِی کٔرِو",
+    "meal_shopping_list_print": "پپرِنٹ فِہرست",
+    "meal_shopping_list_loading": "جیمِنی AI فِہرست بناوان...",
+    "meal_shopping_list_copied": "کاپِی گۄ!"
   },
   "ml": {
     "select_language": "അപനീ പസംദീദാ ഭാഷാ ചുനേം",
@@ -5947,7 +6011,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "സാധാരണ പരിധി",
     "home_mockup_vitamin_meal": "7 ദിവസത്തെ വിറ്റാമിൻ ബി12 ഭക്ഷണ ഓപ്ഷൻ",
     "home_mockup_ready": "തയ്യാറാണ്",
-    "breathing_rest": "വിശ്രമിക്കുക"
+    "breathing_rest": "വിശ്രമിക്കുക",
+    "meal_shopping_list_btn": "എഐ ഷോപ്പിംഗ് ലിസ്റ്റ് ഉണ്ടാക്കുക",
+    "meal_shopping_list_modal_title": "എഐ പലചരക്ക് ഷോപ്പിംഗ് ലിസ്റ്റ്",
+    "meal_shopping_list_subtitle": "നിങ്ങളുടെ 7 ദിവസത്തെ ഭക്ഷണ പദ്ധതിക്കുള്ള പലചരക്ക് സാധനങ്ങൾ",
+    "meal_shopping_list_download_txt": "ഡൗൺലോഡ് (.txt)",
+    "meal_shopping_list_copy_clipboard": "കോപ്പി ചെയ്യുക",
+    "meal_shopping_list_print": "പ്രിന്റ് ചെയ്യുക",
+    "meal_shopping_list_loading": "ജെമിനി എഐ നിങ്ങളുടെ ഷോപ്പിംഗ് ലിസ്റ്റ് ഉണ്ടാക്കുന്നു...",
+    "meal_shopping_list_copied": "കോപ്പി ചെയ്തു!"
   },
   "mr": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6598,7 +6670,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "सामान्य श्रेणी",
     "home_mockup_vitamin_meal": "7-दिवसीय व्हिटॅमिन B12 आहार पर्याय",
     "home_mockup_ready": "तयार",
-    "breathing_rest": "विश्रांती घ्या"
+    "breathing_rest": "विश्रांती घ्या",
+    "meal_shopping_list_btn": "एआय खरेदी सूची तयार करा",
+    "meal_shopping_list_modal_title": "एआय किराणा खरेदी सूची",
+    "meal_shopping_list_subtitle": "तुमच्या 7-दिवसांच्या आहार योजनेसाठी किराणा सामान",
+    "meal_shopping_list_download_txt": "डाउनलोड (.txt)",
+    "meal_shopping_list_copy_clipboard": "क्लिपबोर्डवर कॉपी करा",
+    "meal_shopping_list_print": "प्रिंट सूची",
+    "meal_shopping_list_loading": "जेमिनी एआय तुमची खरेदी सूची तयार करत आहे...",
+    "meal_shopping_list_copied": "क्लिपबोर्डवर कॉपी केले!"
   },
   "ne": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7249,7 +7329,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "सामान्य सीमा",
     "home_mockup_vitamin_meal": "७ दिने भिटामिन B12 भोजन विकल्प",
     "home_mockup_ready": "तयार छ",
-    "breathing_rest": "आराम गर्नुहोस्"
+    "breathing_rest": "आराम गर्नुहोस्",
+    "meal_shopping_list_btn": "AI किनमेल सूची बनाउनुहोस्",
+    "meal_shopping_list_modal_title": "AI किराना किनमेल सूची",
+    "meal_shopping_list_subtitle": "तपाईंको ७ दिने भोजन योजनाका लागि आवश्यक सामानहरू",
+    "meal_shopping_list_download_txt": "डाउनलोड (.txt)",
+    "meal_shopping_list_copy_clipboard": "कपी गर्नुहोस्",
+    "meal_shopping_list_print": "प्रिन्ट सूची",
+    "meal_shopping_list_loading": "जेमिनी AI ले किनमेल सूची बनाउँदैछ...",
+    "meal_shopping_list_copied": "कपी भयो!"
   },
   "or": {
     "select_language": "ଅପନୀ ପସଂଦୀଦା ଭାଷା ଚୁନେଂ",
@@ -7900,7 +7988,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "ସାଧାରଣ ସୀମା",
     "home_mockup_vitamin_meal": "୭-ଦିନିଆ ଭିଟାମିନ୍ B12 ଆହାର ସୋପାନ",
     "home_mockup_ready": "ପ୍ରସ୍ତୁତ",
-    "breathing_rest": "ବିଶ୍ରାମ ଏବଂ ଆରାମ"
+    "breathing_rest": "ବିଶ୍ରାମ ଏବଂ ଆରାମ",
+    "meal_shopping_list_btn": "AI କିଣାକିଣି ତାଲିକା ପ୍ରସ୍ତୁତ କରନ୍ତୁ",
+    "meal_shopping_list_modal_title": "AI ଗ୍ରୋସରୀ କିଣାକିଣି ତାଲିକା",
+    "meal_shopping_list_subtitle": "ଆପଣଙ୍କର ୭-ଦିନିଆ ସାପ୍ତାହିକ ଭୋଜନ ଯୋଜନା ପାଇଁ ଆବଶ୍ୟକୀୟ ଖାଦ୍ୟ ସାମଗ୍ରୀ",
+    "meal_shopping_list_download_txt": "ଡାଉନଲୋଡ୍ (.txt)",
+    "meal_shopping_list_copy_clipboard": "କ୍ଲିପବୋର୍ଡକୁ କପି କରନ୍ତୁ",
+    "meal_shopping_list_print": "ପ୍ରିଣ୍ଟ୍ ତାଲିକା",
+    "meal_shopping_list_loading": "Gemini AI ଆପଣଙ୍କର କିଣାକିଣି ତାଲିକା ପ୍ରସ୍ତୁତ କରୁଛି...",
+    "meal_shopping_list_copied": "କ୍ଲିପବୋର୍ଡକୁ କପି ହୋଇଗଲା!"
   },
   "pa": {
     "select_language": "ਅਪਨੀ ਪਸਂਦੀਦਾ ਭਾਸ਼ਾ ਚੁਨੇਂ",
@@ -8551,7 +8647,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "ਸਧਾਰਨ ਸੀਮਾ",
     "home_mockup_vitamin_meal": "7-ਦਿਨਾਂ ਦੀ ਵਿਟਾਮਿਨ B12 ਖੁਰਾਕ ਯੋਜਨਾ",
     "home_mockup_ready": "ਤਿਆਰ ਹੈ",
-    "breathing_rest": "ਆਰਾਮ ਕਰੋ"
+    "breathing_rest": "ਆਰਾਮ ਕਰੋ",
+    "meal_shopping_list_btn": "AI ਖਰੀਦਦਾਰੀ ਸੂਚੀ ਬਣਾਓ",
+    "meal_shopping_list_modal_title": "AI ਰਾਸ਼ਨ ਖਰੀਦਦਾਰੀ ਸੂਚੀ",
+    "meal_shopping_list_subtitle": "ਤੁਹਾਡੀ 7-ਦਿਨਾਂ ਦੀ ਭੋਜਨ ਯੋਜਨਾ ਲਈ ਜ਼ਰੂਰੀ ਸਾਮਾਨ",
+    "meal_shopping_list_download_txt": "ਡਾਊਨਲੋਡ (.txt)",
+    "meal_shopping_list_copy_clipboard": "ਕਾਪੀ ਕਰੋ",
+    "meal_shopping_list_print": "ਪ੍ਰਿੰਟ ਸੂਚੀ",
+    "meal_shopping_list_loading": "ਜੈਮਿਨੀ AI ਤੁਹਾਡੀ ਖਰੀਦਦਾਰੀ ਸੂਚੀ ਬਣਾ ਰਿਹਾ ਹੈ...",
+    "meal_shopping_list_copied": "ਕਾਪੀ ਹੋ ਗਿਆ!"
   },
   "sd": {
     "select_language": "اددِ دشاتِته ڦهوه چيدِا",
@@ -9196,7 +9300,15 @@ export const TRANSLATIONS = {
     "timer_15min": "15 منٽ",
     "timer_30min": "30 منٽ",
     "admin_sounds_title": "آواز ۽ موسيقي ڪيٽيگري مئنيجر",
-    "admin_sounds_subtitle": "آڊيو اسٽريمز ۽ ريلاڪسيشن فرڪوئنسيون شامل ۽ سيٽ ڪريو."
+    "admin_sounds_subtitle": "آڊيو اسٽريمز ۽ ريلاڪسيشن فرڪوئنسيون شامل ۽ سيٽ ڪريو.",
+    "meal_shopping_list_btn": "اي آءِ خريداري لسٽٺ ٺاهيو",
+    "meal_shopping_list_modal_title": "اي آءِ سودا خريداري لسٽ",
+    "meal_shopping_list_subtitle": "توهان جي 7 ڏينهن جي طعام رٿا لاءِ سودا سلف",
+    "meal_shopping_list_download_txt": "ڊائون لوڊ (.txt)",
+    "meal_shopping_list_copy_clipboard": "ڪاپي ڪريو",
+    "meal_shopping_list_print": "پرنٽ لسٽ",
+    "meal_shopping_list_loading": "جيمنائي اي آءِ خريداري لسٽ ٺاهي رهيو آهي...",
+    "meal_shopping_list_copied": "ڪاپي ٿي ويو!"
   },
   "ta": {
     "select_language": "அபனீ பஸமதீதা பাஷা சுனேம",
@@ -9847,7 +9959,15 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "சாதாரண வரம்பு",
     "home_mockup_vitamin_meal": "7 நாள் வைட்டமின் B12 உணவுத் திட்டம்",
     "home_mockup_ready": "தயார்",
-    "breathing_rest": "ஓய்வெடுக்கவும்"
+    "breathing_rest": "ஓய்வெடுக்கவும்",
+    "meal_shopping_list_btn": "AI கொள்முதல் பட்டியலை உருவாக்கவும்",
+    "meal_shopping_list_modal_title": "AI மளிகைப் பொருட்கள் பட்டியல்",
+    "meal_shopping_list_subtitle": "உங்கள் 7 நாள் உணவுத் திட்டத்திற்கான மளிகைப் பொருட்கள்",
+    "meal_shopping_list_download_txt": "பதிவிறக்கம் (.txt)",
+    "meal_shopping_list_copy_clipboard": "நகலெடுக்கவும்",
+    "meal_shopping_list_print": "அச்சிடுக",
+    "meal_shopping_list_loading": "ஜெமினி AI உங்கள் மளிகைப் பட்டியலை உருவாக்குகிறது...",
+    "meal_shopping_list_copied": "நகலெடுக்கப்பட்டது!"
   },
   "te": {
     "select_language": "అపనీ పసందీదা భাషা చునేం",
@@ -10498,6 +10618,14 @@ export const TRANSLATIONS = {
     "home_mockup_normal": "సాధారణ పరిమితి",
     "home_mockup_vitamin_meal": "7 రోజుల విటమిన్ B12 ఆహార ప్రణాళిక",
     "home_mockup_ready": "సిద్ధంగా ఉంది",
-    "breathing_rest": "విశ్రాంతి తీసుకోండి"
+    "breathing_rest": "విశ్రాంతి తీసుకోండి",
+    "meal_shopping_list_btn": "AI షాపింగ్ జాబితాను సృష్టించండి",
+    "meal_shopping_list_modal_title": "AI కిరాణా షాపింగ్ జాబితా",
+    "meal_shopping_list_subtitle": "మీ 7 రోజుల భోజన ప్రణాళిక కోసం కిరాణా వస్తువులు",
+    "meal_shopping_list_download_txt": "డౌన్‌లోడ్ (.txt)",
+    "meal_shopping_list_copy_clipboard": "కాపీ చేయండి",
+    "meal_shopping_list_print": "ప్రింట్ జాబితా",
+    "meal_shopping_list_loading": "జెమిని AI మీ షాపింగ్ జాబితాను సృష్టిస్తోంది...",
+    "meal_shopping_list_copied": "కాపీ చేయబడింది!"
   }
 };

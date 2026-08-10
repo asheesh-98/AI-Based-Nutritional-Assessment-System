@@ -258,3 +258,17 @@ def get_meal_plan_history(
             }
         results.append(_build_response(plan_dict, plan_id=mp.id, created_at=mp.created_at))
     return results
+
+
+@router.post("/shopping-list")
+def generate_shopping_list(
+    meal_plan: dict,
+    user: User = Depends(get_current_user)
+):
+    """
+    Generate an aggregated 7-day grocery shopping list for the provided weekly meal plan using Gemini AI.
+    """
+    from backend.app.services.gemini_service import generate_shopping_list_with_gemini
+    diet_pref = meal_plan.get("diet_preference") or "vegetarian"
+    result = generate_shopping_list_with_gemini(meal_plan, diet_preference=diet_pref)
+    return result
