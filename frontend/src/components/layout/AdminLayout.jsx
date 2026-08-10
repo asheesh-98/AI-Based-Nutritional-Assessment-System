@@ -125,7 +125,7 @@ export default function AdminLayout({ children }) {
         <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-indigo-300/15 rounded-full blur-[130px] pointer-events-none z-0" />
         
         <Navbar />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden relative z-10 custom-scrollbar">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden relative custom-scrollbar">
           <div className="container mx-auto px-4 py-8 max-w-7xl">
             {children || <Outlet />}
           </div>

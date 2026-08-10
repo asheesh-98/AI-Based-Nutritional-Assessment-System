@@ -13,7 +13,7 @@ export default function DashboardLayout({ children, title, subtitle }) {
 
       <Navbar />
       
-      <div className="flex flex-1 overflow-hidden relative z-10">
+      <div className="flex flex-1 overflow-hidden relative">
         <Sidebar />
         
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 w-full scroll-smooth custom-scrollbar">

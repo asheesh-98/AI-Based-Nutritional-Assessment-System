@@ -484,7 +484,7 @@ export default function AdminSoundManager() {
       {/* Category Modal */}
       <AnimatePresence>
         {showCatModal && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -548,7 +548,7 @@ export default function AdminSoundManager() {
       {/* Track Modal with Dual Upload / Stream URL */}
       <AnimatePresence>
         {showTrackModal && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
