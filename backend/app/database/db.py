@@ -36,26 +36,21 @@ def init_db():
     Base.metadata.create_all(bind=engine)
 
     # Safe auto-migration for schema updates across SQLite & PostgreSQL
-    try:
-        with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
-            for query in [
-                "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS medical_conditions VARCHAR(200)",
-                "ALTER TABLE health_profiles ADD COLUMN medical_conditions VARCHAR(200)",
-                "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS allergies VARCHAR(200)",
-                "ALTER TABLE health_profiles ADD COLUMN allergies VARCHAR(200)",
-                "ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)",
-                "ALTER TABLE food_diary ADD COLUMN unit VARCHAR(50)",
-            ]:
-                try:
-                    conn.execute(text(query))
-                except Exception:
-                    pass
-    except Exception:
-        pass
+    migrations = [
+        "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS medical_conditions VARCHAR(200)",
+        "ALTER TABLE health_profiles ADD COLUMN IF NOT EXISTS allergies VARCHAR(200)",
+        "ALTER TABLE food_diary ADD COLUMN IF NOT EXISTS unit VARCHAR(50)",
+    ]
+    for query in migrations:
+        try:
+            with engine.begin() as conn:
+                conn.execute(text(query))
+        except Exception:
+            pass
 
     # Seed default sound categories if empty
+    db = SessionLocal()
     try:
-        db = SessionLocal()
         from backend.app.models.sound import SoundCategory
         if db.query(SoundCategory).count() == 0:
             default_cats = [
@@ -63,10 +58,11 @@ def init_db():
                 SoundCategory(name="Solfeggio Frequencies", description="432Hz and 528Hz healing sound waves", icon_name="Sparkles"),
                 SoundCategory(name="Nature Sounds", description="Ambient ocean waves, rain, and forest soundscapes", icon_name="TreePine"),
                 SoundCategory(name="Guided Meditation", description="Breathing visualizer and calmness guides", icon_name="Wind"),
-                SoundCategory(name="Relaxing Instrumentals", description="Soothing piano and acoustic acoustic melodies", icon_name="Music")
+                SoundCategory(name="Relaxing Instrumentals", description="Soothing piano and acoustic melodies", icon_name="Music")
             ]
             db.add_all(default_cats)
             db.commit()
-        db.close()
     except Exception:
-        pass
+        db.rollback()
+    finally:
+        db.close()
