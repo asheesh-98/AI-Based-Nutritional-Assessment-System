@@ -221,6 +221,22 @@ export default function MentalWellness() {
     }
   };
 
+  const getPlayableUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const rawBase = import.meta.env.VITE_API_BASE_URL || '';
+    let backendOrigin = '';
+    if (rawBase && (rawBase.startsWith('http://') || rawBase.startsWith('https://'))) {
+      backendOrigin = rawBase.replace(/\/api\/?$/, '').replace(/\/$/, '');
+    } else {
+      backendOrigin = 'https://ai-nutrition-backend.onrender.com';
+    }
+    const cleanPath = url.startsWith('/') ? url : `/${url}`;
+    return `${backendOrigin}${cleanPath}`;
+  };
+
   const handlePlayTrack = (track) => {
     if (currentTrack?.id === track.id && isPlaying) {
       stopPlayback();
@@ -238,9 +254,10 @@ export default function MentalWellness() {
       else if (track.id === 'focus_relief') audioSynthesizer.playFocusAnxietyRelief();
       audioSynthesizer.setVolume(volume);
     } else if (track.audio_url) {
-      const audio = new Audio(track.audio_url);
+      const playableUrl = getPlayableUrl(track.audio_url);
+      const audio = new Audio(playableUrl);
       audio.volume = volume;
-      audio.play().catch(() => {});
+      audio.play().catch((e) => console.error('Audio playback error:', e));
       audioStreamRef.current = audio;
     }
 

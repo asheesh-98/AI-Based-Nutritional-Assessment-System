@@ -22,6 +22,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/admin/upload-audio")
 async def upload_audio_file(
+    request: Request,
     file: UploadFile = File(...),
     admin: User = Depends(get_current_admin_user)
 ):
@@ -40,7 +41,9 @@ async def upload_audio_file(
     with open(file_path, "wb") as f:
         f.write(contents)
     
-    audio_url = f"/uploads/sounds/{unique_name}"
+    # Return full accessible absolute URL (e.g. https://domain.com/uploads/sounds/track_123.mp3)
+    base_url = str(request.base_url).rstrip('/')
+    audio_url = f"{base_url}/uploads/sounds/{unique_name}"
     return {"audio_url": audio_url, "filename": filename, "size_bytes": len(contents)}
 
 

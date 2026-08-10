@@ -28,7 +28,7 @@ class SoundTrack(Base):
     category_id = Column(Integer, ForeignKey("sound_categories.id"), nullable=False)
     title = Column(String(150), nullable=False)
     description = Column(Text, nullable=True)
-    audio_url = Column(String(500), nullable=True)
+    audio_url = Column(Text, nullable=True)
     is_synthesized = Column(Boolean, default=False)
     freq_hz = Column(Float, default=432.0)
     binaural_hz = Column(Float, default=10.0)

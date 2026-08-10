@@ -258,6 +258,22 @@ export default function AdminSoundManager() {
     }
   };
 
+  const getPlayableUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+      return url;
+    }
+    const rawBase = import.meta.env.VITE_API_BASE_URL || '';
+    let backendOrigin = '';
+    if (rawBase && (rawBase.startsWith('http://') || rawBase.startsWith('https://'))) {
+      backendOrigin = rawBase.replace(/\/api\/?$/, '').replace(/\/$/, '');
+    } else {
+      backendOrigin = 'https://ai-nutrition-backend.onrender.com';
+    }
+    const cleanPath = url.startsWith('/') ? url : `/${url}`;
+    return `${backendOrigin}${cleanPath}`;
+  };
+
   // Preview Audio Player
   const togglePlayPreview = (track) => {
     if (playingTrackId === track.id) {
@@ -266,8 +282,12 @@ export default function AdminSoundManager() {
     } else {
       if (audioRef) audioRef.pause();
       if (track.audio_url) {
-        const audio = new Audio(track.audio_url);
-        audio.play().catch(() => setError('Unable to play audio URL stream'));
+        const playableUrl = getPlayableUrl(track.audio_url);
+        const audio = new Audio(playableUrl);
+        audio.play().catch((err) => {
+          console.error('Audio play error:', err);
+          setError('Unable to play audio URL stream. Please verify file URL or format.');
+        });
         setAudioRef(audio);
         setPlayingTrackId(track.id);
         audio.onended = () => setPlayingTrackId(null);
