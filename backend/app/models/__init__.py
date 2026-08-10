@@ -11,3 +11,4 @@ from backend.app.models.prediction import Prediction           # noqa: F401
 from backend.app.models.meal_plan import MealPlan              # noqa: F401
 from backend.app.models.food_diary import FoodDiary            # noqa: F401
 from backend.app.models.progress import ProgressLog            # noqa: F401
+from backend.app.models.sound import SoundCategory, SoundTrack  # noqa: F401

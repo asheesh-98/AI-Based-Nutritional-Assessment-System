@@ -16,6 +16,7 @@ import Reports from '../pages/Reports/index';
 import Profile from '../pages/Profile/index';
 import FoodScanner from '../pages/FoodScanner/index';
 import AICoach from '../pages/AICoach/index';
+import MentalWellness from '../pages/MentalWellness/index';
 
 import AdminDashboard from '../pages/Admin/Dashboard/index';
 import AdminUsers from '../pages/Admin/Users/index';
@@ -23,6 +24,7 @@ import AdminFoodDatabase from '../pages/Admin/FoodDatabase/index';
 import AdminAnalytics from '../pages/Admin/Analytics/index';
 import AdminPredictionReports from '../pages/Admin/PredictionReports/index';
 import AdminSettings from '../pages/Admin/Settings/index';
+import AdminSoundManager from '../pages/Admin/SoundManager/index';
 import AdminLayout from '../components/layout/AdminLayout';
 import AdminLogin from '../pages/Admin/Login/index';
 
@@ -55,6 +57,7 @@ export default function AppRouter() {
         {/* Protected routes */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/ai-coach" element={<ProtectedRoute><AICoach /></ProtectedRoute>} />
+        <Route path="/mental-wellness" element={<ProtectedRoute><MentalWellness /></ProtectedRoute>} />
         <Route path="/health-profile" element={<ProtectedRoute><HealthProfile /></ProtectedRoute>} />
         <Route path="/symptoms" element={<ProtectedRoute><Symptoms /></ProtectedRoute>} />
         <Route path="/blood-report" element={<ProtectedRoute><BloodReport /></ProtectedRoute>} />
@@ -74,6 +77,7 @@ export default function AppRouter() {
           <Route path="/admin/foods" element={<AdminFoodDatabase />} />
           <Route path="/admin/analytics" element={<AdminAnalytics />} />
           <Route path="/admin/prediction-reports" element={<AdminPredictionReports />} />
+          <Route path="/admin/sounds" element={<AdminSoundManager />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
 

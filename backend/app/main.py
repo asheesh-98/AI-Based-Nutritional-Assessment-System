@@ -22,6 +22,7 @@ from backend.app.api.admin import router as admin_router
 from backend.app.api.admin_settings import router as admin_settings_router
 from backend.app.api.external import router as external_router
 from backend.app.api.ai import router as ai_router
+from backend.app.api.sounds import router as sounds_router
 
 # ── Database & seeder ────────────────────────────────────────────────────
 from backend.app.database.db import init_db
@@ -93,6 +94,7 @@ app.include_router(admin_router)
 app.include_router(admin_settings_router)
 app.include_router(external_router, prefix="/api")
 app.include_router(ai_router)
+app.include_router(sounds_router, prefix="/api/v1/sounds", tags=["Sounds"])
 
 
 # ── Root health-check endpoint ───────────────────────────────────────────

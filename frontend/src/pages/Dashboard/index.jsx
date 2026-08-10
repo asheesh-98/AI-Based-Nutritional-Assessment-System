@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import {
   Activity, AlertTriangle, Flame, Droplets, Utensils,
   Stethoscope, Plus, ArrowRight, Sparkles, ChevronRight,
-  Zap, ScanBarcode, Bot, TestTube2
+  Zap, ScanBarcode, Bot, TestTube2, Headphones
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { SkeletonCard } from '../../components/common/Loader';
@@ -61,7 +61,7 @@ export default function Dashboard() {
   const userName = user?.full_name || user?.name || user?.email?.split('@')[0] || 'User';
 
   const quickActions = [
-    { label: t('dashboard_qa_run_ai_label'), desc: t('dashboard_qa_run_ai_desc'), icon: Activity, path: '/prediction', primary: true },
+    { label: t('sidebar_mental_wellness'), desc: t('mental_wellness_subtitle'), icon: Headphones, path: '/mental-wellness', primary: true },
     { label: t('dashboard_qa_blood_label'), desc: t('dashboard_qa_blood_desc'), icon: TestTube2, path: '/blood-report' },
     { label: t('dashboard_qa_symptoms_label'), desc: t('dashboard_qa_symptoms_desc'), icon: Stethoscope, path: '/symptoms' },
     { label: t('dashboard_qa_meal_label'), desc: t('dashboard_qa_meal_desc'), icon: Utensils, path: '/meal-plan' },

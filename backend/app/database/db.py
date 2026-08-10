@@ -50,5 +50,23 @@ def init_db():
                     conn.execute(text(query))
                 except Exception:
                     pass
+
+    # Seed default sound categories if empty
+    try:
+        db = SessionLocal()
+        from backend.app.models.sound import SoundCategory
+        if db.query(SoundCategory).count() == 0:
+            default_cats = [
+                SoundCategory(name="Binaural Beats", description="Alpha & Theta brainwave entrainment tones", icon_name="Activity"),
+                SoundCategory(name="Solfeggio Frequencies", description="432Hz and 528Hz healing sound waves", icon_name="Sparkles"),
+                SoundCategory(name="Nature Sounds", description="Ambient ocean waves, rain, and forest soundscapes", icon_name="TreePine"),
+                SoundCategory(name="Guided Meditation", description="Breathing visualizer and calmness guides", icon_name="Wind"),
+                SoundCategory(name="Relaxing Instrumentals", description="Soothing piano and acoustic acoustic melodies", icon_name="Music")
+            ]
+            db.add_all(default_cats)
+            db.commit()
+        db.close()
+    except Exception:
+        pass
     except Exception:
         pass

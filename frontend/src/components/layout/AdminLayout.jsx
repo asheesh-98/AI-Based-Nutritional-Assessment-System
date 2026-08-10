@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, UtensilsCrossed, BarChart3, Activity,
-  ChevronLeft, ChevronRight, Settings, LogOut
+  ChevronLeft, ChevronRight, Settings, LogOut, Music
 } from 'lucide-react';
 import Navbar from './Navbar';
 
@@ -21,6 +21,7 @@ const menuSections = [
     items: [
       { path: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
       { path: '/admin/prediction-reports', label: 'Predictions', icon: Activity },
+      { path: '/admin/sounds', label: 'Sound Manager', icon: Music },
     ],
   },
   {
