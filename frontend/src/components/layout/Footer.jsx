@@ -44,8 +44,8 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/5 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-600">
-            © {new Date().getFullYear()} {t('footer_copyright')}
+          <p className="text-xs text-gray-500 font-medium">
+            © {new Date().getFullYear()} NutriAI — Asheesh Patel. All Rights Reserved.
           </p>
           <div className="flex items-center gap-4">
             {[Github, Twitter, Mail].map((Icon, i) => (

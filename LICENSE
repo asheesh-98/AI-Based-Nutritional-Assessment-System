@@ -1,0 +1,83 @@
+================================================================================
+          NUTRI-AI LEGAL & POLICY LICENSES & PROPRIETARY NOTICE
+================================================================================
+
+Copyright (c) 2026 Asheesh Patel. All Rights Reserved.
+
+Owner & Creator: Asheesh Patel
+Project Name: NutriAI — AI-Based Nutritional Assessment System
+Repository: https://github.com/asheesh-98/AI-Based-Nutritional-Assessment-System
+Production URL: https://ai-based-nutritional-assessment-sys.vercel.app
+
+--------------------------------------------------------------------------------
+1. COPYRIGHT NOTICE & INTELLECTUAL PROPERTY OWNERSHIP
+--------------------------------------------------------------------------------
+All source code, software architecture, machine learning models, clinical decision 
+rules, user interfaces, graphic designs, trademarks, text, logos, audio assets, 
+and media associated with NutriAI ("The Application") belong exclusively to 
+Asheesh Patel ("The Owner").
+
+Strict Limitations:
+- Unauthorized copying, duplication, modification, redistribution, republication, 
+  sublicensing, or commercial exploitation of any part of this software, code, 
+  or media is strictly prohibited without prior explicit written permission 
+  from Asheesh Patel.
+- No individual or entity may host, re-brand, or create derivative works from 
+  this repository or application without written authorization.
+
+--------------------------------------------------------------------------------
+2. TERMS OF SERVICE & PLATFORM USAGE AGREEMENT
+--------------------------------------------------------------------------------
+By accessing, registering for, or using NutriAI, users ("You") agree to be bound 
+by the following binding terms:
+
+A. Acceptable Use:
+- You agree to use NutriAI solely for lawful, personal nutritional assessment, 
+  meal planning, and health tracking purposes.
+- You agree not to attempt to reverse engineer, decompile, scrape, or overload 
+  the API endpoints or machine learning infrastructure.
+
+B. Clinical & Medical Disclaimer:
+- NutriAI provides AI-driven nutritional assessments, symptom risk evaluations, 
+  blood lab report analyses, and personalized meal recommendations.
+- NutriAI IS NOT A SUBSTITUTE FOR PROFESSIONAL MEDICAL DIAGNOSIS, TREATMENT, OR 
+  EMERGENCY MEDICAL ADVICE. Always consult a qualified healthcare professional 
+  or registered dietitian before making significant changes to your diet, 
+  supplementation, or medical treatment plan.
+
+C. Limitation of Liability:
+- Under no circumstances shall Asheesh Patel or NutriAI operators be liable 
+  for any direct, indirect, incidental, or consequential damages resulting 
+  from the use or inability to use this platform, AI recommendations, or lab data.
+
+--------------------------------------------------------------------------------
+3. PRIVACY POLICY & DATA PROTECTION NOTICE
+--------------------------------------------------------------------------------
+NutriAI is committed to maintaining the highest standards of data privacy and 
+security for all personal and health telemetry information.
+
+A. Information We Collect:
+- Account Data: Name, email address, password hash (PBKDF2/BCrypt encrypted).
+- Health & Clinical Telemetry: Self-reported symptoms, blood report lab values, 
+  height, weight, age, gender, activity levels, and dietary preferences.
+- Audio & Preference Logs: Custom sound studio presets, mood logs, and breathing timers.
+
+B. How Your Data is Used & Secured:
+- Your data is strictly used to power personalized AI nutrient deficiency predictions, 
+  generate tailored meal plans, and summarize health reports.
+- DATA IS NEVER SOLD, RENTED, OR SHARED WITH THIRD-PARTY ADVERTISERS.
+- Authentication data is secured via JSON Web Tokens (JWT) with encrypted session keys.
+
+C. PWA Offline Caching & Cookies:
+- Local offline data is cached strictly on your local device via Web Storage 
+  (localStorage & IndexedDB) to enable Progressive Web App (PWA) offline usage.
+
+D. User Rights:
+- Users reserve the full right to update their health profile, clear local cached 
+  data, or request account data deletion at any time.
+
+--------------------------------------------------------------------------------
+FOR PERMISSION REQUESTS OR LEGAL INQUIRIES:
+Author & Rights Holder: Asheesh Patel
+GitHub: https://github.com/asheesh-98
+================================================================================
