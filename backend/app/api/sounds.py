@@ -5,7 +5,7 @@ Supports patient public fetching and admin CRUD operations.
 import os
 import uuid
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
