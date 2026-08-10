@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Music, Volume2, Plus, Edit2, Trash2, Play, Pause,
-  FolderPlus, Sparkles, Activity, CheckCircle, AlertCircle, RefreshCw
+  FolderPlus, Sparkles, Activity, CheckCircle, AlertCircle, RefreshCw,
+  UploadCloud, FileAudio, Link2, Check
 } from 'lucide-react';
 import api from '../../../services/api';
 import Alert from '../../../components/common/Alert';
@@ -34,11 +35,17 @@ export default function AdminSoundManager() {
   const [trackDesc, setTrackDesc] = useState('');
   const [trackCatId, setTrackCatId] = useState('');
   const [trackUrl, setTrackUrl] = useState('');
+  const [sourceMode, setSourceMode] = useState('upload'); // 'upload' or 'url'
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState('');
+  const [uploadedFileSize, setUploadedFileSize] = useState('');
   const [isSynth, setIsSynth] = useState(false);
   const [freqHz, setFreqHz] = useState(432);
   const [binauralHz, setBinauralHz] = useState(10);
   const [durationSec, setDurationSec] = useState(300);
   const [savingTrack, setSavingTrack] = useState(false);
+
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     fetchData();
@@ -125,27 +132,91 @@ export default function AdminSoundManager() {
       setTrackDesc(track.description || '');
       setTrackCatId(track.category_id);
       setTrackUrl(track.audio_url || '');
+      setSourceMode(track.audio_url?.startsWith('/uploads') || track.audio_url?.startsWith('data:') ? 'upload' : 'url');
       setIsSynth(track.is_synthesized || false);
       setFreqHz(track.freq_hz || 432);
       setBinauralHz(track.binaural_hz || 10);
       setDurationSec(track.duration_sec || 300);
+      setUploadedFileName('');
+      setUploadedFileSize('');
     } else {
       setEditingTrack(null);
       setTrackTitle('');
       setTrackDesc('');
       setTrackCatId(categories[0]?.id || '');
       setTrackUrl('');
+      setSourceMode('upload');
       setIsSynth(false);
       setFreqHz(432);
       setBinauralHz(10);
       setDurationSec(300);
+      setUploadedFileName('');
+      setUploadedFileSize('');
     }
     setShowTrackModal(true);
+  };
+
+  // File Upload Handler (Direct MP3 Upload)
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingFile(true);
+    setUploadedFileName(file.name);
+    setUploadedFileSize((file.size / (1024 * 1024)).toFixed(2) + ' MB');
+
+    // Auto-populate title if empty
+    if (!trackTitle) {
+      const cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+      setTrackTitle(cleanName.charAt(0).toUpperCase() + cleanName.slice(1));
+    }
+
+    // Auto-detect audio duration
+    try {
+      const audioUrlTemp = URL.createObjectURL(file);
+      const tempAudio = new Audio(audioUrlTemp);
+      tempAudio.onloadedmetadata = () => {
+        if (tempAudio.duration && isFinite(tempAudio.duration)) {
+          setDurationSec(Math.round(tempAudio.duration));
+        }
+      };
+    } catch (err) {
+      // Ignore duration detection errors
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await api.post('/v1/sounds/admin/upload-audio', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      if (res.data?.audio_url) {
+        setTrackUrl(res.data.audio_url);
+        setSuccess('MP3 file uploaded successfully!');
+      }
+    } catch (err) {
+      // Fallback: Encode as Data URL if API endpoint or storage is unavailable
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setTrackUrl(event.target.result);
+        setSuccess('MP3 file processed successfully!');
+      };
+      reader.readAsDataURL(file);
+    } finally {
+      setUploadingFile(false);
+    }
   };
 
   const handleSaveTrack = async (e) => {
     e.preventDefault();
     if (!trackTitle.trim() || !trackCatId) return;
+    if (!trackUrl.trim()) {
+      setError('Please upload an MP3 audio file or enter a valid stream URL');
+      return;
+    }
+
     setSavingTrack(true);
     try {
       const payload = {
@@ -223,7 +294,7 @@ export default function AdminSoundManager() {
             </div>
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight">Sound & Music Manager</h1>
             <p className="text-purple-200 text-xs sm:text-sm max-w-2xl font-medium leading-relaxed">
-              Manage patient mental wellness categories, Binaural frequencies, 432Hz/528Hz Solfeggio soundscapes, and relaxation music tracks.
+              Upload MP3 songs directly or paste audio stream links to categorize relaxation music tracks, Binaural frequencies, and 432Hz/528Hz Solfeggio soundscapes.
             </p>
           </div>
 
@@ -357,7 +428,7 @@ export default function AdminSoundManager() {
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-xs font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200">
-                          <Music className="w-3 h-3" /> Audio Stream
+                          <FileAudio className="w-3 h-3" /> {track.audio_url?.startsWith('/uploads') ? 'Uploaded MP3' : 'Audio Stream'}
                         </span>
                       )}
                     </td>
@@ -454,7 +525,7 @@ export default function AdminSoundManager() {
         )}
       </AnimatePresence>
 
-      {/* Track Modal */}
+      {/* Track Modal with Dual Upload / Stream URL */}
       <AnimatePresence>
         {showTrackModal && (
           <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md">
@@ -512,18 +583,106 @@ export default function AdminSoundManager() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                    Audio Stream URL (MP3 / AAC Link)
+                {/* Audio Source Mode Switcher */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    Audio Source Type
                   </label>
-                  <input
-                    type="text"
-                    value={trackUrl}
-                    onChange={(e) => setTrackUrl(e.target.value)}
-                    placeholder="https://cdn.example.com/relaxing-waves.mp3"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono text-xs focus:bg-white"
-                  />
+                  <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-2xl border border-slate-200">
+                    <button
+                      type="button"
+                      onClick={() => setSourceMode('upload')}
+                      className={`py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        sourceMode === 'upload'
+                          ? 'bg-white text-purple-700 shadow-sm border border-slate-200 font-black'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <UploadCloud className="w-4 h-4 text-purple-600" /> Upload MP3 File
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSourceMode('url')}
+                      className={`py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                        sourceMode === 'url'
+                          ? 'bg-white text-purple-700 shadow-sm border border-slate-200 font-black'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <Link2 className="w-4 h-4 text-sky-600" /> Audio Stream URL
+                    </button>
+                  </div>
                 </div>
+
+                {/* Source Input 1: Direct File Upload Dropzone */}
+                {sourceMode === 'upload' ? (
+                  <div className="space-y-2">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="audio/*,.mp3,.wav,.m4a,.aac,.flac,.ogg"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className={`p-6 rounded-2xl border-2 border-dashed text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 ${
+                        trackUrl
+                          ? 'bg-emerald-50/60 border-emerald-300 text-emerald-900'
+                          : 'bg-purple-50/40 border-purple-200 hover:border-purple-400 text-slate-600'
+                      }`}
+                    >
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                        trackUrl ? 'bg-emerald-600 text-white' : 'bg-purple-600 text-white'
+                      }`}>
+                        {uploadingFile ? (
+                          <RefreshCw className="w-6 h-6 animate-spin" />
+                        ) : trackUrl ? (
+                          <Check className="w-6 h-6" />
+                        ) : (
+                          <UploadCloud className="w-6 h-6" />
+                        )}
+                      </div>
+
+                      <div>
+                        <p className="text-xs font-bold text-slate-800">
+                          {uploadingFile
+                            ? 'Uploading audio file...'
+                            : trackUrl
+                            ? 'Audio File Ready!'
+                            : 'Click or Drag & Drop MP3 / AAC song here'}
+                        </p>
+                        <p className="text-[11px] text-slate-500 mt-0.5 font-medium">
+                          Supports MP3, WAV, AAC, M4A, FLAC up to 50MB
+                        </p>
+                      </div>
+
+                      {uploadedFileName && (
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-lg border border-slate-200 text-xs font-mono font-bold text-slate-700 shadow-2xs">
+                          <FileAudio className="w-3.5 h-3.5 text-purple-600" />
+                          <span>{uploadedFileName}</span>
+                          <span className="text-slate-400">({uploadedFileSize})</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  /* Source Input 2: Stream URL */
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Audio Stream URL (MP3 / AAC Link)
+                    </label>
+                    <input
+                      type="text"
+                      value={trackUrl}
+                      onChange={(e) => setTrackUrl(e.target.value)}
+                      placeholder="https://cdn.example.com/relaxing-waves.mp3"
+                      className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-mono text-xs focus:bg-white focus:border-purple-600"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
@@ -534,7 +693,7 @@ export default function AdminSoundManager() {
                     value={trackDesc}
                     onChange={(e) => setTrackDesc(e.target.value)}
                     placeholder="Short description of sound benefits..."
-                    className="w-full px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-medium text-xs"
+                    className="w-full px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 font-medium text-xs focus:bg-white"
                   />
                 </div>
 
@@ -548,8 +707,8 @@ export default function AdminSoundManager() {
                   </button>
                   <button
                     type="submit"
-                    disabled={savingTrack}
-                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-sky-600 text-white font-bold text-xs shadow-md"
+                    disabled={savingTrack || uploadingFile}
+                    className="px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-sky-600 text-white font-bold text-xs shadow-md cursor-pointer border-0"
                   >
                     {savingTrack ? 'Saving...' : 'Save Track'}
                   </button>

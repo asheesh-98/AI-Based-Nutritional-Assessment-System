@@ -96,6 +96,13 @@ app.include_router(external_router, prefix="/api")
 app.include_router(ai_router)
 app.include_router(sounds_router, prefix="/api/v1/sounds", tags=["Sounds"])
 
+# ── Mount Uploads Directory for Audio Files ──────────────────────────────
+import os
+from fastapi.staticfiles import StaticFiles
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 
 # ── Root health-check endpoint ───────────────────────────────────────────
 @app.get("/", tags=["Health"])

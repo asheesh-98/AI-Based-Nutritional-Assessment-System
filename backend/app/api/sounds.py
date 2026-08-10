@@ -2,8 +2,10 @@
 FastAPI router for Sound Categories and Sound Tracks.
 Supports patient public fetching and admin CRUD operations.
 """
+import os
+import uuid
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -13,6 +15,33 @@ from backend.app.models.user import User
 from backend.app.auth.jwt_handler import get_current_user, get_current_admin_user
 
 router = APIRouter()
+
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "uploads", "sounds")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+@router.post("/admin/upload-audio")
+async def upload_audio_file(
+    file: UploadFile = File(...),
+    admin: User = Depends(get_current_admin_user)
+):
+    """Admin: Upload an MP3, WAV, AAC, or M4A audio file directly."""
+    allowed_exts = ('.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac')
+    filename = file.filename or "audio.mp3"
+    ext = os.path.splitext(filename)[1].lower()
+    
+    if not ext or ext not in allowed_exts:
+        raise HTTPException(status_code=400, detail="Only audio files (.mp3, .wav, .m4a, .aac, .ogg, .flac) are allowed")
+    
+    unique_name = f"track_{uuid.uuid4().hex[:12]}{ext}"
+    file_path = os.path.join(UPLOAD_DIR, unique_name)
+    
+    contents = await file.read()
+    with open(file_path, "wb") as f:
+        f.write(contents)
+    
+    audio_url = f"/uploads/sounds/{unique_name}"
+    return {"audio_url": audio_url, "filename": filename, "size_bytes": len(contents)}
 
 
 # --- Pydantic Schemas ---
