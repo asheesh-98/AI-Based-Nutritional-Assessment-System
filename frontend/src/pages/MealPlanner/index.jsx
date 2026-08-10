@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import {
   Utensils, RefreshCw, Sun, Coffee, Moon, Cookie,
   Leaf, Beef, Vegan, X, CheckCircle2, Bot, Clock, Sparkles,
-  ShoppingCart, Download, Copy, Printer
+  ShoppingCart, Download, Copy, Printer, FileText
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -42,7 +42,7 @@ function MealCard({ slot, meal, onMealClick, t }) {
 
   if (!meal) {
     return (
-      <div className={`p-6 rounded-3xl bg-slate-50 border border-slate-200 opacity-60 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[280px]`}>
+      <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 opacity-60 flex flex-col items-center justify-center min-h-[260px] sm:min-h-[280px]">
         <Icon size={32} className="opacity-40 mb-3 text-slate-400" />
         <span className="text-base sm:text-lg font-black text-slate-600 capitalize">{slot}</span>
         <p className="text-xs sm:text-sm text-slate-500 italic mt-2">{t('meal_no_meal_scheduled')}</p>
@@ -60,7 +60,6 @@ function MealCard({ slot, meal, onMealClick, t }) {
       onClick={() => onMealClick(meal, slot)}
       className="relative rounded-3xl overflow-hidden cursor-pointer group shadow-xs min-h-[320px] sm:min-h-[360px] flex flex-col border border-slate-200 bg-white"
     >
-      {/* Background Imagery or Gradient Fallback */}
       {hasValidImage ? (
         <img
           src={meal.recipe_image}
@@ -76,9 +75,7 @@ function MealCard({ slot, meal, onMealClick, t }) {
 
       <div className={`absolute inset-0 bg-gradient-to-t ${hasValidImage ? 'from-[#0a192f] via-[#0a192f]/40 to-black/30' : 'from-[#0a192f] via-[#0a192f]/20 to-transparent'}`} />
       
-      {/* Card Content */}
       <div className="relative z-10 p-4 sm:p-6 flex flex-col h-full justify-between">
-        {/* Top Header Pills */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5 sm:gap-2 bg-white/90 backdrop-blur-md px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-slate-200 shadow-xs">
             <Icon size={14} className="text-[#0284c7] shrink-0" />
@@ -92,7 +89,6 @@ function MealCard({ slot, meal, onMealClick, t }) {
           )}
         </div>
 
-        {/* Dish Title & Frosted-Glass Macros at a Glance */}
         <div className="mt-auto pt-6 sm:pt-8 space-y-3">
           <h4
             title={titleText}
@@ -101,7 +97,6 @@ function MealCard({ slot, meal, onMealClick, t }) {
             {titleText}
           </h4>
 
-          {/* Responsive Macros Badge Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-[#0a192f]/90 backdrop-blur-md p-2 rounded-2xl border border-white/20 text-center text-white">
             <div className="flex flex-col items-center justify-center p-1">
               <span className="text-xs font-black text-amber-300 leading-none">{Math.round(meal.calories || 0)}</span>
@@ -159,7 +154,7 @@ export default function MealPlanner() {
   const [aiRecipes, setAiRecipes] = useState(null);
   const [recipesLoading, setRecipesLoading] = useState(false);
 
-  // Shopping List Modal States
+  // Shopping List States
   const [shoppingListModalOpen, setShoppingListModalOpen] = useState(false);
   const [shoppingListLoading, setShoppingListLoading] = useState(false);
   const [shoppingListData, setShoppingListData] = useState(null);
@@ -249,22 +244,33 @@ export default function MealPlanner() {
 
   const handleDownloadTxt = () => {
     if (!shoppingListData) return;
-    let txt = `=================================================\n`;
-    txt += `  NUTRI-AI WEEKLY GROCERY SHOPPING LIST\n`;
-    txt += `  Diet Preference: ${shoppingListData.diet_preference || selectedDiet}\n`;
-    txt += `  Generated via Google Gemini AI\n`;
-    txt += `=================================================\n\n`;
+    let txt = `=================================================
+`;
+    txt += `  NUTRI-AI WEEKLY GROCERY SHOPPING LIST
+`;
+    txt += `  Diet Preference: ${shoppingListData.diet_preference || selectedDiet}
+`;
+    txt += `  Generated via Google Gemini AI
+`;
+    txt += `=================================================
+
+`;
 
     shoppingListData.categories?.forEach((cat) => {
-      txt += `[ ${cat.name.toUpperCase()} ]\n`;
+      txt += `[ ${cat.name.toUpperCase()} ]
+`;
       cat.items?.forEach((item) => {
-        txt += `  • ${item.item} (${item.quantity})${item.notes ? ` - ${item.notes}` : ''}\n`;
+        txt += `  • ${item.item} (${item.quantity})${item.notes ? ` - ${item.notes}` : ''}
+`;
       });
-      txt += `\n`;
+      txt += `
+`;
     });
 
-    txt += `-------------------------------------------------\n`;
-    txt += `Generated on ${new Date().toLocaleDateString()} | NutriAI Clinical Nutrition System\n`;
+    txt += `-------------------------------------------------
+`;
+    txt += `Generated on ${new Date().toLocaleDateString()} | NutriAI Clinical Nutrition System
+`;
 
     const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -279,13 +285,18 @@ export default function MealPlanner() {
 
   const handleCopyClipboard = () => {
     if (!shoppingListData) return;
-    let text = `🛒 NutriAI Grocery Shopping List (${shoppingListData.diet_preference || selectedDiet})\n\n`;
+    let text = `🛒 NutriAI Grocery Shopping List (${shoppingListData.diet_preference || selectedDiet})
+
+`;
     shoppingListData.categories?.forEach((cat) => {
-      text += `📌 ${cat.name}:\n`;
+      text += `📌 ${cat.name}:
+`;
       cat.items?.forEach((item) => {
-        text += `  • ${item.item}: ${item.quantity}${item.notes ? ` (${item.notes})` : ''}\n`;
+        text += `  • ${item.item}: ${item.quantity}${item.notes ? ` (${item.notes})` : ''}
+`;
       });
-      text += `\n`;
+      text += `
+`;
     });
 
     navigator.clipboard.writeText(text);
@@ -677,14 +688,8 @@ export default function MealPlanner() {
       {/* Meal Slot Cards Grid */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="glass-card p-6 rounded-3xl h-[320px] animate-pulse bg-white border border-slate-200 flex flex-col justify-between">
-              <div className="h-6 w-24 bg-slate-100 rounded-full" />
-              <div className="space-y-3">
-                <div className="h-6 w-3/4 bg-slate-100 rounded-lg" />
-                <div className="h-12 w-full bg-slate-100 rounded-2xl" />
-              </div>
-            </div>
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-80 rounded-3xl bg-slate-100 animate-pulse border border-slate-200" />
           ))}
         </div>
       ) : (
@@ -719,7 +724,6 @@ export default function MealPlanner() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-3xl p-4 sm:p-6 shadow-2xl my-auto max-h-[85vh] sm:max-h-[88vh] flex flex-col overflow-hidden text-[#0a192f]"
           >
-            {/* Sticky Top Header Bar with Close Button */}
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 shrink-0">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
@@ -740,9 +744,7 @@ export default function MealPlanner() {
               </button>
             </div>
 
-            {/* Scrollable Content Area */}
             <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-4 sm:space-y-5 custom-scrollbar">
-              {/* Modal Hero Banner */}
               <div className="relative rounded-2xl overflow-hidden h-40 sm:h-52 bg-slate-100 border border-slate-200 shrink-0">
                 {selectedMeal.recipe_image && !modalImgFailed ? (
                   <img
@@ -765,7 +767,6 @@ export default function MealPlanner() {
                 </div>
               </div>
 
-              {/* Macro Nutrients Breakdown */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-center">
                 <div>
                   <span className="text-[10px] sm:text-xs text-slate-500 font-bold block">{t('common_calories')}</span>
@@ -785,7 +786,6 @@ export default function MealPlanner() {
                 </div>
               </div>
 
-              {/* Ingredients */}
               {selectedMeal.recipe_ingredients && selectedMeal.recipe_ingredients.length > 0 && (
                 <div>
                   <h4 className="text-base font-black text-[#0a192f] mb-2.5">{t('meal_ingredients')}</h4>
@@ -800,7 +800,6 @@ export default function MealPlanner() {
                 </div>
               )}
 
-              {/* Instructions */}
               {selectedMeal.recipe_instructions && selectedMeal.recipe_instructions.length > 0 && (
                 <div>
                   <h4 className="text-base font-black text-[#0a192f] mb-2.5">{t('meal_cooking_instructions')}</h4>
@@ -831,7 +830,6 @@ export default function MealPlanner() {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden my-auto max-h-[90vh] flex flex-col text-[#0a192f]"
           >
-            {/* Top Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5 shrink-0">
               <div className="flex items-center gap-3">
                 <div className="p-3 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20">
@@ -854,7 +852,6 @@ export default function MealPlanner() {
               </button>
             </div>
 
-            {/* Scrollable Shopping Categories */}
             <div className="flex-1 overflow-y-auto pr-1 sm:pr-2 space-y-5 custom-scrollbar mb-5">
               {shoppingListData?.categories?.map((cat, catIdx) => (
                 <div key={catIdx} className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
@@ -908,7 +905,6 @@ export default function MealPlanner() {
               ))}
             </div>
 
-            {/* Bottom Modal Actions */}
             <div className="flex flex-wrap items-center justify-end gap-2.5 pt-4 border-t border-slate-100 shrink-0">
               <button
                 onClick={handleCopyClipboard}
@@ -918,7 +914,7 @@ export default function MealPlanner() {
                 <span>{copied ? t('meal_shopping_list_copied') : t('meal_shopping_list_copy_clipboard')}</span>
               </button>
               <button
-                onClick={handlePrintList}
+                onClick={handlePrintPdf}
                 className="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
               >
                 <Printer className="w-4 h-4 text-slate-500" />
