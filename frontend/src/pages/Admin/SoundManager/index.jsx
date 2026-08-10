@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Music, Volume2, Plus, Edit2, Trash2, Play, Pause,
   FolderPlus, Sparkles, Activity, CheckCircle, AlertCircle, RefreshCw,
-  UploadCloud, FileAudio, Link2, Check
+  UploadCloud, FileAudio, Link2, Check, X
 } from 'lucide-react';
 import api from '../../../services/api';
 import Alert from '../../../components/common/Alert';
@@ -489,11 +489,21 @@ export default function AdminSoundManager() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-200 space-y-5"
+              className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-200 space-y-5 relative"
             >
-              <h3 className="text-xl font-black text-[#0a192f]">
-                {editingCat ? 'Edit Sound Category' : 'Create Sound Category'}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-black text-[#0a192f]">
+                  {editingCat ? 'Edit Sound Category' : 'Create Sound Category'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowCatModal(false)}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+                  title="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
 
               <form onSubmit={handleSaveCategory} className="space-y-4">
                 <div>
@@ -553,11 +563,21 @@ export default function AdminSoundManager() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl border border-slate-200 space-y-5 max-h-[90vh] overflow-y-auto custom-scrollbar relative"
             >
-              <h3 className="text-xl font-black text-[#0a192f]">
-                {editingTrack ? 'Edit Sound Track' : 'Add Sound Track'}
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-black text-[#0a192f]">
+                  {editingTrack ? 'Edit Sound Track' : 'Add Sound Track'}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setShowTrackModal(false)}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+                  title="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
 
               <form onSubmit={handleSaveTrack} className="space-y-4">
                 <div>
