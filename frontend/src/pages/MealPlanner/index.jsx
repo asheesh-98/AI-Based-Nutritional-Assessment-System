@@ -293,8 +293,252 @@ export default function MealPlanner() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handlePrintList = () => {
-    window.print();
+  const handlePrintPdf = () => {
+    if (!shoppingListData) return;
+
+    const printWin = window.open('', '_blank');
+    if (!printWin) return;
+
+    const dietLabel = (shoppingListData.diet_preference || selectedDiet).toUpperCase();
+    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    let categoriesHtml = '';
+    shoppingListData.categories?.forEach((cat, catIdx) => {
+      let itemsHtml = '';
+      cat.items?.forEach((item, itemIdx) => {
+        const itemKey = `${catIdx}-${itemIdx}`;
+        const isChecked = checkedItems[itemKey];
+        itemsHtml += `
+          <div class="item-row ${isChecked ? 'completed' : ''}">
+            <div class="checkbox ${isChecked ? 'checked' : ''}">
+              ${isChecked ? '✓' : ''}
+            </div>
+            <div class="item-details">
+              <span class="item-name">${item.item}</span>
+              ${item.notes ? `<span class="item-notes">(${item.notes})</span>` : ''}
+            </div>
+            <span class="item-qty">${item.quantity}</span>
+          </div>
+        `;
+      });
+
+      categoriesHtml += `
+        <div class="category-block">
+          <div class="category-header">
+            <h3>${cat.name}</h3>
+            <span class="badge">${cat.items?.length || 0} ${t('common_items').toUpperCase()}</span>
+          </div>
+          <div class="items-grid">
+            ${itemsHtml}
+          </div>
+        </div>
+      `;
+    });
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>NutriAI Grocery Shopping List - ${dietLabel}</title>
+        <style>
+          @page {
+            size: A4;
+            margin: 15mm;
+          }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #0a192f;
+            background: #ffffff;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #0284c7;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+          }
+          .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+          .logo-box {
+            width: 40px;
+            height: 40px;
+            background: #0284c7;
+            color: white;
+            font-weight: 900;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+          }
+          .title {
+            font-size: 22px;
+            font-weight: 900;
+            margin: 0;
+            color: #0a192f;
+          }
+          .subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+          }
+          .meta-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            border: 1px solid #bae6fd;
+          }
+          .category-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            page-break-inside: avoid;
+          }
+          .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+          }
+          .category-header h3 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #0f172a;
+          }
+          .badge {
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid #bbf7d0;
+          }
+          .items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+          .item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+          }
+          .item-row.completed {
+            background: #f1f5f9;
+            text-decoration: line-through;
+            color: #94a3b8;
+          }
+          .checkbox {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #0284c7;
+            border-radius: 4px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #ffffff;
+          }
+          .checkbox.checked {
+            background: #10b981;
+            border-color: #10b981;
+          }
+          .item-details {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+          }
+          .item-name {
+            font-weight: 700;
+            color: #0f172a;
+          }
+          .item-notes {
+            font-size: 10px;
+            color: #64748b;
+            font-style: italic;
+          }
+          .item-qty {
+            font-weight: 800;
+            color: #047857;
+            background: #ecfdf5;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid #a7f3d0;
+            font-size: 11px;
+          }
+          .footer {
+            margin-top: 24px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #64748b;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="brand">
+            <div class="logo-box">Ψ</div>
+            <div>
+              <h1 class="title">AI Grocery Shopping List</h1>
+              <p class="subtitle">NutriAI Clinical Nutrition & Meal Planning System</p>
+            </div>
+          </div>
+          <div class="meta-badge">
+            ${dietLabel} • ${dateStr}
+          </div>
+        </div>
+
+        ${categoriesHtml}
+
+        <div class="footer">
+          <span>Generated by NutriAI Google Gemini AI Engine</span>
+          <span>Official NutriAI Document</span>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          }
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWin.document.open();
+    printWin.document.write(htmlContent);
+    printWin.document.close();
   };
 
   const currentDayData = weeklyPlan?.days?.[selectedDayIndex];
