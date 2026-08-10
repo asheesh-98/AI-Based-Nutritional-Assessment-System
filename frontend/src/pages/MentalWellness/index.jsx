@@ -108,7 +108,7 @@ export default function MentalWellness() {
     let textToSpeak = '';
     if (phase === 'inhale') textToSpeak = 'Inhale deeply through your nose';
     else if (phase === 'hold') textToSpeak = 'Hold your breath';
-    else if (phase === 'exhale') textToSpeak = 'Exhale slowly through your mouth';
+    else if (phase === 'exhale') textToSpeak = 'Exhale slowly through your nose';
     else if (phase === 'rest') textToSpeak = 'Rest and relax';
 
     if (textToSpeak) {
