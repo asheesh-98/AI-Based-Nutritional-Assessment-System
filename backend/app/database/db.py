@@ -50,6 +50,8 @@ def init_db():
                     conn.execute(text(query))
                 except Exception:
                     pass
+    except Exception:
+        pass
 
     # Seed default sound categories if empty
     try:
@@ -66,7 +68,5 @@ def init_db():
             db.add_all(default_cats)
             db.commit()
         db.close()
-    except Exception:
-        pass
     except Exception:
         pass
