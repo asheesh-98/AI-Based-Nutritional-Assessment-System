@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from backend.app.database.db import get_db
 from backend.app.models.sound import SoundCategory, SoundTrack
 from backend.app.models.user import User
-from backend.app.auth.security import get_current_user, get_admin_user
+from backend.app.auth.jwt_handler import get_current_user, get_current_admin_user
 
 router = APIRouter()
 
@@ -118,7 +118,7 @@ def get_public_sound_tracks(category_id: Optional[int] = None, db: Session = Dep
 def create_sound_category(
     payload: SoundCategoryCreate,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Create a new sound category."""
     existing = db.query(SoundCategory).filter(SoundCategory.name == payload.name).first()
@@ -147,7 +147,7 @@ def update_sound_category(
     category_id: int,
     payload: SoundCategoryCreate,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Update sound category."""
     cat = db.query(SoundCategory).filter(SoundCategory.id == category_id).first()
@@ -174,7 +174,7 @@ def update_sound_category(
 def delete_sound_category(
     category_id: int,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Delete sound category."""
     cat = db.query(SoundCategory).filter(SoundCategory.id == category_id).first()
@@ -190,7 +190,7 @@ def delete_sound_category(
 def create_sound_track(
     payload: SoundTrackCreate,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Add a new sound track or frequency preset."""
     cat = db.query(SoundCategory).filter(SoundCategory.id == payload.category_id).first()
@@ -234,7 +234,7 @@ def update_sound_track(
     track_id: int,
     payload: SoundTrackCreate,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Update sound track details."""
     track = db.query(SoundTrack).filter(SoundTrack.id == track_id).first()
@@ -276,7 +276,7 @@ def update_sound_track(
 def delete_sound_track(
     track_id: int,
     db: Session = Depends(get_db),
-    admin: User = Depends(get_admin_user)
+    admin: User = Depends(get_current_admin_user)
 ):
     """Admin: Delete sound track."""
     track = db.query(SoundTrack).filter(SoundTrack.id == track_id).first()
