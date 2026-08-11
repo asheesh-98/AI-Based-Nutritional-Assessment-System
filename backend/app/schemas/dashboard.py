@@ -20,6 +20,7 @@ class DeficiencyRisk(BaseModel):
 class DashboardResponse(BaseModel):
     user_name: str
     nutrition_score: float = 85.0
+    nutrition_score_trend: str = "+0% Baseline"
     deficiency_count: int = 0
     high_risk_count: int = 0
     risk_level: str = "Optimal"

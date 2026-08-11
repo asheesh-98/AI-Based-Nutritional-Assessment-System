@@ -1,6 +1,6 @@
 """
 Dashboard endpoint — aggregates key user metrics dynamically into a single response.
-Calculates personalized calorie targets, deficiency risk counts, hydration levels, and nutrition scores.
+Calculates personalized calorie targets, deficiency risk counts, hydration levels, and real-time nutrition scores.
 """
 import json
 from datetime import date
@@ -121,7 +121,6 @@ def get_dashboard(
             if risk and risk >= 0.65:
                 high_risk_count += 1
     else:
-        # Dynamic baseline for user without assessment yet
         deficiency_count = 1 if (bmi and (bmi < 18.5 or bmi > 25)) else 0
         high_risk_count = 0
 
@@ -135,36 +134,42 @@ def get_dashboard(
     else:
         risk_level = "Optimal"
 
-    # ── 4. Dynamic Nutrition Score Calculation ─────────────────────────────
+    # ── 4. Today's Progress Log & Water Hydration ─────────────────────────
     today_progress = (
         db.query(ProgressLog)
         .filter(ProgressLog.user_id == current_user.id, ProgressLog.log_date == today)
         .first()
     )
+    water_intake = today_progress.water_intake if (today_progress and today_progress.water_intake is not None) else 0.0
 
-    if today_progress and today_progress.nutrition_score and today_progress.nutrition_score > 0:
-        nutrition_score = today_progress.nutrition_score
-    else:
-        # Compute dynamic score
-        base_score = 92.0
-        base_score -= (deficiency_count * 4.0)
-        base_score -= (high_risk_count * 8.0)
+    # ── 5. Real-Time Dynamic Nutrition Score Calculation ──────────────────
+    base_score = 88.0
 
-        # Bonus for logging meals today
-        if diary_entries:
+    # Deductions for risk predictions
+    base_score -= (high_risk_count * 12.0)
+    base_score -= ((deficiency_count - high_risk_count) * 5.0)
+
+    # Food Diary Rewards
+    if diary_entries:
+        base_score += 4.0
+        calorie_ratio = calories_today / daily_calorie_target if daily_calorie_target > 0 else 0
+        if 0.70 <= calorie_ratio <= 1.15:
             base_score += 4.0
 
-        # Adjust for BMI status
-        if bmi:
-            if 18.5 <= bmi <= 24.9:
-                base_score += 3.0
-            elif bmi < 17.5 or bmi > 30.0:
-                base_score -= 5.0
+    # Water Hydration Reward
+    if water_intake >= (water_target * 0.75):
+        base_score += 4.0
+    elif water_intake >= (water_target * 0.40):
+        base_score += 2.0
 
-        nutrition_score = round(min(100.0, max(35.0, base_score)), 0)
+    # BMI Status Adjustment
+    if bmi:
+        if 18.5 <= bmi <= 24.9:
+            base_score += 3.0
+        elif bmi < 17.0 or bmi > 32.0:
+            base_score -= 6.0
 
-    # ── 5. Water Hydration Tracking ────────────────────────────────────────
-    water_intake = today_progress.water_intake if (today_progress and today_progress.water_intake is not None) else 0.0
+    nutrition_score = round(min(100.0, max(30.0, base_score)), 0)
 
     # Save/update progress log entry for today
     if not today_progress:
@@ -184,7 +189,31 @@ def get_dashboard(
         today_progress.calories_consumed = calories_today
         db.commit()
 
-    # ── 6. Recent predictions (last 5) ──────────────────────────────────────
+    # ── 6. Trend Percentage vs Past Progress Log ───────────────────────────
+    prev_log = (
+        db.query(ProgressLog)
+        .filter(ProgressLog.user_id == current_user.id, ProgressLog.log_date < today)
+        .order_by(ProgressLog.log_date.desc())
+        .first()
+    )
+    if prev_log and prev_log.nutrition_score and prev_log.nutrition_score > 0:
+        diff = nutrition_score - prev_log.nutrition_score
+        pct = round((diff / prev_log.nutrition_score) * 100, 1)
+        if pct > 0:
+            nutrition_score_trend = f"+{pct}% Improved"
+        elif pct < 0:
+            nutrition_score_trend = f"{pct}% Focus Needed"
+        else:
+            nutrition_score_trend = "0% Steady"
+    else:
+        if nutrition_score >= 80:
+            nutrition_score_trend = "+5% Optimal"
+        elif nutrition_score >= 60:
+            nutrition_score_trend = "Moderate"
+        else:
+            nutrition_score_trend = "Needs Focus"
+
+    # ── 7. Recent predictions (last 5) ──────────────────────────────────────
     recent_preds = (
         db.query(Prediction)
         .filter(Prediction.user_id == current_user.id)
@@ -201,7 +230,7 @@ def get_dashboard(
         for p in recent_preds
     ]
 
-    # ── 7. Recent diary entries ─────────────────────────────────────────────
+    # ── 8. Recent diary entries ─────────────────────────────────────────────
     recent_diary = [
         {
             "food_name": e.food_name,
@@ -215,6 +244,7 @@ def get_dashboard(
     return DashboardResponse(
         user_name=current_user.full_name or current_user.username,
         nutrition_score=nutrition_score,
+        nutrition_score_trend=nutrition_score_trend,
         deficiency_count=deficiency_count,
         high_risk_count=high_risk_count,
         risk_level=risk_level,

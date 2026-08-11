@@ -104,6 +104,7 @@ export default function Dashboard() {
   const deficiencyCount = data?.deficiency_count ?? 0;
   const riskLevelText = data?.risk_level || (deficiencyCount > 0 ? t('dashboard_mild_risk') : 'Optimal');
   const nutritionScoreVal = Math.round(data?.nutrition_score || 85);
+  const nutritionScoreTrend = data?.nutrition_score_trend || (nutritionScoreVal >= 80 ? '+5% Optimal' : nutritionScoreVal >= 60 ? 'Moderate' : 'Needs Focus');
 
   const proteinToday = Math.round(data?.nutrient_summary?.protein_today || 0);
   const carbsToday = Math.round(data?.nutrient_summary?.carbs_today || 0);
@@ -193,8 +194,12 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7] shrink-0 shadow-xs">
                   <Activity className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-black text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
-                  {nutritionScoreVal >= 80 ? '+5% Optimal' : nutritionScoreVal >= 60 ? 'Moderate' : 'Needs Focus'}
+                <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${
+                  nutritionScoreVal >= 80 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' :
+                  nutritionScoreVal >= 60 ? 'text-[#0284c7] bg-sky-50 border-sky-200' :
+                  'text-amber-700 bg-amber-50 border-amber-200'
+                }`}>
+                  {nutritionScoreTrend}
                 </span>
               </div>
               <div className="flex items-baseline justify-between">
@@ -205,7 +210,7 @@ export default function Dashboard() {
                 <div className="w-12 h-12 relative flex items-center justify-center">
                   <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                     <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-[#0284c7]" strokeDasharray={`${nutritionScoreVal}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className={nutritionScoreVal >= 80 ? 'text-emerald-500' : nutritionScoreVal >= 60 ? 'text-[#0284c7]' : 'text-amber-500'} strokeDasharray={`${nutritionScoreVal}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   </svg>
                 </div>
               </div>
