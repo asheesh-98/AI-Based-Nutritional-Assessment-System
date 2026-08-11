@@ -105,6 +105,11 @@ export const LANGUAGES = [
 export const TRANSLATIONS = {
   "en": {
     "food_diary_subtitle": "Direct AI-powered caloric and macronutrient food logging",
+    "calendar_today": "Today",
+    "calendar_yesterday": "Yesterday",
+    "calendar_prev_day": "Prev",
+    "calendar_next_day": "Next",
+    "calendar_viewing_past": "Viewing archived logs for",
     "food_diary_daily_goal": "Daily Calorie Goal",
     "food_diary_target_met": "Target Met",
     "food_diary_protein": "PROTEIN",

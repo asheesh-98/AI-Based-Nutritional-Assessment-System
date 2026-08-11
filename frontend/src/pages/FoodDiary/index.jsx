@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, Coffee, Sun, Moon, Cookie,
   Flame, Droplets, Trash2, Utensils, Sparkles,
-  CheckCircle2, RefreshCw, Scale, ChevronRight, Sliders, Zap,
-  TrendingUp, Award, Clock, ArrowUpRight
+  CheckCircle2, RefreshCw, Scale, ChevronRight, ChevronLeft, Sliders, Zap,
+  TrendingUp, Award, Clock, ArrowUpRight, Calendar as CalendarIcon
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import Button from '../../components/common/Button';
@@ -34,6 +34,44 @@ const cardVariants = {
 
 export default function FoodDiary() {
   const { t, language } = useLanguage();
+
+  // Calendar Date Navigation State
+  const todayStr = useMemo(() => new Date().toISOString().split('T')[0], []);
+  const [selectedDate, setSelectedDate] = useState(todayStr);
+
+  const isToday = selectedDate === todayStr;
+  const isYesterday = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return selectedDate === d.toISOString().split('T')[0];
+  }, [selectedDate]);
+
+  const formattedDateLabel = useMemo(() => {
+    try {
+      const parts = selectedDate.split('-');
+      const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      return d.toLocaleDateString(language === 'hi' ? 'hi-IN' : 'en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    } catch {
+      return selectedDate;
+    }
+  }, [selectedDate, language]);
+
+  const changeDateByDays = (days) => {
+    try {
+      const parts = selectedDate.split('-');
+      const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+      d.setDate(d.getDate() + days);
+      const newStr = d.toISOString().split('T')[0];
+      setSelectedDate(newStr);
+    } catch (err) {
+      console.error('Date shift error:', err);
+    }
+  };
 
   // Presets mapped with translated labels
   const popularPresets = useMemo(() => [
@@ -87,13 +125,13 @@ export default function FoodDiary() {
   const [estimatingDetails, setEstimatingDetails] = useState(false);
 
   useEffect(() => {
-    loadDiary();
-  }, []);
+    loadDiary(selectedDate);
+  }, [selectedDate]);
 
-  const loadDiary = async () => {
+  const loadDiary = async (targetDate = selectedDate) => {
+    setLoading(true);
     try {
-      const today = new Date().toISOString().split('T')[0];
-      const res = await foodService.getFoodDiary(today);
+      const res = await foodService.getFoodDiary(targetDate);
       setDiary(Array.isArray(res) ? res : []);
     } catch (err) {
       console.error('Diary load error:', err);
@@ -296,6 +334,80 @@ export default function FoodDiary() {
           onClose={() => setAlert({ ...alert, show: false })}
         />
       )}
+
+      {/* 🗓️ Interactive Calendar & Date Picker System Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-3xl bg-white/95 border border-slate-200 shadow-sm mb-6 text-[#0a192f] relative overflow-hidden"
+      >
+        {/* Ambient Glow */}
+        <div className="absolute top-0 right-0 w-48 h-48 bg-sky-100/50 rounded-full blur-2xl pointer-events-none" />
+
+        {/* Left: Selected Date Info & Status Badge */}
+        <div className="flex items-center gap-3.5 relative z-10">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/20 shrink-0">
+            <CalendarIcon className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-base sm:text-lg font-black text-[#0a192f] tracking-tight">{formattedDateLabel}</h3>
+              <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider border shadow-xs ${
+                isToday ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                isYesterday ? 'bg-sky-50 text-[#0284c7] border-sky-200' :
+                'bg-purple-50 text-purple-700 border-purple-200'
+              }`}>
+                {isToday ? (t('calendar_today') || 'Today') : isYesterday ? (t('calendar_yesterday') || 'Yesterday') : (t('calendar_viewing_past') ? `${t('calendar_viewing_past')} (${selectedDate})` : `Archived (${selectedDate})`)}
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 font-semibold mt-0.5">
+              {isToday ? 'Viewing live today food entries' : `Viewing food diary history for ${selectedDate}`}
+            </p>
+          </div>
+        </div>
+
+        {/* Right: Quick Date Controls (Prev Day, Today, Next Day, Calendar Date Input) */}
+        <div className="flex items-center gap-2 self-end sm:self-auto w-full sm:w-auto justify-between sm:justify-end relative z-10">
+          <button
+            onClick={() => changeDateByDays(-1)}
+            className="px-3 py-2 rounded-2xl bg-slate-100 hover:bg-sky-50 hover:text-[#0284c7] border border-slate-200 text-slate-700 font-bold transition-all cursor-pointer shadow-xs active:scale-95 flex items-center gap-1 text-xs"
+            title="Previous Day"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">{t('calendar_prev_day') || 'Prev'}</span>
+          </button>
+
+          {!isToday && (
+            <button
+              onClick={() => setSelectedDate(todayStr)}
+              className="px-3.5 py-2 rounded-2xl bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+            >
+              {t('calendar_today') || 'Today'}
+            </button>
+          )}
+
+          <button
+            onClick={() => changeDateByDays(1)}
+            disabled={isToday}
+            className="px-3 py-2 rounded-2xl bg-slate-100 hover:bg-sky-50 hover:text-[#0284c7] border border-slate-200 text-slate-700 font-bold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 text-xs"
+            title="Next Day"
+          >
+            <span className="hidden sm:inline">{t('calendar_next_day') || 'Next'}</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* Native HTML5 Calendar Date Picker Input */}
+          <div className="relative shrink-0">
+            <input
+              type="date"
+              max={todayStr}
+              value={selectedDate}
+              onChange={(e) => e.target.value && setSelectedDate(e.target.value)}
+              className="px-3 py-2 rounded-2xl bg-sky-50 hover:bg-sky-100 border border-sky-200 text-[#0284c7] text-xs font-black transition-all cursor-pointer shadow-xs focus:outline-none focus:ring-2 focus:ring-[#0284c7]"
+            />
+          </div>
+        </div>
+      </motion.div>
 
       {/* 🌟 Hero Calorie & Macro Intelligence Hub Header */}
       <motion.div
