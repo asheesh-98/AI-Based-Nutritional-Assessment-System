@@ -256,7 +256,7 @@ export default function Dashboard() {
                   <Flame className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                  Target: {targetCalories.toLocaleString()}
+                  {t('dashboard_target_label')} {targetCalories.toLocaleString()}
                 </span>
               </div>
               <div>
@@ -282,7 +282,7 @@ export default function Dashboard() {
                     onClick={handleResetWater}
                     disabled={addingWater}
                     className="p-1.5 rounded-full text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-                    title="Reset Water Intake to 0.0L"
+                    title={t('dashboard_reset_water_title') || 'Reset Water Intake to 0.0L'}
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                   </button>
@@ -298,7 +298,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_water_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{waterAmount}L <span className="text-xs font-bold text-slate-400">/ {waterTarget}L Target</span></p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{waterAmount}L <span className="text-xs font-bold text-slate-400">/ {waterTarget}L {t('dashboard_target_water_label')}</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden">
                     <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: `${waterPercent}%` }} />
@@ -326,12 +326,12 @@ export default function Dashboard() {
                   <PieChart className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">Today's Macronutrients Summary</h3>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">Real-time daily protein, carbohydrates, and healthy fats intake</p>
+                  <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">{t('dashboard_macros_summary_title')}</h3>
+                  <p className="text-xs text-slate-500 font-semibold mt-0.5">{t('dashboard_macros_summary_subtitle')}</p>
                 </div>
               </div>
               <Link to="/food-diary" className="text-xs sm:text-sm font-extrabold text-[#0284c7] hover:text-sky-800 transition-colors flex items-center gap-1">
-                Log Food <ChevronRight className="w-4 h-4" />
+                {t('dashboard_btn_log_food')} <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -345,7 +345,7 @@ export default function Dashboard() {
                 <div className="h-2 w-full bg-emerald-100 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min(100, Math.round((proteinToday / 110) * 100))}%` }} />
                 </div>
-                <p className="text-[11px] text-emerald-600 font-semibold mt-2">Target: 110g daily for muscle repair</p>
+                <p className="text-[11px] text-emerald-600 font-semibold mt-2">{t('dashboard_protein_subtext')}</p>
               </div>
 
               {/* Carbs */}
@@ -357,7 +357,7 @@ export default function Dashboard() {
                 <div className="h-2 w-full bg-sky-100 rounded-full overflow-hidden">
                   <div className="h-full bg-[#0284c7] rounded-full" style={{ width: `${Math.min(100, Math.round((carbsToday / 240) * 100))}%` }} />
                 </div>
-                <p className="text-[11px] text-sky-600 font-semibold mt-2">Complex energy carbs progress</p>
+                <p className="text-[11px] text-sky-600 font-semibold mt-2">{t('dashboard_carbs_subtext')}</p>
               </div>
 
               {/* Fats */}
@@ -369,7 +369,7 @@ export default function Dashboard() {
                 <div className="h-2 w-full bg-purple-100 rounded-full overflow-hidden">
                   <div className="h-full bg-purple-500 rounded-full" style={{ width: `${Math.min(100, Math.round((fatToday / 65) * 100))}%` }} />
                 </div>
-                <p className="text-[11px] text-purple-600 font-semibold mt-2">Essential Omega fatty acids balance</p>
+                <p className="text-[11px] text-purple-600 font-semibold mt-2">{t('dashboard_fat_subtext')}</p>
               </div>
             </div>
           </motion.div>
@@ -388,16 +388,16 @@ export default function Dashboard() {
                 <span className="p-2 rounded-xl bg-purple-500/20 border border-purple-400/30 text-purple-300">
                   <Bot className="w-5 h-5" />
                 </span>
-                <span className="text-xs font-black uppercase tracking-wider text-purple-300">AI Health Recommendation</span>
+                <span className="text-xs font-black uppercase tracking-wider text-purple-300">{t('dashboard_ai_rec_title')}</span>
               </div>
 
               <h4 className="text-lg font-black leading-snug mb-2 text-white">
-                {deficiencyCount > 0 ? 'Micronutrient Boost Needed' : 'Metabolic Health Optimal'}
+                {deficiencyCount > 0 ? t('dashboard_ai_rec_head_boost') : t('dashboard_ai_rec_head_optimal')}
               </h4>
               <p className="text-xs text-slate-300 leading-relaxed font-medium">
                 {deficiencyCount > 0
-                  ? `Your telemetry indicates mild vulnerability to key nutrients. Consider reviewing your daily meal plan to optimize iron & vitamin absorption.`
-                  : `Your daily calorie and macronutrient intake is well balanced. Keep maintaining your 7-day health streak!`}
+                  ? t('dashboard_ai_rec_body_boost')
+                  : t('dashboard_ai_rec_body_optimal')}
               </p>
             </div>
 
@@ -405,7 +405,7 @@ export default function Dashboard() {
               to="/ai-coach"
               className="mt-6 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold text-xs shadow-md transition-all border-0 cursor-pointer active:scale-95"
             >
-              Ask AI Coach <ArrowRight className="w-4 h-4" />
+              {t('dashboard_btn_ask_coach')} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
         </div>
