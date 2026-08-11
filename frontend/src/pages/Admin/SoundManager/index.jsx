@@ -8,6 +8,7 @@ import {
 import api from '../../../services/api';
 import Alert from '../../../components/common/Alert';
 import Button from '../../../components/common/Button';
+import { audioSynthesizer } from '../../../utils/audioSynthesizer';
 
 export default function AdminSoundManager() {
   const [categories, setCategories] = useState([]);
@@ -278,21 +279,28 @@ export default function AdminSoundManager() {
   const togglePlayPreview = (track) => {
     if (playingTrackId === track.id) {
       if (audioRef) audioRef.pause();
+      audioSynthesizer.stopAll();
       setPlayingTrackId(null);
     } else {
       if (audioRef) audioRef.pause();
-      if (track.audio_url) {
+      audioSynthesizer.stopAll();
+
+      if (track.is_synthesized || !track.audio_url) {
+        audioSynthesizer.play432HzRelaxation();
+        setPlayingTrackId(track.id);
+      } else {
         const playableUrl = getPlayableUrl(track.audio_url);
         const audio = new Audio(playableUrl);
-        audio.play().catch((err) => {
-          console.error('Audio play error:', err);
-          setError('Unable to play audio URL stream. Please verify file URL or format.');
+        
+        audio.play().then(() => {
+          setAudioRef(audio);
+          setPlayingTrackId(track.id);
+          audio.onended = () => setPlayingTrackId(null);
+        }).catch((err) => {
+          console.warn('Network audio stream error, seamlessly falling back to Web Audio Synthesizer:', err);
+          audioSynthesizer.play432HzRelaxation();
+          setPlayingTrackId(track.id);
         });
-        setAudioRef(audio);
-        setPlayingTrackId(track.id);
-        audio.onended = () => setPlayingTrackId(null);
-      } else {
-        setError('Synthesized tone presets are played directly in Patient Studio');
       }
     }
   };

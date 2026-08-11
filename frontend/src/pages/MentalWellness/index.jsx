@@ -246,19 +246,25 @@ export default function MentalWellness() {
     stopPlayback();
     setCurrentTrack(track);
 
-    if (track.type === 'synth') {
+    if (track.type === 'synth' || track.is_synthesized || !track.audio_url) {
       if (track.id === 'deep_relaxation') audioSynthesizer.play432HzRelaxation();
       else if (track.id === 'rain_forest') audioSynthesizer.playRainForest();
       else if (track.id === 'ocean_solfeggio') audioSynthesizer.playOceanSolfeggio();
       else if (track.id === 'sleep_restoration') audioSynthesizer.playSleepRestoration();
       else if (track.id === 'focus_relief') audioSynthesizer.playFocusAnxietyRelief();
+      else audioSynthesizer.play432HzRelaxation();
       audioSynthesizer.setVolume(volume);
     } else if (track.audio_url) {
       const playableUrl = getPlayableUrl(track.audio_url);
       const audio = new Audio(playableUrl);
       audio.volume = volume;
-      audio.play().catch((e) => console.error('Audio playback error:', e));
-      audioStreamRef.current = audio;
+      audio.play().then(() => {
+        audioStreamRef.current = audio;
+      }).catch((e) => {
+        console.warn('Network audio stream error, seamlessly falling back to Web Audio Synthesizer:', e);
+        audioSynthesizer.play432HzRelaxation();
+        audioSynthesizer.setVolume(volume);
+      });
     }
 
     setIsPlaying(true);

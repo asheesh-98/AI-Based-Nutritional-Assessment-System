@@ -4,6 +4,7 @@ Supports patient public fetching and admin CRUD operations.
 """
 import os
 import uuid
+import base64
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile, Request
 from pydantic import BaseModel
@@ -16,7 +17,8 @@ from backend.app.auth.jwt_handler import get_current_user, get_current_admin_use
 
 router = APIRouter()
 
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "uploads", "sounds")
+# Fix UPLOAD_DIR to point to backend/uploads/sounds matching main.py static mount
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads", "sounds")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
@@ -34,16 +36,29 @@ async def upload_audio_file(
     if not ext or ext not in allowed_exts:
         raise HTTPException(status_code=400, detail="Only audio files (.mp3, .wav, .m4a, .aac, .ogg, .flac) are allowed")
     
+    contents = await file.read()
+    
+    # Save file to static uploads folder
     unique_name = f"track_{uuid.uuid4().hex[:12]}{ext}"
     file_path = os.path.join(UPLOAD_DIR, unique_name)
-    
-    contents = await file.read()
     with open(file_path, "wb") as f:
         f.write(contents)
     
-    # Return full accessible absolute URL (e.g. https://domain.com/uploads/sounds/track_123.mp3)
-    base_url = str(request.base_url).rstrip('/')
-    audio_url = f"{base_url}/uploads/sounds/{unique_name}"
+    # Detect MIME type
+    mime_type = "audio/mpeg"
+    if ext == '.wav': mime_type = "audio/wav"
+    elif ext == '.ogg': mime_type = "audio/ogg"
+    elif ext in ('.m4a', '.aac'): mime_type = "audio/mp4"
+    elif ext == '.flac': mime_type = "audio/flac"
+
+    # For files <= 20MB, generate Data URI to guarantee 100% cloud persistence on Render
+    if len(contents) <= 20 * 1024 * 1024:
+        b64_str = base64.b64encode(contents).decode("utf-8")
+        audio_url = f"data:{mime_type};base64,{b64_str}"
+    else:
+        base_url = str(request.base_url).rstrip('/')
+        audio_url = f"{base_url}/uploads/sounds/{unique_name}"
+
     return {"audio_url": audio_url, "filename": filename, "size_bytes": len(contents)}
 
 
