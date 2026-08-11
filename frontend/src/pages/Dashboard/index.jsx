@@ -255,122 +255,73 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* 🚀 Main Grid: Recent Assessments & AI Assistant Hub */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* 🚀 Main Timeline: Recent Diagnostic & Assessment Records */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="glass-card p-5 sm:p-8 rounded-3xl bg-white/95 border border-slate-200/90 shadow-md w-full"
+        >
+          <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
+            <div>
+              <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">{t('dashboard_diagnostic_title')}</h3>
+              <p className="text-xs text-slate-500 font-semibold mt-0.5">{t('dashboard_diagnostic_subtitle')}</p>
+            </div>
+            <Link to="/reports" className="text-xs sm:text-sm font-extrabold text-[#0284c7] hover:text-sky-800 transition-colors flex items-center gap-1">
+              {t('common_view_all')} <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
           
-          {/* Left Column (2 cols): Recent Assessment Timeline */}
-          <div className="lg:col-span-2 flex flex-col h-full space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="glass-card p-5 sm:p-8 rounded-3xl flex-1 flex flex-col bg-white/95 border border-slate-200/90 shadow-md"
-            >
-              <div className="flex items-center justify-between mb-6 border-b border-slate-100 pb-4">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">{t('dashboard_diagnostic_title')}</h3>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">{t('dashboard_diagnostic_subtitle')}</p>
-                </div>
-                <Link to="/reports" className="text-xs sm:text-sm font-extrabold text-[#0284c7] hover:text-sky-800 transition-colors flex items-center gap-1">
-                  {t('common_view_all')} <ChevronRight className="w-4 h-4" />
-                </Link>
-              </div>
-              
-              {data?.recent_predictions?.length > 0 ? (
-                <div className="space-y-3 sm:space-y-4 flex-1">
-                  {data.recent_predictions.slice(0, 4).map((pred, idx) => (
-                    <motion.div 
-                      key={idx}
-                      whileHover={{ scale: 1.01 }}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-sky-300 transition-all cursor-pointer gap-3 sm:gap-0 shadow-xs"
-                    >
-                      <div className="flex items-center gap-3 sm:gap-4">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${
-                           (pred.risk || 0) > 60 ? 'bg-rose-50 border-rose-200 text-rose-600' :
-                           (pred.risk || 0) > 30 ? 'bg-amber-50 border-amber-200 text-amber-600' :
-                           'bg-emerald-50 border-emerald-200 text-emerald-600'
-                        }`}>
-                          <Activity className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <p className="text-sm sm:text-base font-black text-[#0a192f] leading-tight">{pred.deficiency || t('dashboard_default_assessment')}</p>
-                          <p className="text-xs text-slate-500 font-semibold mt-0.5">{pred.date || 'Today, 10:45 AM'}</p>
-                        </div>
-                      </div>
-                      <span className={`self-start sm:self-auto text-[10px] sm:text-xs px-3 py-1.5 rounded-full font-black uppercase tracking-wider ${
-                        (pred.risk || 0) > 60 ? 'bg-rose-50 text-rose-600 border border-rose-200' :
-                        (pred.risk || 0) > 30 ? 'bg-amber-50 text-amber-600 border border-amber-200' :
-                        'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                      }`}>
-                        {(pred.risk || 0) > 60 ? t('common_high_risk') : (pred.risk || 0) > 30 ? t('common_moderate_risk') : t('common_low_risk')}
-                      </span>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-10 sm:py-14 flex-1 flex flex-col items-center justify-center bg-slate-50/70 rounded-2xl border border-dashed border-slate-200 p-6">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4 text-[#0284c7] shadow-xs">
-                    <Activity className="w-7 h-7 sm:w-8 sm:h-8" />
+          {data?.recent_predictions?.length > 0 ? (
+            <div className="space-y-3 sm:space-y-4">
+              {data.recent_predictions.slice(0, 5).map((pred, idx) => (
+                <motion.div 
+                  key={idx}
+                  whileHover={{ scale: 1.005 }}
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-sky-300 transition-all cursor-pointer gap-3 sm:gap-0 shadow-xs"
+                >
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${
+                       (pred.risk || 0) > 60 ? 'bg-rose-50 border-rose-200 text-rose-600' :
+                       (pred.risk || 0) > 30 ? 'bg-amber-50 border-amber-200 text-amber-600' :
+                       'bg-emerald-50 border-emerald-200 text-emerald-600'
+                    }`}>
+                      <Activity className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm sm:text-base font-black text-[#0a192f] leading-tight">{pred.deficiency || t('dashboard_default_assessment')}</p>
+                      <p className="text-xs text-slate-500 font-semibold mt-0.5">{pred.date || 'Today, 10:45 AM'}</p>
+                    </div>
                   </div>
-                  <h4 className="text-base sm:text-lg font-black text-[#0a192f] mb-2">{t('dashboard_empty_title')}</h4>
-                  <p className="text-xs sm:text-sm text-slate-500 font-semibold mb-6 max-w-sm mx-auto leading-relaxed">
-                    {t('dashboard_empty_desc')}
-                  </p>
-                  <Link
-                    to="/prediction"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all hover:scale-105"
-                  >
-                    {t('dashboard_empty_btn')}
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              )}
-            </motion.div>
-          </div>
-
-          {/* Right Column (1 col): Interactive Quick Actions Hub */}
-          <div className="flex flex-col h-full space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-              className="glass-card p-5 sm:p-8 rounded-3xl flex-1 flex flex-col bg-white/95 border border-slate-200/90 shadow-md"
-            >
-              <div className="flex items-center gap-2.5 mb-5 sm:mb-6 border-b border-slate-100 pb-4">
-                <div className="p-2 rounded-xl bg-sky-50 text-[#0284c7] border border-sky-100">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg sm:text-xl font-black text-[#0a192f] tracking-tight">{t('dashboard_quick_actions_title')}</h3>
+                  <span className={`self-start sm:self-auto text-[10px] sm:text-xs px-3 py-1.5 rounded-full font-black uppercase tracking-wider ${
+                    (pred.risk || 0) > 60 ? 'bg-rose-50 text-rose-600 border border-rose-200' :
+                    (pred.risk || 0) > 30 ? 'bg-amber-50 text-amber-600 border border-amber-200' :
+                    'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                  }`}>
+                    {(pred.risk || 0) > 60 ? t('common_high_risk') : (pred.risk || 0) > 30 ? t('common_moderate_risk') : t('common_low_risk')}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 sm:py-14 flex flex-col items-center justify-center bg-slate-50/70 rounded-2xl border border-dashed border-slate-200 p-6">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-4 text-[#0284c7] shadow-xs">
+                <Activity className="w-7 h-7 sm:w-8 sm:h-8" />
               </div>
-
-              <div className="space-y-3 flex-1">
-                {quickActions.map((action, idx) => (
-                  <motion.div key={action.path} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + idx * 0.08 }}>
-                    <Link
-                      to={action.path}
-                      className={`flex items-center gap-3.5 p-3.5 rounded-2xl transition-all duration-200 group border cursor-pointer ${
-                        action.primary
-                          ? 'bg-sky-50/80 border-sky-200 hover:border-[#0284c7] shadow-xs'
-                          : 'bg-slate-50/80 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-                      }`}
-                    >
-                      <div className={`p-2.5 rounded-xl shrink-0 ${action.primary ? 'bg-[#0a192f] text-white shadow-xs' : 'bg-white text-slate-700 group-hover:text-[#0284c7] border border-slate-200 transition-colors'}`}>
-                        <action.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className={`text-xs sm:text-sm font-black truncate ${action.primary ? 'text-[#0a192f]' : 'text-slate-800 group-hover:text-[#0a192f] transition-colors'}`}>
-                          {action.label}
-                        </p>
-                        <p className="text-[11px] text-slate-500 font-bold truncate mt-0.5">{action.desc}</p>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${action.primary ? 'text-[#0284c7]' : 'text-slate-400 group-hover:text-[#0284c7]'}`} />
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
+              <h4 className="text-base sm:text-lg font-black text-[#0a192f] mb-2">{t('dashboard_empty_title')}</h4>
+              <p className="text-xs sm:text-sm text-slate-500 font-semibold mb-6 max-w-sm mx-auto leading-relaxed">
+                {t('dashboard_empty_desc')}
+              </p>
+              <Link
+                to="/prediction"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs sm:text-sm font-bold rounded-xl shadow-md transition-all hover:scale-105"
+              >
+                {t('dashboard_empty_btn')}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+        </motion.div>
 
       </div>
     </DashboardLayout>
