@@ -17,6 +17,8 @@ from backend.app.auth.jwt_handler import get_current_user, get_current_admin_use
 
 router = APIRouter()
 
+from fastapi.responses import FileResponse
+
 # Fix UPLOAD_DIR to point to backend/uploads/sounds matching main.py static mount
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads", "sounds")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -44,17 +46,39 @@ async def upload_audio_file(
     with open(file_path, "wb") as f:
         f.write(contents)
     
-    # Detect MIME type
-    mime_type = "audio/mpeg"
-    if ext == '.wav': mime_type = "audio/wav"
-    elif ext == '.ogg': mime_type = "audio/ogg"
-    elif ext in ('.m4a', '.aac'): mime_type = "audio/mp4"
-    elif ext == '.flac': mime_type = "audio/flac"
-
-    # Return relative static audio URL for lightweight PostgreSQL storage and HTTP range streaming
-    audio_url = f"/uploads/sounds/{unique_name}"
+    # Return dedicated CORS-enabled audio streaming URL
+    audio_url = f"/api/v1/sounds/audio/{unique_name}"
 
     return {"audio_url": audio_url, "filename": filename, "size_bytes": len(contents)}
+
+
+@router.get("/audio/{filename}")
+def stream_audio_file(filename: str):
+    """Stream an uploaded audio file directly with full CORS, Content-Type, and Byte-Range support."""
+    safe_filename = os.path.basename(filename)
+    file_path = os.path.join(UPLOAD_DIR, safe_filename)
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Audio file not found on server")
+    
+    ext = os.path.splitext(safe_filename)[1].lower()
+    media_type = "audio/mpeg"
+    if ext == '.wav': media_type = "audio/wav"
+    elif ext == '.ogg': media_type = "audio/ogg"
+    elif ext in ('.m4a', '.aac'): media_type = "audio/mp4"
+    elif ext == '.flac': media_type = "audio/flac"
+    
+    return FileResponse(
+        path=file_path,
+        media_type=media_type,
+        filename=safe_filename,
+        headers={
+            "Accept-Ranges": "bytes",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+            "Cache-Control": "public, max-age=86400"
+        }
+    )
 
 
 # --- Pydantic Schemas ---

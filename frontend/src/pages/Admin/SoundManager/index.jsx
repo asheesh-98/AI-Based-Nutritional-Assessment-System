@@ -256,8 +256,15 @@ export default function AdminSoundManager() {
 
   const getPlayableUrl = (url) => {
     if (!url) return '';
-    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-      return url;
+    if (url.startsWith('data:')) return url;
+
+    let cleanUrl = url;
+    if (cleanUrl.startsWith('/uploads/sounds/')) {
+      cleanUrl = cleanUrl.replace('/uploads/sounds/', '/api/v1/sounds/audio/');
+    }
+
+    if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+      return cleanUrl;
     }
     const rawBase = import.meta.env.VITE_API_BASE_URL || '';
     let backendOrigin = '';
@@ -266,22 +273,30 @@ export default function AdminSoundManager() {
     } else {
       backendOrigin = 'https://ai-nutrition-backend.onrender.com';
     }
-    const cleanPath = url.startsWith('/') ? url : `/${url}`;
+    const cleanPath = cleanUrl.startsWith('/') ? cleanUrl : `/${cleanUrl}`;
     return `${backendOrigin}${cleanPath}`;
   };
 
   // Preview Audio Player
   const togglePlayPreview = (track) => {
     if (playingTrackId === track.id) {
-      if (audioRef) audioRef.pause();
+      if (audioRef) {
+        audioRef.pause();
+        audioRef.currentTime = 0;
+      }
       audioSynthesizer.stopAll();
       setPlayingTrackId(null);
     } else {
-      if (audioRef) audioRef.pause();
+      if (audioRef) {
+        audioRef.pause();
+        audioRef.currentTime = 0;
+      }
       audioSynthesizer.stopAll();
 
       if (track.is_synthesized || !track.audio_url) {
-        audioSynthesizer.play432HzRelaxation();
+        if (track.freq_hz === 528) audioSynthesizer.playOceanSolfeggio();
+        else if (track.freq_hz === 216) audioSynthesizer.playRainForest();
+        else audioSynthesizer.play432HzRelaxation();
         setPlayingTrackId(track.id);
       } else {
         const playableUrl = getPlayableUrl(track.audio_url);
@@ -292,9 +307,8 @@ export default function AdminSoundManager() {
           setPlayingTrackId(track.id);
           audio.onended = () => setPlayingTrackId(null);
         }).catch((err) => {
-          console.warn('Network audio stream error, seamlessly falling back to Web Audio Synthesizer:', err);
-          audioSynthesizer.play432HzRelaxation();
-          setPlayingTrackId(track.id);
+          console.error('Audio stream error for track:', track.title, playableUrl, err);
+          setError(`Unable to stream audio file for "${track.title}". Please verify file or re-upload.`);
         });
       }
     }

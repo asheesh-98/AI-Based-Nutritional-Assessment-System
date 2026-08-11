@@ -223,8 +223,15 @@ export default function MentalWellness() {
 
   const getPlayableUrl = (url) => {
     if (!url) return '';
-    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-      return url;
+    if (url.startsWith('data:')) return url;
+
+    let cleanUrl = url;
+    if (cleanUrl.startsWith('/uploads/sounds/')) {
+      cleanUrl = cleanUrl.replace('/uploads/sounds/', '/api/v1/sounds/audio/');
+    }
+
+    if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
+      return cleanUrl;
     }
     const rawBase = import.meta.env.VITE_API_BASE_URL || '';
     let backendOrigin = '';
@@ -233,7 +240,7 @@ export default function MentalWellness() {
     } else {
       backendOrigin = 'https://ai-nutrition-backend.onrender.com';
     }
-    const cleanPath = url.startsWith('/') ? url : `/${url}`;
+    const cleanPath = cleanUrl.startsWith('/') ? cleanUrl : `/${cleanUrl}`;
     return `${backendOrigin}${cleanPath}`;
   };
 
