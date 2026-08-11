@@ -51,13 +51,8 @@ async def upload_audio_file(
     elif ext in ('.m4a', '.aac'): mime_type = "audio/mp4"
     elif ext == '.flac': mime_type = "audio/flac"
 
-    # For files <= 20MB, generate Data URI to guarantee 100% cloud persistence on Render
-    if len(contents) <= 20 * 1024 * 1024:
-        b64_str = base64.b64encode(contents).decode("utf-8")
-        audio_url = f"data:{mime_type};base64,{b64_str}"
-    else:
-        base_url = str(request.base_url).rstrip('/')
-        audio_url = f"{base_url}/uploads/sounds/{unique_name}"
+    # Return relative static audio URL for lightweight PostgreSQL storage and HTTP range streaming
+    audio_url = f"/uploads/sounds/{unique_name}"
 
     return {"audio_url": audio_url, "filename": filename, "size_bytes": len(contents)}
 

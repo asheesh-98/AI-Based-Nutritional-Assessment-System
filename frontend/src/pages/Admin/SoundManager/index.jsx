@@ -198,13 +198,8 @@ export default function AdminSoundManager() {
         setSuccess('MP3 file uploaded successfully!');
       }
     } catch (err) {
-      // Fallback: Encode as Data URL if API endpoint or storage is unavailable
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setTrackUrl(event.target.result);
-        setSuccess('MP3 file processed successfully!');
-      };
-      reader.readAsDataURL(file);
+      console.error('Upload audio API error:', err);
+      setError(err.response?.data?.detail || 'Failed to upload audio file. Please verify file format and size (up to 50MB).');
     } finally {
       setUploadingFile(false);
     }
