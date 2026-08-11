@@ -54,8 +54,17 @@ export default function Dashboard() {
     fetchDashboard();
   }, []);
 
-  const handleAddWater = () => {
-    setWaterAmount((prev) => parseFloat((prev + 0.25).toFixed(2)));
+  const handleAddWater = async () => {
+    try {
+      const res = await dashboardService.logWaterIntake(250);
+      if (res?.water_intake !== undefined) {
+        setWaterAmount(res.water_intake);
+      } else {
+        setWaterAmount((prev) => parseFloat((prev + 0.25).toFixed(2)));
+      }
+    } catch (err) {
+      setWaterAmount((prev) => parseFloat((prev + 0.25).toFixed(2)));
+    }
   };
 
   const userName = user?.full_name || user?.name || user?.email?.split('@')[0] || 'User';
@@ -68,6 +77,18 @@ export default function Dashboard() {
     { label: t('dashboard_qa_scan_label'), desc: t('dashboard_qa_scan_desc'), icon: ScanBarcode, path: '/food-scanner' },
     { label: t('dashboard_qa_coach_label'), desc: t('dashboard_qa_coach_desc'), icon: Bot, path: '/ai-coach' },
   ];
+
+  const currentCalories = Math.round(data?.daily_calories || data?.nutrient_summary?.calories_today || 0);
+  const targetCalories = Math.round(data?.daily_calorie_target || 2000);
+  const caloriePercent = Math.min(100, Math.round((currentCalories / targetCalories) * 100));
+
+  const waterTarget = data?.water_target || 3.0;
+  const waterPercent = Math.min(100, Math.round((waterAmount / waterTarget) * 100));
+
+  const deficiencyCount = data?.deficiency_count ?? 0;
+  const riskLevelText = data?.risk_level || (deficiencyCount > 0 ? t('dashboard_mild_risk') : 'Optimal');
+
+  const nutritionScoreVal = Math.round(data?.nutrition_score || 85);
 
   return (
     <DashboardLayout title={t('dashboard_title')} subtitle={t('dashboard_subtitle')}>
@@ -145,18 +166,18 @@ export default function Dashboard() {
                   <Activity className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-black text-[#0284c7] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
-                  {t('dashboard_nutrition_score_badge')}
+                  {nutritionScoreVal >= 80 ? '+5% Optimal' : nutritionScoreVal >= 60 ? 'Moderate' : 'Needs Focus'}
                 </span>
               </div>
               <div className="flex items-baseline justify-between">
                 <div>
                   <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_nutrition_score_label')}</p>
-                  <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{data?.nutrition_score || 82}<span className="text-sm font-bold text-slate-400">/100</span></p>
+                  <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{nutritionScoreVal}<span className="text-sm font-bold text-slate-400">/100</span></p>
                 </div>
                 <div className="w-12 h-12 relative flex items-center justify-center">
                   <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                     <path className="text-slate-100" strokeWidth="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path className="text-[#0284c7]" strokeDasharray={`${data?.nutrition_score || 82}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path className="text-[#0284c7]" strokeDasharray={`${nutritionScoreVal}, 100`} strokeWidth="3.5" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                   </svg>
                 </div>
               </div>
@@ -169,17 +190,17 @@ export default function Dashboard() {
                   <AlertTriangle className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-black text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
-                  {t('dashboard_deficiency_risks_badge')}
+                  {riskLevelText}
                 </span>
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_deficiency_risks_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{data?.deficiency_count ?? 3} <span className="text-xs font-bold text-slate-400">{t('dashboard_nutrients_tracked')}</span></p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{deficiencyCount} <span className="text-xs font-bold text-slate-400">{t('dashboard_nutrients_tracked')}</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-amber-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-amber-500 rounded-full" style={{ width: '60%' }} />
+                    <div className="h-full bg-amber-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.max(10, deficiencyCount * 25))}%` }} />
                   </div>
-                  <span className="text-[10px] font-black text-amber-600">{t('dashboard_mild_risk')}</span>
+                  <span className="text-[10px] font-black text-amber-600">{riskLevelText}</span>
                 </div>
               </div>
             </motion.div>
@@ -191,17 +212,17 @@ export default function Dashboard() {
                   <Flame className="w-5 h-5" />
                 </div>
                 <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                  {t('dashboard_daily_calories_target')}
+                  Target: {targetCalories.toLocaleString()}
                 </span>
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_daily_calories_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{(data?.daily_calories || 1850).toLocaleString()} <span className="text-xs font-bold text-slate-400">kcal</span></p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{currentCalories.toLocaleString()} <span className="text-xs font-bold text-slate-400">kcal</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min(100, ((data?.daily_calories || 1850) / 2000) * 100)}%` }} />
+                    <div className="h-full bg-emerald-500 rounded-full transition-all duration-500" style={{ width: `${caloriePercent}%` }} />
                   </div>
-                  <span className="text-[10px] font-black text-emerald-600">{Math.round(((data?.daily_calories || 1850) / 2000) * 100)}%</span>
+                  <span className="text-[10px] font-black text-emerald-600">{caloriePercent}%</span>
                 </div>
               </div>
             </motion.div>
@@ -222,12 +243,12 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_water_label')}</p>
-                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{waterAmount}L <span className="text-xs font-bold text-slate-400">{t('dashboard_water_target')}</span></p>
+                <p className="text-3xl sm:text-4xl font-black text-[#0a192f]">{waterAmount}L <span className="text-xs font-bold text-slate-400">/ {waterTarget}L Target</span></p>
                 <div className="mt-3 flex items-center gap-1.5">
                   <div className="h-1.5 flex-1 bg-slate-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, (waterAmount / 3.0) * 100)}%` }} />
+                    <div className="h-full bg-purple-500 rounded-full transition-all duration-500" style={{ width: `${waterPercent}%` }} />
                   </div>
-                  <span className="text-[10px] font-black text-purple-600">{Math.round((waterAmount / 3.0) * 100)}%</span>
+                  <span className="text-[10px] font-black text-purple-600">{waterPercent}%</span>
                 </div>
               </div>
             </motion.div>

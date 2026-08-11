@@ -3,7 +3,6 @@ Pydantic schemas for the dashboard endpoint.
 """
 from pydantic import BaseModel
 from typing import Optional, List, Dict
-from datetime import datetime
 
 
 class NutrientSummary(BaseModel):
@@ -20,7 +19,14 @@ class DeficiencyRisk(BaseModel):
 
 class DashboardResponse(BaseModel):
     user_name: str
-    nutrition_score: Optional[float] = None
+    nutrition_score: float = 85.0
+    deficiency_count: int = 0
+    high_risk_count: int = 0
+    risk_level: str = "Optimal"
+    daily_calories: float = 0.0
+    daily_calorie_target: float = 2000.0
+    water_intake: float = 0.0
+    water_target: float = 3.0
     nutrient_summary: NutrientSummary = NutrientSummary()
     deficiency_risks: List[DeficiencyRisk] = []
     recent_predictions: List[Dict] = []
