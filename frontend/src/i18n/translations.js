@@ -1419,7 +1419,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "प्रिंट सूची",
     "meal_shopping_list_loading": "जेमिनी एआई आपकी किराना सूची बना रहा है...",
     "meal_shopping_list_copied": "क्लिपबोर्ड पर कॉपी हो गया!",
-    "common_items": "सामग्री"
+    "common_items": "सामग्री",
+    "calendar_today": "आज",
+    "calendar_yesterday": "कल",
+    "calendar_prev_day": "पिछला",
+    "calendar_next_day": "अगला",
+    "calendar_viewing_past": "पुराना रिकॉर्ड देखा जा रहा है"
   },
   "sa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2079,7 +2084,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "मुद्रणसूची",
     "meal_shopping_list_loading": "जेमिनि ए-आई क्रयणसूचीं रचयति...",
     "meal_shopping_list_copied": "प्रतिकृतिः कृता!",
-    "common_items": "वस्तूनि"
+    "common_items": "वस्तूनि",
+    "calendar_today": "अद्य",
+    "calendar_yesterday": "ह्यः",
+    "calendar_prev_day": "पूर्वम्",
+    "calendar_next_day": "अग्रिमम्",
+    "calendar_viewing_past": "पुरातनलेखः दृश्यते"
   },
   "as": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -2739,7 +2749,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "প্ৰিন্ট তালিকা",
     "meal_shopping_list_loading": "জেমিনী AI বজাৰৰ তালিকা প্ৰস্তুত কৰি আছে...",
     "meal_shopping_list_copied": "কপি কৰা হ’ল!",
-    "common_items": "সামগ্ৰী"
+    "common_items": "সামগ্ৰী",
+    "calendar_today": "আজি",
+    "calendar_yesterday": "কালি",
+    "calendar_prev_day": "পূৰ্বৱৰ্তী",
+    "calendar_next_day": "পৰৱৰ্তী",
+    "calendar_viewing_past": "পুৰণি ৰেকৰ্ড চোৱা হৈছে"
   },
   "bn": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -3399,7 +3414,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "প্রিন্ট তালিকা",
     "meal_shopping_list_loading": "জেমিনি এআই আপনার কেনাকাটার তালিকা তৈরি করছে...",
     "meal_shopping_list_copied": "ক্লিপবোর্ডে কপি করা হয়েছে!",
-    "common_items": "আইটেম"
+    "common_items": "আইটেম",
+    "calendar_today": "আজ",
+    "calendar_yesterday": "গতকাল",
+    "calendar_prev_day": "পূর্ববর্তী",
+    "calendar_next_day": "পরবর্তী",
+    "calendar_viewing_past": "পুরানো রেকর্ড দেখা হচ্ছে"
   },
   "gu": {
     "select_language": "અપની પસંદીદા ભાષા ચુનેં",
@@ -4059,7 +4079,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "પ્રિન્ટ યાદી",
     "meal_shopping_list_loading": "જેમિની એઆઈ તમારી ખરીદી યાદી બનાવી રહ્યું છે...",
     "meal_shopping_list_copied": "ક્લિપબોર્ડ પર કોપી થયું!",
-    "common_items": "વસ્તુઓ"
+    "common_items": "વસ્તુઓ",
+    "calendar_today": "આજે",
+    "calendar_yesterday": "ગઈકાલે",
+    "calendar_prev_day": "પાછળ",
+    "calendar_next_day": "આગળ",
+    "calendar_viewing_past": "જૂનો રેકોર્ડ જોઈ રહ્યા છો"
   },
   "kn": {
     "select_language": "ಅಪನೀ ಪಸಂದೀದಾ ಭಾಷಾ ಚುನೇಂ",
@@ -4719,7 +4744,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "ಪ್ರಿಂಟ್ ಮಾಡಿ",
     "meal_shopping_list_loading": "ಜೆಮಿನಿ AI ನಿಮ್ಮ ಖರೀದಿ ಪಟ್ಟಿಯನ್ನು ತಯಾರಿಸುತ್ತಿದೆ...",
     "meal_shopping_list_copied": "ಕಾಪಿ ಮಾಡಲಾಗಿದೆ!",
-    "common_items": "ವಸ್ತುಗಳು"
+    "common_items": "ವಸ್ತುಗಳು",
+    "calendar_today": "ಇಂದು",
+    "calendar_yesterday": "ನಿನ್ನೆ",
+    "calendar_prev_day": "ಹಿಂದಿನ",
+    "calendar_next_day": "ಮುಂದಿನ",
+    "calendar_viewing_past": "ಹಳೆಯ ದಾಖಲೆ ವೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ"
   },
   "ks": {
     "select_language": "اھتص ھيےڻصڻو نومو چستِے",
@@ -5373,7 +5403,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "پپرِنٹ فِہرست",
     "meal_shopping_list_loading": "جیمِنی AI فِہرست بناوان...",
     "meal_shopping_list_copied": "کاپِی گۄ!",
-    "common_items": "چیز"
+    "common_items": "چیز",
+    "calendar_today": "आज",
+    "calendar_yesterday": "राथ",
+    "calendar_prev_day": "บรุนฮ",
+    "calendar_next_day": "પતહ",
+    "calendar_viewing_past": "પુરાણ રોકોર્ડ વ્યુ"
   },
   "ml": {
     "select_language": "അപനീ പസംദീദാ ഭാഷാ ചുനേം",
@@ -6033,7 +6068,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "പ്രിന്റ് ചെയ്യുക",
     "meal_shopping_list_loading": "ജെമിനി എഐ നിങ്ങളുടെ ഷോപ്പിംഗ് ലിസ്റ്റ് ഉണ്ടാക്കുന്നു...",
     "meal_shopping_list_copied": "കോപ്പി ചെയ്തു!",
-    "common_items": "സാധനങ്ങൾ"
+    "common_items": "സാധനങ്ങൾ",
+    "calendar_today": "ഇന്ന്",
+    "calendar_yesterday": "ഇന്നലെ",
+    "calendar_prev_day": "മുൻപത്തെ",
+    "calendar_next_day": "അടുത്തത്",
+    "calendar_viewing_past": "പഴയ രേഖ പരിശോധിക്കുന്നു"
   },
   "mr": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6693,7 +6733,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "प्रिंट सूची",
     "meal_shopping_list_loading": "जेमिनी एआय तुमची खरेदी सूची तयार करत आहे...",
     "meal_shopping_list_copied": "क्लिपबोर्डवर कॉपी केले!",
-    "common_items": "सामग्री"
+    "common_items": "सामग्री",
+    "calendar_today": "आज",
+    "calendar_yesterday": "काल",
+    "calendar_prev_day": "मागील",
+    "calendar_next_day": "पुढील",
+    "calendar_viewing_past": "जुना नोंद पाहत आहात"
   },
   "ne": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7353,7 +7398,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "प्रिन्ट सूची",
     "meal_shopping_list_loading": "जेमिनी AI ले किनमेल सूची बनाउँदैछ...",
     "meal_shopping_list_copied": "कपी भयो!",
-    "common_items": "सामानहरू"
+    "common_items": "सामानहरू",
+    "calendar_today": "आज",
+    "calendar_yesterday": "हिजो",
+    "calendar_prev_day": "अघिल्लो",
+    "calendar_next_day": "पछिल्लो",
+    "calendar_viewing_past": "पुराना अभिलेख हेर्दै"
   },
   "or": {
     "select_language": "ଅପନୀ ପସଂଦୀଦା ଭାଷା ଚୁନେଂ",
@@ -8013,7 +8063,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "ପ୍ରିଣ୍ଟ୍ ତାଲିକା",
     "meal_shopping_list_loading": "Gemini AI ଆପଣଙ୍କର କିଣାକିଣି ତାଲିକା ପ୍ରସ୍ତୁତ କରୁଛି...",
     "meal_shopping_list_copied": "କ୍ଲିପବୋର୍ଡକୁ କପି ହୋଇଗଲା!",
-    "common_items": "ସାମଗ୍ରୀ"
+    "common_items": "ସାମଗ୍ରୀ",
+    "calendar_today": "ଆଜି",
+    "calendar_yesterday": "ଗତକାଲି",
+    "calendar_prev_day": "ପୂର୍ବବର୍ତ୍ତୀ",
+    "calendar_next_day": "ପରବର୍ତ୍ତୀ",
+    "calendar_viewing_past": "ପୁରୁଣା ରେକର୍ଡ ଦେଖାଯାଉଛି"
   },
   "pa": {
     "select_language": "ਅਪਨੀ ਪਸਂਦੀਦਾ ਭਾਸ਼ਾ ਚੁਨੇਂ",
@@ -8673,7 +8728,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "ਪ੍ਰਿੰਟ ਸੂਚੀ",
     "meal_shopping_list_loading": "ਜੈਮਿਨੀ AI ਤੁਹਾਡੀ ਖਰੀਦਦਾਰੀ ਸੂਚੀ ਬਣਾ ਰਿਹਾ ਹੈ...",
     "meal_shopping_list_copied": "ਕਾਪੀ ਹੋ ਗਿਆ!",
-    "common_items": "ਸਾਮਾਨ"
+    "common_items": "ਸਾਮਾਨ",
+    "calendar_today": "ਅੱਜ",
+    "calendar_yesterday": "ਕੱਲ੍ਹ",
+    "calendar_prev_day": "ਪਿਛਲਾ",
+    "calendar_next_day": "ਅਗਲਾ",
+    "calendar_viewing_past": "ਪੁਰਾਣਾ ਰਿਕਾਰਡ ਦੇਖਿਆ ਜਾ ਰਿਹਾ ਹੈ"
   },
   "sd": {
     "select_language": "اددِ دشاتِته ڦهوه چيدِا",
@@ -9327,7 +9387,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "پرنٽ لسٽ",
     "meal_shopping_list_loading": "جيمنائي اي آءِ خريداري لسٽ ٺاهي رهيو آهي...",
     "meal_shopping_list_copied": "ڪاپي ٿي ويو!",
-    "common_items": "سامان"
+    "common_items": "سامان",
+    "calendar_today": "اڄ",
+    "calendar_yesterday": "ڪالهه",
+    "calendar_prev_day": "پويون",
+    "calendar_next_day": "اڳيون",
+    "calendar_viewing_past": "پراڻو رڪارڊ ڏسي رهيا آهيو"
   },
   "ta": {
     "select_language": "அபனீ பஸமதீதা பাஷা சுனேம",
@@ -9987,7 +10052,12 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "அச்சிடுக",
     "meal_shopping_list_loading": "ஜெமினி AI உங்கள் மளிகைப் பட்டியலை உருவாக்குகிறது...",
     "meal_shopping_list_copied": "நகலெடுக்கப்பட்டது!",
-    "common_items": "பொருட்கள்"
+    "common_items": "பொருட்கள்",
+    "calendar_today": "இன்று",
+    "calendar_yesterday": "நேற்று",
+    "calendar_prev_day": "முந்தைய",
+    "calendar_next_day": "அடுத்த",
+    "calendar_viewing_past": "பழைய பதிவைப் பார்க்கிறீர்கள்"
   },
   "te": {
     "select_language": "అపనీ పసందీదা భাషা చునేం",
@@ -10647,6 +10717,11 @@ export const TRANSLATIONS = {
     "meal_shopping_list_print": "ప్రింట్ జాబితా",
     "meal_shopping_list_loading": "జెమిని AI మీ షాపింగ్ జాబితాను సృష్టిస్తోంది...",
     "meal_shopping_list_copied": "కాపీ చేయబడింది!",
-    "common_items": "వస్తువులు"
+    "common_items": "వస్తువులు",
+    "calendar_today": "ఈరోజు",
+    "calendar_yesterday": "నిన్న",
+    "calendar_prev_day": "మునుపటి",
+    "calendar_next_day": "తరువాత",
+    "calendar_viewing_past": "పాత రికార్డును వీక్షిస్తున్నారు"
   }
 };
