@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Activity, AlertTriangle, Flame, Droplets, Utensils,
   Stethoscope, Plus, ArrowRight, Sparkles, ChevronRight,
   Zap, ScanBarcode, Bot, TestTube2, Headphones, ShieldCheck,
-  TrendingUp, Award, HeartPulse, PieChart, RotateCcw
+  TrendingUp, Award, HeartPulse, PieChart, RotateCcw, Info, X
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { SkeletonCard } from '../../components/common/Loader';
@@ -26,6 +27,7 @@ export default function Dashboard() {
   const [error, setError] = useState('');
   const [waterAmount, setWaterAmount] = useState(0.0);
   const [addingWater, setAddingWater] = useState(false);
+  const [scoreInfoModalOpen, setScoreInfoModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -191,8 +193,17 @@ export default function Dashboard() {
             {/* Card 1: Nutrition Score */}
             <motion.div variants={item} className="glass-card p-5 sm:p-6 rounded-3xl relative overflow-hidden group border border-slate-200/90 bg-white/95 hover:border-sky-300 transition-all shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <div className="w-10 h-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7] shrink-0 shadow-xs">
-                  <Activity className="w-5 h-5" />
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-[#0284c7] shrink-0 shadow-xs">
+                    <Activity className="w-5 h-5" />
+                  </div>
+                  <button
+                    onClick={() => setScoreInfoModalOpen(true)}
+                    className="w-7 h-7 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-500 hover:text-[#0284c7] border border-slate-200/80 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                    title="How to increase Nutrition Score"
+                  >
+                    <Info className="w-4 h-4" />
+                  </button>
                 </div>
                 <span className={`text-xs font-black px-2.5 py-1 rounded-full border ${
                   nutritionScoreVal >= 80 ? 'text-emerald-700 bg-emerald-50 border-emerald-200' :
@@ -488,6 +499,102 @@ export default function Dashboard() {
         </div>
 
       </div>
+
+      {/* ℹ️ Nutrition Score Guide Modal */}
+      {scoreInfoModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto custom-scrollbar">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative overflow-hidden my-auto text-[#0a192f]"
+          >
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white shadow-md shadow-sky-500/20">
+                  <Activity className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-2xl font-black text-[#0a192f] leading-tight">
+                    Nutrition Score Guide
+                  </h3>
+                  <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                    How to boost your metabolic nutrition score
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setScoreInfoModalOpen(false)}
+                className="p-2 rounded-full hover:bg-slate-100 border border-slate-200 text-slate-400 hover:text-slate-700 transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 mb-6 text-xs sm:text-sm text-slate-700">
+              <div className="p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/80 flex items-start gap-3">
+                <div className="px-2.5 py-1 rounded-xl bg-emerald-600 text-white font-black shrink-0 text-[11px] mt-0.5 shadow-xs">
+                  +8 PTS
+                </div>
+                <div>
+                  <h4 className="font-black text-emerald-950 text-xs sm:text-sm">Log Daily Meals in Food Diary</h4>
+                  <p className="text-slate-600 font-medium text-xs mt-0.5">Log breakfast, lunch, or dinner daily to build your tracking streak and earn meal points.</p>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-sky-50/90 border border-sky-200/80 flex items-start gap-3">
+                <div className="px-2.5 py-1 rounded-xl bg-[#0284c7] text-white font-black shrink-0 text-[11px] mt-0.5 shadow-xs">
+                  +5 PTS
+                </div>
+                <div>
+                  <h4 className="font-black text-sky-950 text-xs sm:text-sm">Hit Daily Calorie & Macro Target</h4>
+                  <p className="text-slate-600 font-medium text-xs mt-0.5">Staying within 70% – 115% of your recommended BMR/TDEE calorie target boosts score stability.</p>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-purple-50/90 border border-purple-200/80 flex items-start gap-3">
+                <div className="px-2.5 py-1 rounded-xl bg-purple-600 text-white font-black shrink-0 text-[11px] mt-0.5 shadow-xs">
+                  +4 PTS
+                </div>
+                <div>
+                  <h4 className="font-black text-purple-950 text-xs sm:text-sm">Maintain Water Hydration Goal</h4>
+                  <p className="text-slate-600 font-medium text-xs mt-0.5">Log water intake to reach at least 75% of your body weight hydration target (e.g. 2.5L+).</p>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200/80 flex items-start gap-3">
+                <div className="px-2.5 py-1 rounded-xl bg-amber-500 text-white font-black shrink-0 text-[11px] mt-0.5 shadow-xs">
+                  +20 PTS
+                </div>
+                <div>
+                  <h4 className="font-black text-amber-950 text-xs sm:text-sm">Resolve Tracked Nutrient Deficiencies</h4>
+                  <p className="text-slate-600 font-medium text-xs mt-0.5">Run AI assessments and follow AI meal plans to reduce Iron, Vitamin D, Calcium, and B12 risks.</p>
+                </div>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-indigo-50/90 border border-indigo-200/80 flex items-start gap-3">
+                <div className="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-black shrink-0 text-[11px] mt-0.5 shadow-xs">
+                  +3 PTS
+                </div>
+                <div>
+                  <h4 className="font-black text-indigo-950 text-xs sm:text-sm">Optimal Body Mass Index (BMI)</h4>
+                  <p className="text-slate-600 font-medium text-xs mt-0.5">Maintaining a healthy BMI range (18.5 – 24.9) automatically adds structural metabolic points.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 flex justify-end">
+              <button
+                onClick={() => setScoreInfoModalOpen(false)}
+                className="px-6 py-2.5 rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs sm:text-sm font-bold shadow-md transition-all cursor-pointer"
+              >
+                Got It
+              </button>
+            </div>
+          </motion.div>
+        </div>,
+        document.body
+      )}
     </DashboardLayout>
   );
 }
