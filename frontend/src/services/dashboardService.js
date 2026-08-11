@@ -10,6 +10,11 @@ export const dashboardService = {
     const { data } = await api.post('/dashboard/water', { amount_ml: amountMl });
     return data;
   },
+
+  async resetWaterIntake() {
+    const { data } = await api.post('/dashboard/water/reset');
+    return data;
+  },
 };
 
 export default dashboardService;

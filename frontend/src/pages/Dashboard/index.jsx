@@ -5,7 +5,7 @@ import {
   Activity, AlertTriangle, Flame, Droplets, Utensils,
   Stethoscope, Plus, ArrowRight, Sparkles, ChevronRight,
   Zap, ScanBarcode, Bot, TestTube2, Headphones, ShieldCheck,
-  TrendingUp, Award, HeartPulse, PieChart
+  TrendingUp, Award, HeartPulse, PieChart, RotateCcw
 } from 'lucide-react';
 import DashboardLayout from '../../components/layout/DashboardLayout';
 import { SkeletonCard } from '../../components/common/Loader';
@@ -24,7 +24,7 @@ export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [waterAmount, setWaterAmount] = useState(2.1);
+  const [waterAmount, setWaterAmount] = useState(0.0);
   const [addingWater, setAddingWater] = useState(false);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Dashboard() {
             deficiency_count: 1,
             daily_calories: 1450,
             daily_calorie_target: 2150,
-            water_intake: 2.1,
+            water_intake: 0.0,
             water_target: 3.0,
             recent_predictions: [],
             nutrient_summary: { calories_today: 1450, protein_today: 68, carbs_today: 175, fat_today: 48 }
@@ -70,6 +70,22 @@ export default function Dashboard() {
       }
     } catch (err) {
       setWaterAmount((prev) => parseFloat((prev + 0.25).toFixed(2)));
+    } finally {
+      setTimeout(() => setAddingWater(false), 300);
+    }
+  };
+
+  const handleResetWater = async () => {
+    setAddingWater(true);
+    try {
+      const res = await dashboardService.resetWaterIntake();
+      if (res?.water_intake !== undefined) {
+        setWaterAmount(res.water_intake);
+      } else {
+        setWaterAmount(0.0);
+      }
+    } catch (err) {
+      setWaterAmount(0.0);
     } finally {
       setTimeout(() => setAddingWater(false), 300);
     }
@@ -245,14 +261,24 @@ export default function Dashboard() {
                 <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 shrink-0 shadow-xs">
                   <Droplets className="w-5 h-5" />
                 </div>
-                <button
-                  onClick={handleAddWater}
-                  disabled={addingWater}
-                  className="text-xs font-black text-purple-600 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full border border-purple-100 flex items-center gap-1 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
-                  title={t('dashboard_add_water')}
-                >
-                  <Plus className="w-3 h-3" /> 250ml
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={handleResetWater}
+                    disabled={addingWater}
+                    className="p-1.5 rounded-full text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                    title="Reset Water Intake to 0.0L"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={handleAddWater}
+                    disabled={addingWater}
+                    className="text-xs font-black text-purple-600 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full border border-purple-100 flex items-center gap-1 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                    title={t('dashboard_add_water')}
+                  >
+                    <Plus className="w-3 h-3" /> 250ml
+                  </button>
+                </div>
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mb-1">{t('dashboard_water_label')}</p>

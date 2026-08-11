@@ -164,7 +164,7 @@ def get_dashboard(
         nutrition_score = round(min(100.0, max(35.0, base_score)), 0)
 
     # ── 5. Water Hydration Tracking ────────────────────────────────────────
-    water_intake = today_progress.water_intake if (today_progress and today_progress.water_intake is not None) else 1.5
+    water_intake = today_progress.water_intake if (today_progress and today_progress.water_intake is not None) else 0.0
 
     # Save/update progress log entry for today
     if not today_progress:
@@ -244,7 +244,7 @@ def log_water_intake(
         .filter(ProgressLog.user_id == current_user.id, ProgressLog.log_date == today)
         .first()
     )
-    current_intake = progress.water_intake if (progress and progress.water_intake is not None) else 1.5
+    current_intake = progress.water_intake if (progress and progress.water_intake is not None) else 0.0
     new_intake = round(current_intake + (amount_ml / 1000.0), 2)
 
     if not progress:
@@ -259,3 +259,29 @@ def log_water_intake(
 
     db.commit()
     return {"water_intake": new_intake, "message": "Water intake updated successfully!"}
+
+
+@router.post("/water/reset")
+def reset_water_intake(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Reset water intake for today back to 0.0 L."""
+    today = date.today()
+    progress = (
+        db.query(ProgressLog)
+        .filter(ProgressLog.user_id == current_user.id, ProgressLog.log_date == today)
+        .first()
+    )
+    if not progress:
+        progress = ProgressLog(
+            user_id=current_user.id,
+            log_date=today,
+            water_intake=0.0
+        )
+        db.add(progress)
+    else:
+        progress.water_intake = 0.0
+
+    db.commit()
+    return {"water_intake": 0.0, "message": "Water intake reset to 0.0 L"}
