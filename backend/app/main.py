@@ -105,7 +105,13 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 
 # ── Root health-check endpoint ───────────────────────────────────────────
-@app.get("/", tags=["Health"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["Health"])
 async def root():
-    """Simple health-check that confirms the API is running."""
+    """Health-check endpoint supporting both GET and HEAD for Render deployments."""
     return {"status": "running", "app": "AI Nutrition Assessment"}
+
+
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["Health"])
+async def health_check():
+    """Alternative health-check endpoint for cloud deployments."""
+    return {"status": "healthy"}
