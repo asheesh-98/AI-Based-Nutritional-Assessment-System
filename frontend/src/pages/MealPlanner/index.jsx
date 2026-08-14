@@ -167,8 +167,11 @@ export default function MealPlanner() {
 
   const loadWeeklyPlan = async (diet) => {
     const cached = getOfflineMealPlan();
-    if (cached && (cached.diet_preference === diet || cached.diet_type === diet)) {
+    if (cached) {
       setWeeklyPlan(cached);
+      if (cached.diet_preference) {
+        setSelectedDiet(cached.diet_preference);
+      }
       setLoading(false);
     } else {
       setLoading(true);
@@ -176,11 +179,16 @@ export default function MealPlanner() {
 
     try {
       const data = await mealService.getWeeklyMealPlan(diet);
-      setWeeklyPlan(data);
-      saveOfflineMealPlan(data);
+      if (data && data.days && data.days.length > 0) {
+        setWeeklyPlan(data);
+        if (data.diet_preference) {
+          setSelectedDiet(data.diet_preference);
+        }
+        saveOfflineMealPlan(data);
+      }
     } catch (err) {
       console.error('Failed to load meal plan', err);
-      if (!weeklyPlan && cached) {
+      if (cached) {
         setWeeklyPlan(cached);
       }
     } finally {

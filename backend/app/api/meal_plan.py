@@ -119,25 +119,38 @@ def get_weekly_meal_plan(
     )
     deficiencies = _detected_deficiencies(latest_pred)
 
-    # Check if we already saved a plan for this week first
-    today = datetime.utcnow().date()
-    iso_year, iso_week, _ = today.isocalendar()
-
+    # Retrieve the user's latest saved meal plan regardless of week boundary
     existing = (
         db.query(MealPlan)
-        .filter(
-            MealPlan.user_id == current_user.id,
-            MealPlan.week_number == iso_week,
-            MealPlan.year == iso_year,
-        )
+        .filter(MealPlan.user_id == current_user.id)
+        .order_by(MealPlan.created_at.desc(), MealPlan.id.desc())
         .first()
     )
 
     if existing:
         try:
             saved = json.loads(existing.plan_data)
-            # If existing cached plan matches preference and has no diet violations, return immediately!
-            if not _plan_has_diet_violations(saved, diet_pref):
+            requested_pref = preference.lower().strip() if preference else None
+            saved_pref = (saved.get("diet_preference") or existing.diet_preference or "").lower().strip()
+
+            # If user explicitly requested a specific diet preference, check if we have a cached plan matching it
+            if requested_pref and requested_pref != saved_pref:
+                pref_existing = (
+                    db.query(MealPlan)
+                    .filter(
+                        MealPlan.user_id == current_user.id,
+                        MealPlan.diet_preference == requested_pref
+                    )
+                    .order_by(MealPlan.created_at.desc(), MealPlan.id.desc())
+                    .first()
+                )
+                if pref_existing:
+                    pref_saved = json.loads(pref_existing.plan_data)
+                    if not _plan_has_diet_violations(pref_saved, requested_pref):
+                        return _build_response(pref_saved, plan_id=pref_existing.id, created_at=pref_existing.created_at)
+
+            # Return latest saved plan if valid
+            if not _plan_has_diet_violations(saved, saved_pref):
                 return _build_response(saved, plan_id=existing.id, created_at=existing.created_at)
             else:
                 logger.info("Purging non-compliant cached plan ID %s for user %s and re-generating clean plan...", existing.id, current_user.id)
