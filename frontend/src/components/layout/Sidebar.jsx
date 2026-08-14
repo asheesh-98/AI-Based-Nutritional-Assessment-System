@@ -26,7 +26,6 @@ export default function Sidebar() {
       title: t('sidebar_section_health'),
       items: [
         { path: '/health-profile', label: t('sidebar_health_profile'), icon: Heart },
-        { path: '/mental-wellness', label: t('sidebar_mental_wellness'), icon: Headphones },
         { path: '/symptoms', label: t('sidebar_symptoms'), icon: Stethoscope },
         { path: '/blood-report', label: t('sidebar_blood_reports'), icon: TestTube2 },
         { path: '/prediction', label: t('sidebar_assessment'), icon: Activity },

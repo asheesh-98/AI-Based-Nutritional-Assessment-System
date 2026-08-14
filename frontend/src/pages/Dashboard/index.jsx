@@ -113,7 +113,6 @@ export default function Dashboard() {
   const fatToday = Math.round(data?.nutrient_summary?.fat_today || 0);
 
   const shortcutLinks = [
-    { label: t('sidebar_mental_wellness'), icon: Headphones, path: '/mental-wellness', color: 'from-[#0284c7] to-indigo-600' },
     { label: t('dashboard_qa_blood_label'), icon: TestTube2, path: '/blood-report', color: 'from-purple-600 to-pink-600' },
     { label: t('dashboard_qa_symptoms_label'), icon: Stethoscope, path: '/symptoms', color: 'from-amber-500 to-orange-600' },
     { label: t('dashboard_qa_scan_label'), icon: ScanBarcode, path: '/food-scanner', color: 'from-emerald-600 to-teal-600' },

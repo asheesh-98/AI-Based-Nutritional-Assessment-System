@@ -21,7 +21,6 @@ const menuSections = [
     items: [
       { path: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
       { path: '/admin/prediction-reports', label: 'Predictions', icon: Activity },
-      { path: '/admin/sounds', label: 'Sound Manager', icon: Music },
     ],
   },
   {

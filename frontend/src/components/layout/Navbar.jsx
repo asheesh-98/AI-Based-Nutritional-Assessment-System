@@ -27,7 +27,6 @@ export default function Navbar() {
     { path: '/prediction', label: t('assessment'), icon: Activity },
     { path: '/symptoms', label: t('common_symptoms'), icon: Stethoscope },
     { path: '/blood-report', label: t('common_blood_reports'), icon: TestTube2 },
-    { path: '/mental-wellness', label: t('sidebar_mental_wellness', 'Mental Wellness'), icon: Headphones },
     { path: '/reports', label: t('common_reports'), icon: TrendingUp },
     { path: '/meal-plan', label: t('meal_plan'), icon: Utensils },
     { path: '/food-diary', label: t('food_diary'), icon: FileText },
@@ -41,7 +40,6 @@ export default function Navbar() {
     { path: '/admin/foods', label: 'Food Database', icon: UtensilsCrossed },
     { path: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
     { path: '/admin/prediction-reports', label: 'Predictions', icon: Activity },
-    { path: '/admin/sounds', label: t('admin_nav_sound_manager', 'Sound Manager'), icon: Music },
     { path: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
