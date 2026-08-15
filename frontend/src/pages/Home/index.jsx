@@ -195,7 +195,7 @@ export default function Home() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-2xl shadow-xl shadow-sky-950/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-4 text-sm sm:text-base font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2.5 transition-all cursor-pointer border-0"
                 >
                   <span>{t('start_assessment')}</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -319,7 +319,7 @@ export default function Home() {
                     onClick={() => toggleSymptom(symObj.id)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       selected
-                        ? 'bg-[#0a192f] text-white shadow-md'
+                        ? 'bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 text-white shadow-md shadow-purple-500/20'
                         : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
@@ -337,7 +337,7 @@ export default function Home() {
                 </p>
               </div>
               <Link to="/register">
-                <button className="px-6 py-3 rounded-xl bg-[#0a192f] hover:bg-[#0284c7] text-white text-xs font-bold shadow-md hover:scale-105 transition-all">
+                <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white text-xs font-bold shadow-md shadow-purple-500/25 hover:scale-105 transition-all border-0 cursor-pointer">
                   {t('home_calc_btn')}
                 </button>
               </Link>
@@ -463,7 +463,7 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleInstallPWA}
-                  className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-xl"
+                  className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 text-sm sm:text-lg font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 rounded-2xl flex items-center justify-center gap-3 cursor-pointer shadow-lg shadow-purple-500/30 border-0"
                 >
                   <Download className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   <span>{isInstalled ? t('home_pwa_app_installed') : t('home_pwa_download')}</span>
@@ -549,7 +549,7 @@ export default function Home() {
 
               <button
                 onClick={() => setGuideModalOpen(false)}
-                className="w-full py-4 text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-2xl transition-colors cursor-pointer shadow-lg shadow-sky-900/10"
+                className="w-full py-4 text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 rounded-2xl transition-all cursor-pointer shadow-lg shadow-purple-500/25 border-0"
               >
                 {t('pwa_guide_close')}
               </button>

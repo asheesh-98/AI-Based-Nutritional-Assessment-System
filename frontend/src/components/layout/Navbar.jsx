@@ -155,7 +155,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4.5 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-xl shadow-md shadow-sky-950/20 transition-colors whitespace-nowrap"
+                  className="px-4.5 py-2.5 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 rounded-xl shadow-md shadow-purple-500/25 transition-all whitespace-nowrap border-0"
                 >
                   {t('get_started')}
                 </Link>
@@ -279,7 +279,7 @@ export default function Navbar() {
                   <Link
                     to="/register"
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-[#0a192f]"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 shadow-md shadow-purple-500/25 border-0"
                   >
                     <UserPlus className="w-4 h-4" />
                     {t('get_started')}
