@@ -774,7 +774,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "Your daily calorie and macronutrient intake is well balanced. Keep maintaining your 7-day health streak!",
     "dashboard_btn_ask_coach": "Ask AI Coach",
     "dashboard_target_label": "Target:",
-    "dashboard_target_water_label": "Target"
+    "dashboard_target_water_label": "Target",
+    "pwa_guide_title": "How to Install NutriAI App",
+    "pwa_guide_subtitle": "Follow these quick steps to install NutriAI on your device for instant offline access.",
+    "pwa_guide_desktop": "Desktop Chrome / Edge: Click the Install icon (➕) on the right side of your browser address bar.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): Tap the Share button (⎋) at the bottom and select 'Add to Home Screen'.",
+    "pwa_guide_android": "Android (Chrome): Tap the Menu icon (⋮) at top-right and select 'Install App' or 'Add to Home Screen'.",
+    "pwa_guide_close": "Got it"
   },
   "hi": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -1452,7 +1458,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "आपका दैनिक कैलोरी और मैक्रोन्यूट्रिएंट सेवन संतुलित है। अपना स्वास्थ्य सिलसिला बनाए रखें!",
     "dashboard_btn_ask_coach": "एआई कोच से पूछें",
     "dashboard_target_label": "लक्ष्य:",
-    "dashboard_target_water_label": "लक्ष्य"
+    "dashboard_target_water_label": "लक्ष्य",
+    "pwa_guide_title": "NutriAI ऐप कैसे इंस्टॉल करें",
+    "pwa_guide_subtitle": "तत्काल ऑफ़लाइन पहुंच के लिए अपने डिवाइस पर NutriAI इंस्टॉल करने के लिए इन त्वरित चरणों का पालन करें।",
+    "pwa_guide_desktop": "डेस्कटॉप क्रोम / एज: अपने ब्राउज़र एड्रेस बार के दाईं ओर इंस्टॉल आइकन (➕) पर क्लिक करें।",
+    "pwa_guide_ios": "iPhone/iPad (Safari): नीचे शेयर बटन (⎋) पर टैप करें और 'होम स्क्रीन में जोड़ें' चुनें।",
+    "pwa_guide_android": "एंड्रॉइड (क्रोम): ऊपर दाईं ओर मेनू आइकन (⋮) पर टैप करें और 'ऐप इंस्टॉल करें' या 'होम स्क्रीन में जोड़ें' चुनें।",
+    "pwa_guide_close": "समझ गया"
   },
   "sa": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -2131,7 +2143,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "भवतः दैनिकं कैलोरी सेवनं सन्तुलितम् अस्ति।",
     "dashboard_btn_ask_coach": "एआई शिक्षकेन सह सम्भाषतां करोतु",
     "dashboard_target_label": "लक्ष्यम्:",
-    "dashboard_target_water_label": "लक्ष्यम्"
+    "dashboard_target_water_label": "लक्ष्यम्",
+    "pwa_guide_title": "NutriAI App कथं संस्थाप्यते",
+    "pwa_guide_subtitle": "तत्क्षणं अफलाइन-प्रवेशार्थं स्वयन्त्रे NutriAI संस्थापयितुं एतानि द्रुतपदानि अनुसरणं कुर्वन्तु ।",
+    "pwa_guide_desktop": "Desktop Chrome / Edge: स्वस्य ब्राउजर् पतापट्टिकायाः ​​दक्षिणभागे Install चिह्नं (➕) नुदन्तु ।",
+    "pwa_guide_ios": "iPhone / iPad (Safari): अधः Share बटनं (⎋) ट्याप् कृत्वा 'Add to Home Screen' इति चिनोतु।",
+    "pwa_guide_android": "Android (Chrome): उपरि दक्षिणभागे Menu चिह्नं (⋮) ट्याप् कृत्वा 'Install App' अथवा 'Add to Home Screen' इति चिनोतु।",
+    "pwa_guide_close": "अयं प्राप्तः"
   },
   "as": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -2810,7 +2828,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "Your daily calorie and macronutrient intake is well balanced. Keep maintaining your 7-day health streak!",
     "dashboard_btn_ask_coach": "এআই ক'চৰ পৰা সুধক",
     "dashboard_target_label": "লক্ষ্য:",
-    "dashboard_target_water_label": "লক্ষ্য"
+    "dashboard_target_water_label": "লক্ষ্য",
+    "pwa_guide_title": "NutriAI App কেনেকৈ ইনষ্টল কৰিব",
+    "pwa_guide_subtitle": "তৎক্ষণাত অফলাইন অভিগমৰ বাবে আপোনাৰ ডিভাইচত NutriAI সংস্থাপন কৰিবলে এই দ্ৰুত পদক্ষেপসমূহ অনুসৰণ কৰক।",
+    "pwa_guide_desktop": "ডেস্কটপ Chrome / Edge: আপোনাৰ ব্ৰাউজাৰ ঠিকনা বাৰৰ সোঁফালে থকা ইনষ্টল আইকন (➕) ক্লিক কৰক।",
+    "pwa_guide_ios": "আইফোন / আইপেড (ছাফাৰী): তলৰ শ্বেয়াৰ বুটাম (⎋) টেপ কৰক আৰু 'হোম স্ক্ৰীণত যোগ কৰক' নিৰ্বাচন কৰক।",
+    "pwa_guide_android": "এণ্ড্ৰইড (ক্ৰ'ম): ওপৰৰ সোঁফালে থকা মেনু আইকন (⋮) টেপ কৰক আৰু 'এপ ইনষ্টল কৰক' বা 'হোম স্ক্ৰীণত যোগ কৰক' নিৰ্বাচন কৰক।",
+    "pwa_guide_close": "এইটো পাইছো"
   },
   "bn": {
     "select_language": "অপনি পস্দিদা ভাষা চীনৃ্",
@@ -3489,7 +3513,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "Your daily calorie and macronutrient intake is well balanced. Keep maintaining your 7-day health streak!",
     "dashboard_btn_ask_coach": "এআই কোচকে জিজ্ঞাসা করুন",
     "dashboard_target_label": "লক্ষ্য:",
-    "dashboard_target_water_label": "লক্ষ্য"
+    "dashboard_target_water_label": "লক্ষ্য",
+    "pwa_guide_title": "নিউট্রিএআই অ্যাপ কীভাবে ইনস্টল করবেন",
+    "pwa_guide_subtitle": "তাত্ক্ষণিক অফলাইন অ্যাক্সেসের জন্য আপনার ডিভাইসে NutriAI ইনস্টল করতে এই দ্রুত পদক্ষেপগুলি অনুসরণ করুন৷",
+    "pwa_guide_desktop": "ডেস্কটপ ক্রোম / এজ: আপনার ব্রাউজারের ঠিকানা বারের ডানদিকে ইনস্টল আইকনে (➕) ক্লিক করুন।",
+    "pwa_guide_ios": "iPhone / iPad (Safari): নীচে শেয়ার বোতামে (⎋) আলতো চাপুন এবং 'হোম স্ক্রিনে যোগ করুন' নির্বাচন করুন।",
+    "pwa_guide_android": "Android (Chrome): Tap the Menu icon (⋮) at top-right and select 'Install App' or 'Add to Home Screen'.",
+    "pwa_guide_close": "Got it"
   },
   "gu": {
     "select_language": "અપની પસંદીદા ભાષા ચુનેં",
@@ -4168,7 +4198,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "તમારું દૈનિક કેલરી વપરાશ સંતુલિત છે.",
     "dashboard_btn_ask_coach": "એઆઈ કોચને પૂછો",
     "dashboard_target_label": "લક્ષ્ય:",
-    "dashboard_target_water_label": "લક્ષ્ય"
+    "dashboard_target_water_label": "લક્ષ્ય",
+    "pwa_guide_title": "ન્યુટ્રીએઆઈ એપ્લિકેશન કેવી રીતે ઇન્સ્ટોલ કરવી",
+    "pwa_guide_subtitle": "ત્વરિત ઑફલાઇન ઍક્સેસ માટે તમારા ઉપકરણ પર NutriAI ઇન્સ્ટોલ કરવા માટે આ ઝડપી પગલાં અનુસરો.",
+    "pwa_guide_desktop": "ડેસ્કટોપ ક્રોમ / એજ: તમારા બ્રાઉઝર એડ્રેસ બારની જમણી બાજુએ ઇન્સ્ટોલ આઇકન (➕) પર ક્લિક કરો.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): નીચે શેર બટન (⎋) ને ટેપ કરો અને 'Add to Home Screen' પસંદ કરો.",
+    "pwa_guide_android": "Android (Chrome): ઉપર-જમણી બાજુએ મેનૂ આયકન (⋮) ને ટેપ કરો અને 'એપ ઇન્સ્ટોલ કરો' અથવા 'હોમ સ્ક્રીન પર ઉમેરો' પસંદ કરો.",
+    "pwa_guide_close": "સમજાયું"
   },
   "kn": {
     "select_language": "ಅಪನೀ ಪಸಂದೀದಾ ಭಾಷಾ ಚುನೇಂ",
@@ -4847,7 +4883,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "ನಿಮ್ಮ ದೈನಂದಿನ ಕ್ಯಾಲೊರಿ ಸೇವನೆಯು ಸಮತೋಲಿತವಾಗಿದೆ.",
     "dashboard_btn_ask_coach": "ಎಐ ಕೋಚ್ ಅನ್ನು ಕೇಳಿ",
     "dashboard_target_label": "ಗುರಿ:",
-    "dashboard_target_water_label": "ಗುರಿ"
+    "dashboard_target_water_label": "ಗುರಿ",
+    "pwa_guide_title": "NutriAI ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಹೇಗೆ ಸ್ಥಾಪಿಸುವುದು",
+    "pwa_guide_subtitle": "ತ್ವರಿತ ಆಫ್‌ಲೈನ್ ಪ್ರವೇಶಕ್ಕಾಗಿ ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ NutriAI ಅನ್ನು ಸ್ಥಾಪಿಸಲು ಈ ತ್ವರಿತ ಹಂತಗಳನ್ನು ಅನುಸರಿಸಿ.",
+    "pwa_guide_desktop": "ಡೆಸ್ಕ್‌ಟಾಪ್ ಕ್ರೋಮ್ / ಎಡ್ಜ್: ನಿಮ್ಮ ಬ್ರೌಸರ್ ವಿಳಾಸ ಪಟ್ಟಿಯ ಬಲಭಾಗದಲ್ಲಿರುವ ಇನ್‌ಸ್ಟಾಲ್ ಐಕಾನ್ (➕) ಕ್ಲಿಕ್ ಮಾಡಿ.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): ಕೆಳಭಾಗದಲ್ಲಿರುವ ಹಂಚಿಕೆ ಬಟನ್ (⎋) ಟ್ಯಾಪ್ ಮಾಡಿ ಮತ್ತು 'ಹೋಮ್ ಸ್ಕ್ರೀನ್‌ಗೆ ಸೇರಿಸು' ಆಯ್ಕೆಮಾಡಿ.",
+    "pwa_guide_android": "Android (Chrome): ಮೇಲಿನ ಬಲಭಾಗದಲ್ಲಿರುವ ಮೆನು ಐಕಾನ್ (⋮) ಟ್ಯಾಪ್ ಮಾಡಿ ಮತ್ತು 'ಅಪ್ಲಿಕೇಶನ್ ಸ್ಥಾಪಿಸಿ' ಅಥವಾ 'ಹೋಮ್ ಸ್ಕ್ರೀನ್‌ಗೆ ಸೇರಿಸಿ' ಆಯ್ಕೆಮಾಡಿ.",
+    "pwa_guide_close": "ಅರ್ಥವಾಯಿತು"
   },
   "ks": {
     "select_language": "اھتص ھيےڻصڻو نومو چستِے",
@@ -5520,7 +5562,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "توہین روزانہ کیلوریز توازن چھو۔",
     "dashboard_btn_ask_coach": "اے آئی کوچس ترسو",
     "dashboard_target_label": "ہدف:",
-    "dashboard_target_water_label": "ہدف"
+    "dashboard_target_water_label": "ہدف",
+    "pwa_guide_title": "How to Install NutriAI App",
+    "pwa_guide_subtitle": "Follow these quick steps to install NutriAI on your device for instant offline access.",
+    "pwa_guide_desktop": "Desktop Chrome / Edge: Click the Install icon (➕) on the right side of your browser address bar.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): Tap the Share button (⎋) at the bottom and select 'Add to Home Screen'.",
+    "pwa_guide_android": "Android (Chrome): Tap the Menu icon (⋮) at top-right and select 'Install App' or 'Add to Home Screen'.",
+    "pwa_guide_close": "Got it"
   },
   "ml": {
     "select_language": "അപനീ പസംദീദാ ഭാഷാ ചുനേം",
@@ -6199,7 +6247,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "നിങ്ങളുടെ ദൈനംദിന കലോറി ഉപഭോഗം സന്തുലിതമാണ്.",
     "dashboard_btn_ask_coach": "എഐ കോച്ചിനോട് ചോദിക്കുക",
     "dashboard_target_label": "ലക്ഷ്യം:",
-    "dashboard_target_water_label": "ലക്ഷ്യം"
+    "dashboard_target_water_label": "ലക്ഷ്യം",
+    "pwa_guide_title": "NutriAI ആപ്പ് എങ്ങനെ ഇൻസ്റ്റാൾ ചെയ്യാം",
+    "pwa_guide_subtitle": "തൽക്ഷണ ഓഫ്‌ലൈൻ ആക്സസിനായി നിങ്ങളുടെ ഉപകരണത്തിൽ NutriAI ഇൻസ്റ്റാൾ ചെയ്യാൻ ഈ ദ്രുത ഘട്ടങ്ങൾ പാലിക്കുക.",
+    "pwa_guide_desktop": "ഡെസ്‌ക്‌ടോപ്പ് ക്രോം / എഡ്ജ്: നിങ്ങളുടെ ബ്രൗസർ വിലാസ ബാറിൻ്റെ വലതുവശത്തുള്ള ഇൻസ്റ്റോൾ ഐക്കണിൽ (➕) ക്ലിക്ക് ചെയ്യുക.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): Tap the Share button (⎋) at the bottom and select 'Add to Home Screen'.",
+    "pwa_guide_android": "Android (Chrome): മുകളിൽ വലതുവശത്തുള്ള മെനു ഐക്കൺ (⋮) ടാപ്പുചെയ്‌ത് 'ആപ്പ് ഇൻസ്റ്റാൾ ചെയ്യുക' അല്ലെങ്കിൽ 'ഹോം സ്‌ക്രീനിലേക്ക് ചേർക്കുക' തിരഞ്ഞെടുക്കുക.",
+    "pwa_guide_close": "മനസ്സിലായി"
   },
   "mr": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -6878,7 +6932,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "तुमचे दैनंदिन कॅलरी सेवन संतुलित आहे.",
     "dashboard_btn_ask_coach": "एआय कोचला विचारा",
     "dashboard_target_label": "लक्ष्य:",
-    "dashboard_target_water_label": "लक्ष्य"
+    "dashboard_target_water_label": "लक्ष्य",
+    "pwa_guide_title": "NutriAI ॲप कसे स्थापित करावे",
+    "pwa_guide_subtitle": "झटपट ऑफलाइन प्रवेशासाठी तुमच्या डिव्हाइसवर NutriAI स्थापित करण्यासाठी या द्रुत चरणांचे अनुसरण करा.",
+    "pwa_guide_desktop": "डेस्कटॉप क्रोम / एज: तुमच्या ब्राउझर ॲड्रेस बारच्या उजव्या बाजूला इन्स्टॉल आयकॉन (➕) वर क्लिक करा.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): तळाशी शेअर बटण (⎋) वर टॅप करा आणि 'Add to Home Screen' निवडा.",
+    "pwa_guide_android": "Android (Chrome): शीर्ष-उजवीकडे मेनू चिन्हावर (⋮) टॅप करा आणि 'Install App' किंवा 'Add to Home Screen' निवडा.",
+    "pwa_guide_close": "समजले"
   },
   "ne": {
     "select_language": "अपनी पसंदीदा भाषा चुनें",
@@ -7557,7 +7617,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "तपाईंको दैनिक क्यालोरी सेवन सन्तुलित छ।",
     "dashboard_btn_ask_coach": "एआई कोचलाई सोध्नुहोस्",
     "dashboard_target_label": "लक्ष्य:",
-    "dashboard_target_water_label": "लक्ष्य"
+    "dashboard_target_water_label": "लक्ष्य",
+    "pwa_guide_title": "NutriAI एप कसरी स्थापना गर्ने",
+    "pwa_guide_subtitle": "तत्काल अफलाइन पहुँचको लागि आफ्नो उपकरणमा NutriAI स्थापना गर्न यी द्रुत चरणहरू पालना गर्नुहोस्।",
+    "pwa_guide_desktop": "डेस्कटप क्रोम / एज: तपाईको ब्राउजर ठेगाना पट्टीको दायाँ छेउमा रहेको स्थापना आइकन (➕) मा क्लिक गर्नुहोस्।",
+    "pwa_guide_ios": "iPhone / iPad (Safari): तलको साझेदारी बटन (⎋) ट्याप गर्नुहोस् र 'गृह स्क्रिनमा थप्नुहोस्' चयन गर्नुहोस्।",
+    "pwa_guide_android": "एन्ड्रोइड (क्रोम): शीर्ष-दायाँमा रहेको मेनु आइकन (⋮) ट्याप गर्नुहोस् र 'एप स्थापना गर्नुहोस्' वा 'गृह स्क्रिनमा थप्नुहोस्' चयन गर्नुहोस्।",
+    "pwa_guide_close": "बुझियो"
   },
   "or": {
     "select_language": "ଅପନୀ ପସଂଦୀଦା ଭାଷା ଚୁନେଂ",
@@ -8236,7 +8302,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "ତୁମର ଦ daily ନିକ କ୍ୟାଲୋରୀ ଏବଂ ମାକ୍ରୋନ୍ୟୁଟ୍ରିଏଣ୍ଟ ଗ୍ରହଣ ଭଲ ସନ୍ତୁଳିତ ଅଟେ | ଆପଣଙ୍କର 7 ଦିନର ସ୍ୱାସ୍ଥ୍ୟ ଧାରା ବଜାୟ ରଖନ୍ତୁ!",
     "dashboard_btn_ask_coach": "ଏଆଇ କୋଚଙ୍କୁ ପଚାରନ୍ତୁ",
     "dashboard_target_label": "ଲକ୍ଷ୍ୟ:",
-    "dashboard_target_water_label": "ଲକ୍ଷ୍ୟ"
+    "dashboard_target_water_label": "ଲକ୍ଷ୍ୟ",
+    "pwa_guide_title": "NutriAI ଆପ୍ କିପରି ସଂସ୍ଥାପନ କରିବେ |",
+    "pwa_guide_subtitle": "ତତକ୍ଷଣାତ୍ ଅଫଲାଇନ୍ ପ୍ରବେଶ ପାଇଁ ଆପଣଙ୍କ ଡିଭାଇସରେ NutriAI ସଂସ୍ଥାପନ କରିବାକୁ ଏହି ଶୀଘ୍ର ପଦକ୍ଷେପଗୁଡ଼ିକୁ ଅନୁସରଣ କରନ୍ତୁ |",
+    "pwa_guide_desktop": "ଡେସ୍କଟପ୍ କ୍ରୋମ୍ / ଏଜ୍: ଆପଣଙ୍କର ବ୍ରାଉଜର୍ ଠିକଣା ଦଣ୍ଡିକାର ଡାହାଣ ପାର୍ଶ୍ୱରେ ସଂସ୍ଥାପନ ଆଇକନ୍ (➕) କ୍ଲିକ୍ କରନ୍ତୁ |",
+    "pwa_guide_ios": "ଆଇଫୋନ୍ / ଆଇପ୍ୟାଡ୍ (ସଫାରି): ନିମ୍ନରେ ସେୟାର ବଟନ୍ (⎋) ଟ୍ୟାପ୍ କରନ୍ତୁ ଏବଂ 'ହୋମ ସ୍କ୍ରିନରେ ଯୋଡନ୍ତୁ' ଚୟନ କରନ୍ତୁ |",
+    "pwa_guide_android": "ଆଣ୍ଡ୍ରଏଡ୍ (କ୍ରୋମ୍): ଉପର ଡାହାଣରେ ଥିବା ମେନୁ ଆଇକନ୍ (⋮) କୁ ଟ୍ୟାପ୍ କରନ୍ତୁ ଏବଂ 'ଆପ୍ ସଂସ୍ଥାପନ' କିମ୍ବା 'ହୋମ ସ୍କ୍ରିନରେ ଯୋଡନ୍ତୁ' ଚୟନ କରନ୍ତୁ |",
+    "pwa_guide_close": "ପାଇଛି"
   },
   "pa": {
     "select_language": "ਅਪਨੀ ਪਸਂਦੀਦਾ ਭਾਸ਼ਾ ਚੁਨੇਂ",
@@ -8915,7 +8987,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "Your daily calorie and macronutrient intake is well balanced. Keep maintaining your 7-day health streak!",
     "dashboard_btn_ask_coach": "ਏਆਈ ਕੋਚ ਨੂੰ ਪੁੱਛੋ",
     "dashboard_target_label": "ਟੀਚਾ:",
-    "dashboard_target_water_label": "ਟੀਚਾ"
+    "dashboard_target_water_label": "ਟੀਚਾ",
+    "pwa_guide_title": "NutriAI ਐਪ ਨੂੰ ਕਿਵੇਂ ਇੰਸਟਾਲ ਕਰਨਾ ਹੈ",
+    "pwa_guide_subtitle": "ਤੁਰੰਤ ਔਫਲਾਈਨ ਪਹੁੰਚ ਲਈ ਆਪਣੀ ਡਿਵਾਈਸ 'ਤੇ NutriAI ਨੂੰ ਸਥਾਪਿਤ ਕਰਨ ਲਈ ਇਹਨਾਂ ਤੇਜ਼ ਕਦਮਾਂ ਦੀ ਪਾਲਣਾ ਕਰੋ।",
+    "pwa_guide_desktop": "Desktop Chrome / Edge: Click the Install icon (➕) on the right side of your browser address bar.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): ਹੇਠਾਂ ਸ਼ੇਅਰ ਬਟਨ (⎋) 'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ 'ਹੋਮ ਸਕ੍ਰੀਨ 'ਤੇ ਸ਼ਾਮਲ ਕਰੋ' ਨੂੰ ਚੁਣੋ।",
+    "pwa_guide_android": "Android (Chrome): ਉੱਪਰ-ਸੱਜੇ ਪਾਸੇ ਮੀਨੂ ਆਈਕਨ (⋮) 'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ 'ਐਪ ਸਥਾਪਿਤ ਕਰੋ' ਜਾਂ 'ਹੋਮ ਸਕ੍ਰੀਨ 'ਤੇ ਸ਼ਾਮਲ ਕਰੋ' ਨੂੰ ਚੁਣੋ।",
+    "pwa_guide_close": "ਮਿਲ ਗਿਆ"
   },
   "sd": {
     "select_language": "اددِ دشاتِته ڦهوه چيدِا",
@@ -9588,7 +9666,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "توهان جي روزاني ڪيلوري سٺي حالت ۾ آهي.",
     "dashboard_btn_ask_coach": "اي آئي ڪوچ کان پڇو",
     "dashboard_target_label": "هدف:",
-    "dashboard_target_water_label": "هدف"
+    "dashboard_target_water_label": "هدف",
+    "pwa_guide_title": "NutriAI ايپ ڪيئن انسٽال ڪجي",
+    "pwa_guide_subtitle": "انهن تڪڙي قدمن تي عمل ڪريو NutriAI انسٽال ڪرڻ لاءِ توهان جي ڊوائيس تي فوري آف لائن رسائي لاءِ.",
+    "pwa_guide_desktop": "ڊيسڪ ٽاپ ڪروم / ايج: ڪلڪ ڪريو انسٽال آئڪن (➕) توهان جي برائوزر ايڊريس بار جي ساڄي پاسي.",
+    "pwa_guide_ios": "آئي فون / iPad (سفاري): ٽيپ ڪريو شيئر بٽڻ (⎋) تري ۾ ۽ چونڊيو 'هوم اسڪرين ۾ شامل ڪريو'.",
+    "pwa_guide_android": "Android (Chrome): مٿي ساڄي پاسي مينيو آئڪن (⋮) تي ٽيپ ڪريو ۽ چونڊيو 'ايپ انسٽال ڪريو' يا 'هوم اسڪرين تي شامل ڪريو'.",
+    "pwa_guide_close": "سمجهي ويس"
   },
   "ta": {
     "select_language": "அபனீ பஸமதீதা பাஷা சுனேம",
@@ -10267,7 +10351,13 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "உங்கள் தினசரி கலோரி நுகர்வு சீராக உள்ளது.",
     "dashboard_btn_ask_coach": "ஏஐ பயிற்சியாளரிடம் கேளுங்கள்",
     "dashboard_target_label": "இலக்கு:",
-    "dashboard_target_water_label": "இலக்கு"
+    "dashboard_target_water_label": "இலக்கு",
+    "pwa_guide_title": "NutriAI பயன்பாட்டை எவ்வாறு நிறுவுவது",
+    "pwa_guide_subtitle": "உடனடி ஆஃப்லைன் அணுகலுக்கு உங்கள் சாதனத்தில் NutriAI ஐ நிறுவ, இந்த விரைவான படிகளைப் பின்பற்றவும்.",
+    "pwa_guide_desktop": "டெஸ்க்டாப் குரோம் / எட்ஜ்: உங்கள் உலாவியின் முகவரிப் பட்டியின் வலது பக்கத்தில் உள்ள நிறுவு ஐகானை (➕) கிளிக் செய்யவும்.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): கீழே உள்ள பகிர் பொத்தானை (⎋) தட்டி, 'முகப்புத் திரையில் சேர்' என்பதைத் தேர்ந்தெடுக்கவும்.",
+    "pwa_guide_android": "ஆண்ட்ராய்டு (குரோம்): மேல் வலதுபுறத்தில் உள்ள மெனு ஐகானை (⋮) தட்டி, 'பயன்பாட்டை நிறுவு' அல்லது 'முகப்புத் திரையில் சேர்' என்பதைத் தேர்ந்தெடுக்கவும்.",
+    "pwa_guide_close": "கிடைத்தது"
   },
   "te": {
     "select_language": "అపనీ పసందీదা భাషা చునేం",
@@ -10946,6 +11036,12 @@ export const TRANSLATIONS = {
     "dashboard_ai_rec_body_optimal": "మీ రోజువారీ క్యాలరీల వినియోగం సమతుల్యంగా ఉంది.",
     "dashboard_btn_ask_coach": "ఎఐ కోచ్‌ను అడగండి",
     "dashboard_target_label": "లక్ష్యం:",
-    "dashboard_target_water_label": "లక్ష్యం"
+    "dashboard_target_water_label": "లక్ష్యం",
+    "pwa_guide_title": "NutriAI యాప్‌ను ఎలా ఇన్‌స్టాల్ చేయాలి",
+    "pwa_guide_subtitle": "తక్షణ ఆఫ్‌లైన్ యాక్సెస్ కోసం మీ పరికరంలో NutriAIని ఇన్‌స్టాల్ చేయడానికి ఈ శీఘ్ర దశలను అనుసరించండి.",
+    "pwa_guide_desktop": "డెస్క్‌టాప్ క్రోమ్ / ఎడ్జ్: మీ బ్రౌజర్ అడ్రస్ బార్‌కు కుడి వైపున ఉన్న ఇన్‌స్టాల్ ఐకాన్ (➕)ని క్లిక్ చేయండి.",
+    "pwa_guide_ios": "iPhone / iPad (Safari): దిగువన ఉన్న షేర్ బటన్ (⎋)ని నొక్కి, 'హోమ్ స్క్రీన్‌కి జోడించు' ఎంచుకోండి.",
+    "pwa_guide_android": "Android (Chrome): ఎగువ-కుడివైపు ఉన్న మెనూ చిహ్నాన్ని (⋮) నొక్కండి మరియు 'యాప్‌ను ఇన్‌స్టాల్ చేయి' లేదా 'హోమ్ స్క్రీన్‌కి జోడించు' ఎంచుకోండి.",
+    "pwa_guide_close": "అర్థమైంది"
   }
 };

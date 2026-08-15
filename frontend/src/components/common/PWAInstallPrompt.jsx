@@ -21,6 +21,7 @@ export default function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      window.deferredPWAInstallPrompt = e;
       // Check if user previously dismissed the prompt
       const dismissed = localStorage.getItem('nutriai_pwa_dismissed');
       if (!dismissed) {
@@ -32,6 +33,7 @@ export default function PWAInstallPrompt() {
       setInstalled(true);
       setShowPrompt(false);
       setDeferredPrompt(null);
+      window.deferredPWAInstallPrompt = null;
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);

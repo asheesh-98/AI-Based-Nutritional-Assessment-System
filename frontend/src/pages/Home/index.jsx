@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield, Brain, Stethoscope, Utensils, Award, ArrowRight,
   TestTube2, Sparkles, ChevronDown, ChevronUp, Download, Smartphone,
-  Activity, Check, ScanBarcode, Bot
+  Activity, Check, ScanBarcode, Bot, Laptop, X
 } from 'lucide-react';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
@@ -17,17 +17,20 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('scanner');
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [guideModalOpen, setGuideModalOpen] = useState(false);
   const [selectedSymptoms, setSelectedSymptoms] = useState(['Fatigue', 'Dizziness']);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      window.deferredPWAInstallPrompt = e;
     };
 
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      window.deferredPWAInstallPrompt = null;
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -44,25 +47,21 @@ export default function Home() {
   }, []);
 
   const handleInstallPWA = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        setIsInstalled(true);
-      }
-      setDeferredPrompt(null);
-    } else {
-      const promptEvent = window.deferredPWAInstallPrompt;
-      if (promptEvent) {
+    const promptEvent = deferredPrompt || window.deferredPWAInstallPrompt;
+    if (promptEvent) {
+      try {
         promptEvent.prompt();
         const { outcome } = await promptEvent.userChoice;
         if (outcome === 'accepted') {
           setIsInstalled(true);
         }
+        setDeferredPrompt(null);
         window.deferredPWAInstallPrompt = null;
-      } else {
-        alert(t('pwa_browser_instructions') || 'To install, tap Share/Menu in your browser and select "Add to Home Screen".');
+      } catch (err) {
+        setGuideModalOpen(true);
       }
+    } else {
+      setGuideModalOpen(true);
     }
   };
 
@@ -488,6 +487,76 @@ export default function Home() {
 
       <Footer />
       <PWAInstallPrompt />
+
+      {/* PWA Installation Guide Modal */}
+      <AnimatePresence>
+        {guideModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border border-slate-200 relative overflow-hidden text-[#0a192f]"
+            >
+              <button
+                onClick={() => setGuideModalOpen(false)}
+                className="absolute top-5 right-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/25 shrink-0">
+                  <Download className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-[#0a192f]">{t('pwa_guide_title')}</h3>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">{t('pwa_guide_subtitle')}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3.5 mb-8">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3.5">
+                  <Laptop className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-black text-[#0a192f] block mb-1">Desktop Chrome / Edge / Brave</span>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {t('pwa_guide_desktop')}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3.5">
+                  <Smartphone className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-black text-[#0a192f] block mb-1">Android (Chrome / Samsung)</span>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {t('pwa_guide_android')}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-3.5">
+                  <Smartphone className="w-5 h-5 text-purple-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-xs font-black text-[#0a192f] block mb-1">iPhone / iPad (Safari)</span>
+                    <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      {t('pwa_guide_ios')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setGuideModalOpen(false)}
+                className="w-full py-4 text-sm font-bold text-white bg-[#0a192f] hover:bg-[#0284c7] rounded-2xl transition-colors cursor-pointer shadow-lg shadow-sky-900/10"
+              >
+                {t('pwa_guide_close')}
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
