@@ -167,11 +167,8 @@ export default function MealPlanner() {
 
   const loadWeeklyPlan = async (diet) => {
     const cached = getOfflineMealPlan();
-    if (cached) {
+    if (cached && (cached.diet_preference === diet || cached.diet_type === diet)) {
       setWeeklyPlan(cached);
-      if (cached.diet_preference) {
-        setSelectedDiet(cached.diet_preference);
-      }
       setLoading(false);
     } else {
       setLoading(true);
