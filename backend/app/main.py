@@ -54,8 +54,8 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.warning("Food seeding skipped or failed: %s", exc)
 
-    logger.info("Loading ML models …")
-    logger.info("ML model loading step complete (models loaded on first request).")
+    import gc
+    gc.collect()
 
     logger.info("🚀 AI Nutrition Assessment API is ready.")
 

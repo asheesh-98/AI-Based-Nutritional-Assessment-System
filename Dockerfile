@@ -26,5 +26,5 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
-# Start Uvicorn backend server binding to 0.0.0.0
-CMD sh -c "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+# Start Uvicorn backend server optimized for 512MB RAM cap
+CMD sh -c "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1 --limit-max-requests 1000 --timeout-keep-alive 30"

@@ -12,6 +12,7 @@ Core algorithm:
    - Rough daily calorie target validation (1500-2500 kcal).
 5. Audit via Gemini 2.0 Flash AI verification before serving.
 """
+import gc
 import logging
 import random
 import re
@@ -28,6 +29,31 @@ import pandas as pd
 from backend.app.config.settings import FOOD_CSV_PATH
 
 logger = logging.getLogger(__name__)
+
+# Global in-memory cache to prevent re-reading & re-parsing CSV on every request
+_RAW_FOOD_DF_CACHE: Optional[pd.DataFrame] = None
+
+def _get_cached_food_df() -> Optional[pd.DataFrame]:
+    global _RAW_FOOD_DF_CACHE
+    if _RAW_FOOD_DF_CACHE is not None:
+        return _RAW_FOOD_DF_CACHE.copy()
+    
+    csv_path = Path(FOOD_CSV_PATH)
+    if not csv_path.exists():
+        logger.warning("Food CSV not found at %s", csv_path)
+        return None
+    
+    try:
+        df = pd.read_csv(csv_path)
+        if not df.empty:
+            _RAW_FOOD_DF_CACHE = df
+            logger.info("Loaded and cached food database DataFrame (%d rows)", len(df))
+            gc.collect()
+            return _RAW_FOOD_DF_CACHE.copy()
+    except Exception as exc:
+        logger.error("Failed to read food CSV at %s: %s", csv_path, exc)
+    
+    return None
 
 # ── Nutrient mapping per deficiency ──────────────────────────────────────────
 DEFICIENCY_NUTRIENT_MAP: Dict[str, List[tuple]] = {
@@ -206,14 +232,9 @@ def generate_weekly_meal_plan(
     """Generate a 7-day meal plan optimised for detected nutritional deficiencies."""
     deficiencies = deficiencies or []
 
-    csv_path = Path(FOOD_CSV_PATH)
-    if not csv_path.exists():
-        logger.warning("Food CSV not found at %s — returning empty plan", csv_path)
-        return _empty_plan(diet_preference, deficiencies, daily_calorie_target)
-
-    df = pd.read_csv(csv_path)
-    if df.empty:
-        logger.warning("Food CSV is empty — returning empty plan")
+    df = _get_cached_food_df()
+    if df is None or df.empty:
+        logger.warning("Food database DataFrame is empty — returning empty plan")
         return _empty_plan(diet_preference, deficiencies, daily_calorie_target)
 
     df = _filter_by_diet(df, diet_preference)
@@ -313,6 +334,8 @@ def generate_weekly_meal_plan(
             days = verify_meal_plan_diet(days, diet_preference)
         except Exception as err:
             logger.warning("Gemini diet verification skipped: %s", err)
+
+    gc.collect()
 
     return {
         "week_number": week_number,
