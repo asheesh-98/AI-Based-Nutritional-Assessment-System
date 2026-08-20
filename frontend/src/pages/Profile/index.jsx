@@ -18,10 +18,14 @@ const item = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
 
 function InfoRow({ icon: Icon, label, value, color = 'text-[#0284c7]' }) {
   return (
-    <div className="flex items-center gap-3 py-3 border-b border-slate-100 last:border-0">
-      <Icon size={16} className={color} />
-      <span className="text-xs sm:text-sm text-slate-500 font-bold min-w-[120px]">{label}</span>
-      <span className="text-xs sm:text-sm text-[#0a192f] font-black">{value || '—'}</span>
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-3 py-3 border-b border-slate-100 last:border-0 min-w-0">
+      <div className="flex items-center gap-2.5 shrink-0 min-w-0">
+        <Icon size={16} className={`${color} shrink-0`} />
+        <span className="text-xs sm:text-sm text-slate-500 font-bold">{label}</span>
+      </div>
+      <span className="text-xs sm:text-sm text-[#0a192f] font-black break-all min-w-0 sm:text-right sm:pl-2 pl-6">
+        {value || '—'}
+      </span>
     </div>
   );
 }
@@ -83,12 +87,12 @@ export default function Profile() {
         <Alert type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />
       )}
 
-      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-[#0a192f]">
+      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-[#0a192f] w-full max-w-full overflow-hidden">
         {/* Account Info */}
-        <motion.div variants={item} className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-xs">
+        <motion.div variants={item} className="glass-card p-4 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-xs min-w-0 w-full">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-[#0a192f] font-black text-lg flex items-center gap-2">
-              <User size={20} className="text-[#0284c7]" /> {t('profile_account_info')}
+            <h3 className="text-[#0a192f] font-black text-base sm:text-lg flex items-center gap-2">
+              <User size={20} className="text-[#0284c7] shrink-0" /> {t('profile_account_info')}
             </h3>
             {!editing ? (
               <button onClick={() => setEditing(true)} className="text-[#0284c7] hover:text-sky-800 transition-colors cursor-pointer p-1">
@@ -113,19 +117,19 @@ export default function Profile() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
               />
-              <Button onClick={handleSave} loading={saving} className="w-full flex items-center justify-center gap-2 bg-[#0a192f] hover:bg-[#0284c7] text-white font-bold shadow-md">
+              <Button onClick={handleSave} loading={saving} className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 hover:from-purple-700 hover:to-sky-700 text-white font-bold shadow-md border-0">
                 <Save size={16} /> {t('profile_save_btn')}
               </Button>
             </div>
           ) : (
-            <div>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-[#0a192f] flex items-center justify-center text-white text-2xl font-black shadow-md">
+            <div className="min-w-0">
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 min-w-0">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-600 flex items-center justify-center text-white text-xl sm:text-2xl font-black shadow-md shrink-0">
                   {(profile?.full_name || user?.email || 'U')[0].toUpperCase()}
                 </div>
-                <div>
-                  <h4 className="text-xl text-[#0a192f] font-black">{profile?.full_name || t('profile_default_name')}</h4>
-                  <p className="text-xs text-slate-500 font-semibold">{profile?.email || user?.email}</p>
+                <div className="min-w-0 flex-1 overflow-hidden">
+                  <h4 className="text-lg sm:text-xl text-[#0a192f] font-black truncate">{profile?.full_name || t('profile_default_name')}</h4>
+                  <p className="text-xs text-slate-500 font-semibold truncate break-all">{profile?.email || user?.email}</p>
                 </div>
               </div>
               <InfoRow icon={Mail} label={t('profile_email_label')} value={profile?.email || user?.email} />
@@ -137,13 +141,13 @@ export default function Profile() {
         </motion.div>
 
         {/* Health Profile Summary */}
-        <motion.div variants={item} className="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-xs">
-          <h3 className="text-[#0a192f] font-black text-lg flex items-center gap-2 mb-4">
-            <Heart size={20} className="text-rose-600" /> {t('profile_health_summary')}
+        <motion.div variants={item} className="glass-card p-4 sm:p-8 rounded-3xl border border-slate-200 bg-white shadow-xs min-w-0 w-full">
+          <h3 className="text-[#0a192f] font-black text-base sm:text-lg flex items-center gap-2 mb-4">
+            <Heart size={20} className="text-rose-600 shrink-0" /> {t('profile_health_summary')}
           </h3>
 
           {hp ? (
-            <div>
+            <div className="min-w-0">
               <InfoRow icon={Calendar} label={t('profile_age_label')} value={hp.age ? `${hp.age} ${t('profile_years')}` : null} />
               <InfoRow icon={User} label={t('profile_gender_label')} value={hp.gender} />
               <InfoRow icon={Ruler} label={t('profile_height_label')} value={hp.height_cm ? `${hp.height_cm} cm` : null} color="text-purple-600" />
