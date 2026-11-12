@@ -1,0 +1,32 @@
+name: Supabase & Render Keep-Alive
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every 2 days (Supabase pauses after 7 days of inactivity)
+    - cron: '0 0 */2 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend Database Health Check
+        run: |
+          echo "Pinging backend DB endpoint to keep Supabase and Render active..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "https://ai-nutrition-backend.onrender.com/health/db" || echo "failed")
+          echo "Backend /health/db response code: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "Successfully pinged backend and executed database keep-alive query!"
+          else
+            echo "Backend returned status $STATUS (or is waking up). Will verify again."
+          fi
+
+      - name: Direct Supabase REST Ping (Optional Fallback)
+        if: env.SUPABASE_URL != ''
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "Pinging Supabase REST API directly..."
+          curl -s -f -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY" "$SUPABASE_URL/rest/v1/" || true
+          echo "Direct Supabase ping completed."

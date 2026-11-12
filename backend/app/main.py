@@ -8,8 +8,10 @@ and food catalogue on startup, and exposes a health-check root endpoint.
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 # ── API routers ──────────────────────────────────────────────────────────
 from backend.app.api.auth import router as auth_router
@@ -24,7 +26,7 @@ from backend.app.api.external import router as external_router
 from backend.app.api.ai import router as ai_router
 
 # ── Database & seeder ────────────────────────────────────────────────────
-from backend.app.database.db import init_db
+from backend.app.database.db import init_db, get_db
 from backend.app.services.food_seeder import seed_foods
 
 # ── Config ───────────────────────────────────────────────────────────────
@@ -113,3 +115,18 @@ async def root():
 async def health_check():
     """Alternative health-check endpoint for cloud deployments."""
     return {"status": "healthy"}
+
+
+@app.api_route("/health/db", methods=["GET", "HEAD"], tags=["Health"])
+async def health_check_db(db: Session = Depends(get_db)):
+    """
+    Database keep-alive health check.
+    Executes a lightweight query on Supabase PostgreSQL (or local SQLite) to verify
+    connectivity and register activity to prevent Supabase auto-pausing.
+    """
+    try:
+        db.execute(text("SELECT 1"))
+        return {"status": "healthy", "database": "connected"}
+    except Exception as exc:
+        logger.error("Database health check error: %s", exc)
+        return {"status": "degraded", "database": "error", "detail": str(exc)}
