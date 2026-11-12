@@ -50,7 +50,7 @@ async def lifespan(app: FastAPI):
         init_db()
         logger.info("Database initialised successfully.")
     except Exception as exc:
-        logger.warning("Database init deferred: %s", exc)
+        logger.warning("Database initialisation skipped or deferred (DB may be paused or starting): %s", exc)
 
     try:
         logger.info("Seeding food database …")
