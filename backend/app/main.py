@@ -45,9 +45,12 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Runs once on application startup and shutdown."""
     # --- Startup ---
-    logger.info("Initialising database …")
-    init_db()
-    logger.info("Database initialised successfully.")
+    try:
+        logger.info("Initialising database …")
+        init_db()
+        logger.info("Database initialised successfully.")
+    except Exception as exc:
+        logger.warning("Database init deferred: %s", exc)
 
     try:
         logger.info("Seeding food database …")
