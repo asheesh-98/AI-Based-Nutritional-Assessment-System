@@ -13,7 +13,7 @@ jobs:
       - name: Ping Backend Database Health Check
         run: |
           echo "Pinging backend DB endpoint to keep Supabase and Render active..."
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "https://ai-nutrition-backend.onrender.com/health/db" || echo "failed")
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "https://ai-nutrition-backend-w70j.onrender.com/health/db" || echo "failed")
           echo "Backend /health/db response code: $STATUS"
           if [ "$STATUS" = "200" ]; then
             echo "Successfully pinged backend and executed database keep-alive query!"
